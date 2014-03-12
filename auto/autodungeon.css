@@ -1,0 +1,244 @@
+html,body {
+  height: 100%;
+  margin: 0px;
+}
+
+html,body,div {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Microsoft Jhenghei",
+    sans-serif;
+}
+
+[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak
+  {
+  display: none !important;
+}
+
+.splash {
+  display: none;
+}
+
+[ng-cloak].splash {
+  display: block !important;
+}
+
+.full-screen {
+  width: 100%;
+  height: 100%;
+}
+
+.out-box {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: stretch;
+}
+
+.w100 {
+  width: 100%;
+}
+
+/*
+.bg{
+  border-width: 42px 12px 42px 120px;
+  background-color: rgb(211, 69, 73);
+  border-image: url(img/f1.png) 42 112 42 137 fill round;
+}
+*/
+.container {
+  display: -webkit-flex;
+  display: flex;
+  overflow: auto;
+  -webkit-align-items: stretch;
+  align-items: stretch;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.dir-h {
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
+
+.header {
+  background: #bc8;
+  min-height: 40px;
+  overflow: hidden;
+}
+
+.info {
+  background: #853;
+  min-height: 40px;
+  overflow: hidden;
+}
+
+.header-item {
+  cursor: pointer;
+  margin: auto 10px auto 10px;
+  background-color: rgba(0, 100, 0, 0.1);
+  min-width: 50px;
+  max-width: 100px;
+  border-radius: 5px;
+  text-align: center;
+  padding: 0px 5px 0px 5px;
+  border: 2px solid rgba(0, 100, 0, 0.4);
+  -webkit-flex: auto;
+  flex: auto;
+  height: 20px;
+}
+
+.header-item:HOVER {
+  background-color: rgba(0, 100, 0, 0.3);
+  border-color: rgba(0, 100, 0, 0.7);
+}
+
+.header-item:ACTIVE {
+  background-color: rgba(0, 100, 0, 0.2);
+  border-color: rgba(0, 100, 0, 1);
+  /*    box-shadow: 0px 0px 4px 4px rgba(0, 100, 0, 0.8); */
+}
+
+.header-item-save {
+  margin: auto 10px auto 10px;
+}
+
+.header-item-clean {
+  margin: auto 10px auto 10px;
+}
+
+.main {
+  -webkit-flex: 1 1 auto;
+  flex: 1 1 auto;
+  background-color: DeepSkyBlue;
+}
+
+.main-item {
+  background-color: rgba(0, 100, 0, 0.3);
+  min-width: 50px;
+  text-align: center;
+  border: 2px solid rgba(0, 100, 0, 0.4);
+}
+
+.main-left {
+  min-width: 200px;
+  width: 200px;
+  max-width: 200px;
+  overflow: auto;
+  transition: all 0.5s;
+}
+
+.main-left:HOVER {
+  min-width: 200px;
+}
+
+.left-item:FIRST-CHILD {
+  margin: 5px 5px 5px 5px;
+}
+
+.left-item {
+  background-color: rgba(0, 100, 0, 0.3);
+  min-width: 50px;
+  min-height: 80px;
+  text-align: center;
+  padding: 0px 5px 0px 5px;
+  margin: 0px 5px 5px 5px;
+  border: 2px solid rgba(0, 100, 0, 0.4);
+  height: 20px;
+  overflow: hidden;
+  transition: all 0.5s;
+}
+
+.left-item:HOVER {
+  height: 180px;
+}
+
+.box-item {
+  background-color: rgba(0, 100, 0, 0.3);
+  min-width: 150px;
+  min-height: 80px;
+  height: 100px;
+  text-align: center;
+  margin: 10px 5px 5px 5px;
+  padding: 5px 5px 5px 5px;
+  border: 2px solid rgba(0, 100, 0, 0.4);
+  border-radius: 5px;
+}
+
+.box-item:HOVER {
+  background-color: rgba(0, 100, 0, 0.3);
+  border-color: rgba(0, 100, 0, 0.7);
+}
+
+.box-item:ACTIVE {
+  background-color: rgba(0, 100, 0, 0.2);
+  border-color: rgba(0, 100, 0, 1);
+  /*    box-shadow: 0px 0px 4px 4px rgba(0, 100, 0, 0.8); */
+}
+
+.main-right {
+  -webkit-flex: auto;
+  flex: auto;
+  min-width: 100px;
+
+}
+
+.main-right-down {
+  -webkit-flex: auto;
+  flex: auto;
+  
+}
+
+
+/*
+.caption-anim {
+  -webkit-animation: zip 5s linear 0.0s;
+  animation: zip 5s linear 0.0s;
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards;
+}
+*/
+
+.caption {
+  display: -webkit-flex;
+  display: flex;
+  overflow: hidden;
+  height: 40px;
+  min-width: 50px;
+  text-align: center;
+  font-size: 24px;
+}
+
+monster-profile {
+  -webkit-align-items: stretch;
+  align-items: stretch;
+  /*
+  -webkit-animation: pulse 0.5s;
+  animation: pulse 0.5s;
+  */
+  height: 100px;
+  max-width: 150px;
+  width: 150px;
+  margin: 10px 10px 10px 10px;
+  flex: auto;
+  transition: all 0.5s;
+
+  display: -webkit-flex;
+  display: flex;
+}
+
+.green{
+  color: green;
+}
+
+.footer {
+  width: 100%;
+  min-height: 50px;
+  background-color: rgba(220, 200, 0, 1);
+  min-height: 50px;
+}

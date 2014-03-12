@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+
+<html xmlns:ng="http://angularjs.org" ng-app>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+  content="width=device-width,height=device-height, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0, user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style"
+  content="black-translucent" />
+<meta name="orientation" content="landscape" />
+<title>AutoDungeon</title>
+<link rel="stylesheet" href="animate.css" />
+<link rel="stylesheet" href="autodungeon.css" />
+
+</head>
+
+<body class="out-box" auto-dungeon>
+
+
+  <div class="splash" ng-cloak>
+
+    <p>Loading...</p>
+  </div>
+  <div class="container dir-h w100" ng-cloak>
+    <div class="header container">
+      <div class="header-item" ng-repeat="tab in c.tabs"
+        ng-click="c.clickTab(tab)"
+        ng-style="{background:c.tabStyle(tab)}">{{tab}}</div>
+      <div class="header-item header-item-save" ng-click="c.clickSave()">儲存</div>
+      <div class="header-item header-item-clean"
+        ng-click="c.clickClean()">清除</div>
+    </div>
+    <div class="info container">
+
+      <div inline-html="c.inner" tokens="',good,pretty'"></div>
+    </div>
+    <div ng-switch="c.cTab" class="main container">
+      <div class="main container" ng-switch-default>
+        <div class="container dir-h main-item main-left">
+
+          <div class="left-item" ng-repeat="role in c.game.team.roles">
+            <div>{{role.name}} ({{role.level}})</div>
+            <div>DMG: {{role.damage}}</div>
+            <div>
+              EXP({{role.exp}}/{{role.maxExp}})
+              <bar max="role.maxExp" min="role.exp" bar-color="36"
+                style='float: left; height:5px; width: 100%;'></bar>
+              <p inline-html="role.desc" tokens="role.descTokens"></p>
+            </div>
+          </div>
+        </div>
+        <div class="main-item main-right container dir-h">
+
+          <div class="main-item main-right-down container wrap">
+
+            <monster-profile ng-repeat="monster in c.game.monsters"
+              monster="monster" id="$index" style="flex:auto;min-width:100px;"></monster-profile>
+          </div>
+
+
+          <div class="demo" style="position: absolute;left:0px;right:0px;flex:auto;">
+            <div
+              style="position: absolute;background-color: #fff;"
+              ng-style="{bottom:20*(c.game.logs.length-$index-1)+'px'}"
+              ng-repeat="log in c.game.logs">
+              <div ng-click="c.clickRemove(log)">{{log.msg}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main container demo" ng-switch-when="地圖">
+        <div class="box-item" ng-repeat="room in c.game.team.maps">
+          {{room}}</div>
+
+
+      </div>
+
+
+      <div class="main container" ng-switch-when="道具">
+        <css-demo></css-demo>
+      </div>
+
+      <div class="main container" ng-switch-when="收藏">
+        <div class="box-item" ng-repeat="room in c.game.team.items"></div>
+      </div>
+
+      <div class="main container" ng-switch-when="研究">
+        <div class="box-item" ng-repeat="room in c.game.team.items"></div>
+      </div>
+
+      <div class="main container" ng-switch-when="合成">
+        <div class="box-item" ng-repeat="room in c.game.team.items"></div>
+      </div>
+
+      <div class="main container demo" ng-switch-when="日誌">
+        <div class="main-item main-left container dir-h">
+          <div class="left-item"></div>
+          <div class="left-item" ng-repeat="role in c.game.team.roles"></div>
+        </div>
+        <div class="main-item main-right container"></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>你的隊伍正在{{c.game.advState}}中...</div>
+      <bar max="c.game.MAP" min="c.game.AP" bar-color="12"
+        style='float: left; height:15px; width: 100%;'></bar>
+    </div>
+  </div>
+
+
+  <script src="packages/web_components/platform.js"></script>
+  <script src="packages/web_components/dart_support.js"></script>
+  <script type="application/dart" src="autodungeon.dart"></script>
+  <script src="packages/browser/dart.js"></script>
+
+
+
+</body>
+</html>

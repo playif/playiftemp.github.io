@@ -1,0 +1,10 @@
+<div class="monster" title="{{c.monster.desc}}"
+  ng-click="c.clickMonster()" ng-class="c.removeCSS()">
+  <div class="name">{{c.monster.name}}(#{{c.id+1}})</div>
+  <div class="my-container">
+    <div>HP({{c.monster.HP}}/{{c.monster.MHP}}):</div>
+    <bar max="c.monster.MHP" min="c.monster.HP" bar-color="0"></bar>
+  </div>
+  <linger-text ng-repeat="fText in c.monster.floatTexts.list"
+    text="fText" style="color:red;font-size:20px;"></linger-text>
+</div>
