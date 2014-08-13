@@ -13206,7 +13206,7 @@ var $$ = {};
     sprites = new M.SpriteBatch(null, false, null, t4, null, null, t8, t7, t6, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t2), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t3, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
     stage.addChildAt$2(sprites, t10.length);
     dudeArray = H.assertSubtype([], "$isList", [F.Dude], "$asList");
-    totalDudes = !!renderer.$isWebGLRenderer ? 10000 : 500;
+    totalDudes = !!renderer.$isWebGLRenderer ? 5000 : 500;
     texture = H.interceptedTypeCheck($.get$TextureCache().$index(0, "tinyMaggot.png"), "$isTexture");
     if (texture == null) {
       baseTexture = $.get$BaseTextureCache().$index(0, "tinyMaggot.png");
