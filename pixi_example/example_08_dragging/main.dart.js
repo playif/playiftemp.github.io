@@ -497,7 +497,7 @@ var $$ = {};
     $isPoint: true
   },
   Rectangle: {
-    "^": "Object;x,y,width,height",
+    "^": "Shape;x,y,width,height",
     contains$2: [function(_, x, y) {
       var t1, t2, x1, y1;
       t1 = this.width;
@@ -522,18 +522,16 @@ var $$ = {};
     }, "call$2", "get$contains", 4, 0, 52],
     $isRectangle: true
   },
+  Shape: {
+    "^": "Object;",
+    $isShape: true
+  },
   DisplayInterface: {
     "^": "Object;",
     $isDisplayInterface: true
   },
   DisplayObject: {
-    "^": "Object;hitArea<,parent,interactiveChildren,mousemove<,worldTransform<",
-    set$parent: function(_, $parent) {
-      this.parent = H.interceptedTypeCheck($parent, "$isDisplayInterface");
-    },
-    set$interactiveChildren: function(interactiveChildren) {
-      this.interactiveChildren = H.boolTypeCheck(interactiveChildren);
-    },
+    "^": "Object;hitArea<,_worldTransform<",
     mousemove$1: function(arg0) {
       return this.mousemove.call$1(arg0);
     },
@@ -561,29 +559,30 @@ var $$ = {};
     set$interactive: function(value) {
       var t1;
       this._interactive = value;
-      t1 = this.stage;
+      t1 = this._stage;
       if (t1 != null)
-        t1.PIXI$Stage$dirty = true;
+        t1.PIXI$Stage$_dirty = true;
     },
     get$worldVisible: function() {
       var item = this;
       do {
         if (!item.visible)
           return false;
-        item = item.parent;
+        item = item._parent;
       } while (item != null);
       return true;
     },
-    updateTransform$0: function() {
-      var t1, parentTransform, worldTransform, px, py, a00, a01, a10, a11, t2, t3, a02, a12, b00, b01, b10, b11;
+    _updateTransform$0: function() {
+      var t1, $parent, parentTransform, worldTransform, px, py, a00, a01, a10, a11, t2, t3, a02, a12, b00, b01, b10, b11;
       t1 = this.rotation;
-      if (t1 !== this.rotationCache) {
-        this.rotationCache = t1;
+      if (t1 !== this._rotationCache) {
+        this._rotationCache = t1;
         this._sr = Math.sin(t1);
         this._cr = Math.cos(t1);
       }
-      parentTransform = this.parent.get$worldTransform();
-      worldTransform = this.get$worldTransform();
+      $parent = this._parent;
+      parentTransform = $parent.get$_worldTransform();
+      worldTransform = this.get$_worldTransform();
       t1 = this.pivot;
       px = t1.x;
       py = t1.y;
@@ -616,16 +615,16 @@ var $$ = {};
       worldTransform.c = H.doubleTypeCheck(b10 * a00 + b11 * a10);
       worldTransform.d = H.doubleTypeCheck(b10 * a01 + b11 * a11);
       worldTransform.ty = H.doubleTypeCheck(b10 * a02 + b11 * a12 + parentTransform.ty);
-      this.worldAlpha = this.alpha * this.parent.worldAlpha;
+      this._worldAlpha = this.alpha * $parent._worldAlpha;
     },
-    setStageReference$1: function(stage) {
-      this.stage = stage;
+    _setStageReference$1: function(stage) {
+      this._stage = stage;
       if (this._interactive)
-        stage.PIXI$Stage$dirty = true;
+        stage.PIXI$Stage$_dirty = true;
     },
     _renderCachedSprite$1: function(renderSession) {
       var t1 = this._cachedSprite;
-      t1.set$worldAlpha(this.worldAlpha);
+      t1.set$_worldAlpha(this._worldAlpha);
       if (renderSession.gl != null)
         t1._renderWebGL$1(renderSession);
       else
@@ -643,21 +642,21 @@ var $$ = {};
     addChildAt$2: function(child, index) {
       var t1, t2, t3, child0;
       if (index <= this.children.length) {
-        t1 = child.parent;
+        t1 = child._parent;
         if (t1 != null) {
           t2 = t1.children;
           t3 = H.Lists_indexOf(t2, child, 0, t2.length);
-          child0 = t1.getChildAt$1(t3);
-          if (t1.stage != null && !!J.getInterceptor(child0).$isDisplayObjectContainer)
-            child0.removeStageReference$0();
-          child0.set$parent(0, null);
+          child0 = H.interceptedTypeCheck(t1.getChildAt$1(t3), "$isDisplayObject");
+          if (t1._stage != null && !!J.getInterceptor(child0).$isDisplayObjectContainer)
+            child0._removeStageReference$0();
+          child0._parent = null;
           C.JSArray_methods.removeAt$1(t2, t3);
         }
-        child.parent = this;
+        child._parent = this;
         C.JSArray_methods.insert$2(this.children, index, child);
-        t1 = this.stage;
+        t1 = this._stage;
         if (t1 != null)
-          child.setStageReference$1(t1);
+          child._setStageReference$1(t1);
         return child;
       } else
         throw H.wrapException(P.Exception_Exception(child.toString$0(0) + "  The index " + index + " supplied is out of bounds " + this.children.length));
@@ -672,40 +671,40 @@ var $$ = {};
       } else
         throw H.wrapException(P.Exception_Exception("Supplied index does not exist in the child list, or the supplied DisplayObject must be a child of the caller"));
     },
-    updateTransform$0: function() {
+    _updateTransform$0: function() {
       var t1, j, i;
       if (!this.visible)
         return;
-      M.DisplayObject.prototype.updateTransform$0.call(this);
+      M.DisplayObject.prototype._updateTransform$0.call(this);
       if (this._cacheAsBitmap)
         return;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        t1[i].updateTransform$0();
+        t1[i]._updateTransform$0();
       }
     },
-    setStageReference$1: function(stage) {
+    _setStageReference$1: function(stage) {
       var t1, j, i;
-      this.stage = stage;
+      this._stage = stage;
       if (this._interactive)
-        stage.PIXI$Stage$dirty = true;
+        stage.PIXI$Stage$_dirty = true;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        H.interceptedTypeCheck(t1[i], "$isDisplayInterface").setStageReference$1(stage);
+        H.interceptedTypeCheck(t1[i], "$isDisplayObject")._setStageReference$1(stage);
       }
     },
-    removeStageReference$0: function() {
+    _removeStageReference$0: function() {
       var t1, j, i;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        H.interceptedTypeCheck(t1[i], "$isDisplayObjectContainer").removeStageReference$0();
+        H.interceptedTypeCheck(t1[i], "$isDisplayObjectContainer")._removeStageReference$0();
       }
       if (this._interactive)
-        this.stage.PIXI$Stage$dirty = true;
-      this.stage = null;
+        this._stage.PIXI$Stage$_dirty = true;
+      this._stage = null;
     },
     _renderWebGL$1: function(renderSession) {
       var t1, j, i;
@@ -732,7 +731,7 @@ var $$ = {};
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        H.interceptedTypeCheck(t1[i], "$isDisplayObject")._renderCanvas$1(renderSession);
+        H.interceptedTypeCheck(t1[i], "$isDisplayInterface")._renderCanvas$1(renderSession);
       }
     },
     $isDisplayObjectContainer: true
@@ -742,11 +741,11 @@ var $$ = {};
     _setupTexture$0: function() {
       var t1 = this.texture;
       if (t1.baseTexture._hasLoaded)
-        this.onTextureUpdate$1(null);
+        this._onTextureUpdate$1(null);
       else
-        t1.addEventListener$2(0, "update", this.get$onTextureUpdate());
+        t1.addEventListener$2(0, "update", this.get$_onTextureUpdate());
     },
-    onTextureUpdate$1: [function(e) {
+    _onTextureUpdate$1: [function(e) {
       var t1;
       H.interceptedTypeCheck(e, "$isPixiEvent");
       t1 = this.PIXI$Sprite$_width;
@@ -755,7 +754,7 @@ var $$ = {};
       t1 = this.PIXI$Sprite$_height;
       if (t1 !== 0)
         this.scale.y = C.JSInt_methods.$div(t1, this.texture.frame.height);
-    }, "call$1", "get$onTextureUpdate", 2, 0, 53, 3],
+    }, "call$1", "get$_onTextureUpdate", 2, 0, 53, 3],
     _renderWebGL$1: function(renderSession) {
       var t1, j, i;
       if (!this.visible || this.alpha <= 0)
@@ -778,9 +777,9 @@ var $$ = {};
       }
       if (this.texture.valid) {
         t1 = renderSession.context;
-        t1.globalAlpha = this.worldAlpha;
+        t1.globalAlpha = this._worldAlpha;
         renderSession.roundPixels;
-        t2 = this.worldTransform;
+        t2 = this._worldTransform;
         t3 = t2.a;
         t4 = t2.c;
         t5 = t2.b;
@@ -839,20 +838,20 @@ var $$ = {};
     $isSprite: true
   },
   Stage: {
-    "^": "DisplayObjectContainer;PIXI$Stage$dirty,_interactiveEventsAdded,hitArea:PIXI$Stage$hitArea<,backgroundColor,backgroundColorSplit,backgroundColorString,worldTransform:PIXI$Stage$worldTransform<,interactionManager,children,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,renderable,parent,__iParent,interactiveChildren,__hit,__isOver,__mouseIsDown,__isDown,dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,stage,buttonMode,worldAlpha,_interactive,defaultCursor,worldTransform,color,dynamic,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,isMask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,rotationCache",
+    "^": "DisplayObjectContainer;PIXI$Stage$_dirty,_interactiveEventsAdded,hitArea:PIXI$Stage$hitArea<,backgroundColor,backgroundColorSplit,backgroundColorString,_worldTransform:PIXI$Stage$_worldTransform<,interactionManager,children,interactiveChildren,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,buttonMode,renderable,_parent,__hit,__isOver,__mouseIsDown,__isDown,_dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,_stage,_worldAlpha,_interactive,defaultCursor,_worldTransform,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,_rotationCache",
     set$backgroundColorSplit: function(backgroundColorSplit) {
       this.backgroundColorSplit = H.assertSubtype(backgroundColorSplit, "$isList", [P.num], "$asList");
     },
-    updateTransform$0: function() {
+    _updateTransform$0: function() {
       var t1, j, i;
-      this.worldAlpha = 1;
+      this._worldAlpha = 1;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        t1[i].updateTransform$0();
+        t1[i]._updateTransform$0();
       }
-      if (this.PIXI$Stage$dirty) {
-        this.PIXI$Stage$dirty = false;
+      if (this.PIXI$Stage$_dirty) {
+        this.PIXI$Stage$_dirty = false;
         this.interactionManager.dirty = true;
       }
       if (this._interactive)
@@ -860,8 +859,8 @@ var $$ = {};
     },
     Stage$2: function(backgroundColor, interactive) {
       var t1, t2, t3, t4, hex;
-      this.PIXI$Stage$dirty = true;
-      this.stage = this;
+      this.PIXI$Stage$_dirty = true;
+      this._stage = this;
       this.backgroundColor = backgroundColor;
       this.set$interactive(interactive);
       t1 = new M.Point(null, null);
@@ -909,11 +908,8 @@ var $$ = {};
           C.JSArray_methods.add$1(this.interactiveItems, child);
           if (child.children.length > 0)
             this.collectInteractiveSprite$2(child, child);
-        } else {
-          child.__iParent = null;
-          if (child.children.length > 0)
-            this.collectInteractiveSprite$2(child, iParent);
-        }
+        } else if (child.children.length > 0)
+          this.collectInteractiveSprite$2(child, iParent);
       }
     },
     setTarget$1: function(target) {
@@ -970,7 +966,7 @@ var $$ = {};
         if (t2 && !over) {
           if (item.buttonMode)
             cursor = item.defaultCursor;
-          if (!item.interactiveChildren)
+          if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
             over = true;
           if (!item.__isOver) {
             item.mouseover;
@@ -987,20 +983,21 @@ var $$ = {};
       }
     },
     rebuildInteractiveGraph$0: function() {
-      var len, i, t1;
+      var t1, len, i, item;
       this.dirty = false;
-      len = this.interactiveItems.length;
+      t1 = this.interactiveItems;
+      len = t1.length;
       for (i = 0; i < len; ++i) {
-        t1 = this.interactiveItems;
         if (i >= t1.length)
           return H.ioore(t1, i);
-        t1[i].set$interactiveChildren(false);
+        item = H.interceptedTypeCheck(t1[i], "$isDisplayInterface");
+        if (!!J.getInterceptor(item).$isDisplayObjectContainer)
+          item.interactiveChildren = false;
       }
       this.set$interactiveItems([]);
       t1 = this.stage;
       if (t1._interactive)
         C.JSArray_methods.add$1(this.interactiveItems, t1);
-      t1 = this.stage;
       this.collectInteractiveSprite$2(t1, t1);
     },
     onMouseMove$1: [function(_, $event) {
@@ -1042,8 +1039,8 @@ var $$ = {};
         t2 = this.interactiveItems;
         if (i >= t2.length)
           return H.ioore(t2, i);
-        item = t2[i];
-        if (item.get$mousemove() != null)
+        item = H.interceptedTypeCheck(t2[i], "$isDisplayObject");
+        if (item.mousemove != null)
           item.mousemove$1(t1);
       }
     }, "call$1", "get$onMouseMove", 2, 0, 54, 4],
@@ -1074,7 +1071,7 @@ var $$ = {};
             if (item.mousedown != null)
               item.mousedown$1(t1);
             item.__isDown = true;
-            if (!item.interactiveChildren)
+            if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
               break;
           }
         }
@@ -1123,7 +1120,7 @@ var $$ = {};
             item.mouseup$1(t1);
           if (item.__isDown)
             item.click;
-          if (!item.interactiveChildren)
+          if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
             up = true;
         } else if (item.__isDown)
           if (item.mouseupoutside != null)
@@ -1137,7 +1134,7 @@ var $$ = {};
       global = interactionData.global;
       if (!item.get$worldVisible())
         return false;
-      worldTransform = item.get$worldTransform();
+      worldTransform = item.get$_worldTransform();
       a00 = worldTransform.a;
       a01 = worldTransform.b;
       a02 = worldTransform.tx;
@@ -1309,7 +1306,7 @@ var $$ = {};
               item.__isDown = true;
               t3 = item.__touchData;
               t3.$indexSet(0, touchEvent.$index(0, "identifier"), touchData);
-              if (!item.interactiveChildren)
+              if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
                 break;
             }
           }
@@ -1379,7 +1376,7 @@ var $$ = {};
                   item.touchend$1(touchData);
                 if (item.__isDown)
                   item.tap;
-                if (!item.interactiveChildren)
+                if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
                   up = true;
               } else if (item.__isDown)
                 if (item.touchendoutside != null)
@@ -1411,7 +1408,7 @@ var $$ = {};
       var t1, t2;
       C.JSArray_methods.set$length($.get$texturesToUpdate(), 0);
       C.JSArray_methods.set$length($.get$texturesToDestroy(), 0);
-      stage.updateTransform$0();
+      stage._updateTransform$0();
       J.setTransform$6$x(this.context, 1, 0, 0, 1, 0, 0);
       t1 = this.context;
       t1.globalAlpha = 1;
@@ -1902,7 +1899,7 @@ var $$ = {};
       uvs = texture._uvs;
       if (uvs == null)
         return;
-      alpha = sprite.worldAlpha;
+      alpha = sprite._worldAlpha;
       tint = sprite.tint;
       verticies = this.vertices;
       t1 = sprite.anchor;
@@ -1934,7 +1931,7 @@ var $$ = {};
       h1 = t1 * -aY;
       t1 = this.currentBatchSize;
       index = t1 * 4 * this.vertSize;
-      worldTransform = sprite.worldTransform;
+      worldTransform = sprite._worldTransform;
       a = worldTransform.a;
       b = worldTransform.c;
       c = worldTransform.b;
@@ -2228,7 +2225,7 @@ var $$ = {};
         this.__stage = stage;
       }
       M.WebGLRenderer_updateTextures(this.gl);
-      stage.updateTransform$0();
+      stage._updateTransform$0();
       J.viewport$4$x(this.gl, 0, 0, this.width, this.height);
       J.bindFramebuffer$2$x(this.gl, 36160, null);
       t1 = this.transparent;
@@ -12669,7 +12666,7 @@ var $$ = {};
 ["", "main.dart", , F, {
   "^": "",
   main: [function() {
-    var t1, t2, t3, t4, t5, t6, t7, stage, renderer, texture, baseTexture, crossorigin, image, i;
+    var t1, t2, t3, t4, t5, t6, t7, t8, t9, stage, renderer, texture, baseTexture, crossorigin, image, i;
     t1 = new Float32Array(9);
     t2 = new M.Point(null, null);
     t2.x = 0;
@@ -12683,18 +12680,19 @@ var $$ = {};
     t5 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
     t6 = new Float32Array(9);
     t7 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-    stage = new M.Stage(null, false, new M.Rectangle(0, 0, 100000, 100000), 0, H.assertSubtype([], "$isList", [P.num], "$asList"), null, new M.Matrix(1, 0, 0, 1, 0, 0, t1), null, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t2, t3, t4, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t6), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t7, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+    t8 = H.getVoidRuntimeType();
+    t9 = H.buildFunctionType(t8, [H.buildInterfaceType(M.InteractionData)]);
+    stage = new M.Stage(null, false, new M.Rectangle(0, 0, 100000, 100000), 0, H.assertSubtype([], "$isList", [P.num], "$asList"), null, new M.Matrix(1, 0, 0, 1, 0, 0, t1), null, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t2, t3, t4, 0, 1, true, null, false, false, null, false, false, false, false, false, t9._assertCheck$1(null), t9._assertCheck$1(null), t9._assertCheck$1(null), t9._assertCheck$1(null), t9._assertCheck$1(null), t9._assertCheck$1(null), t9._assertCheck$1(null), t9._assertCheck$1(null), t9._assertCheck$1(null), t9._assertCheck$1(null), t9._assertCheck$1(null), t9._assertCheck$1(null), H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t6), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t7, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
     stage.Stage$2(9946478, true);
     renderer = M.autoDetectRenderer(window.innerWidth, window.innerHeight, null, false, false);
     renderer.view.className = "rendererView";
     t7 = new F.main_resize(renderer);
     t6 = H.assertSubtype(H.assertSubtype(H.setRuntimeTypeInfo(new W._EventStream(window, C.EventStreamProvider_resize._eventType, false), [null]), "$isStream", [H.getTypeArgumentByIndex(C.EventStreamProvider_resize, 0)], "$asStream"), "$isStream", [W.Event], "$asStream");
-    t5 = H.getVoidRuntimeType();
-    H.buildFunctionType(t5, [t6.$tv_T()])._assertCheck$1(t7);
-    H.buildFunctionType(t5)._assertCheck$1(null);
-    t5 = H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t6._target, t6._eventType, W._wrapZone(t7), t6._useCapture), [H.getTypeArgumentByIndex(t6, 0)]);
-    t5._tryResume$0();
-    H.assertSubtype(t5, "$isStreamSubscription", [H.getTypeArgumentByIndex(t6, 0)], "$asStreamSubscription");
+    H.buildFunctionType(t8, [t6.$tv_T()])._assertCheck$1(t7);
+    H.buildFunctionType(t8)._assertCheck$1(null);
+    t8 = H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t6._target, t6._eventType, W._wrapZone(t7), t6._useCapture), [H.getTypeArgumentByIndex(t6, 0)]);
+    t8._tryResume$0();
+    H.assertSubtype(t8, "$isStreamSubscription", [H.getTypeArgumentByIndex(t6, 0)], "$asStreamSubscription");
     t7.call$0();
     J.append$1$x(document.body, renderer.view);
     J.set$display$x(renderer.view.style, "block");
@@ -12720,7 +12718,7 @@ var $$ = {};
     $.get$requestAnimFrame().call$1(new F.main_animate(stage, renderer));
   }, "call$0", "main$closure", 0, 0, 35],
   Bunny: {
-    "^": "Sprite;data,dragging,anchor,texture,updateFrame,textureChange,PIXI$Sprite$_width,PIXI$Sprite$_height,_uvs,tintedTexture,buffer,tint,cachedTint,blendMode,children,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,renderable,parent,__iParent,interactiveChildren,__hit,__isOver,__mouseIsDown,__isDown,dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,stage,buttonMode,worldAlpha,_interactive,defaultCursor,worldTransform,color,dynamic,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,isMask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,rotationCache",
+    "^": "Sprite;data,dragging,anchor,texture,updateFrame,PIXI$Sprite$_width,PIXI$Sprite$_height,_uvs,tintedTexture,buffer,tint,cachedTint,blendMode,children,interactiveChildren,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,buttonMode,renderable,_parent,__hit,__isOver,__mouseIsDown,__isDown,_dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,_stage,_worldAlpha,_interactive,defaultCursor,_worldTransform,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,_rotationCache",
     $isBunny: true
   },
   main_resize: {
@@ -12735,7 +12733,7 @@ var $$ = {};
   main_createBunny: {
     "^": "Closure:60;stage_1,texture_2",
     call$2: function(x, y) {
-      var t1, t2, t3, t4, t5, t6, t7, bunny;
+      var t1, t2, t3, t4, t5, t6, t7, t8, bunny;
       t1 = new M.Point(null, null);
       t1.x = 0;
       t1.y = 0;
@@ -12751,7 +12749,8 @@ var $$ = {};
       t5 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
       t6 = new Float32Array(9);
       t7 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-      bunny = new F.Bunny(null, false, t1, null, false, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t2, t3, t4, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t6), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t7, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+      t8 = H.buildFunctionType(H.getVoidRuntimeType(), [H.buildInterfaceType(M.InteractionData)]);
+      bunny = new F.Bunny(null, false, t1, null, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t2, t3, t4, 0, 1, true, null, false, false, null, false, false, false, false, false, t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t6), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t7, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
       bunny.texture = this.texture_2;
       bunny._setupTexture$0();
       bunny.set$interactive(true);
@@ -12807,9 +12806,9 @@ var $$ = {};
       t1 = this.bunny_5;
       if (t1.dragging) {
         t2 = t1.data;
-        t3 = t1.parent;
+        t3 = t1._parent;
         t2.toString;
-        worldTransform = t3.get$worldTransform();
+        worldTransform = t3.get$_worldTransform();
         a00 = worldTransform.a;
         a01 = worldTransform.b;
         a02 = worldTransform.tx;

@@ -550,7 +550,7 @@ var $$ = {};
     $isPoint: true
   },
   Rectangle: {
-    "^": "Object;x,y,width,height",
+    "^": "Shape;x,y,width,height",
     set$x: function(_, x) {
       this.x = H.numTypeCheck(x);
     },
@@ -595,38 +595,37 @@ var $$ = {};
     }, "call$2", "get$contains", 4, 0, 53],
     $isRectangle: true
   },
+  Shape: {
+    "^": "Object;",
+    $isShape: true
+  },
   DisplayInterface: {
     "^": "Object;",
     $isDisplayInterface: true
   },
   DisplayObject: {
-    "^": "Object;hitArea<,parent,interactiveChildren,mousemove<,worldTransform<",
-    set$parent: function(_, $parent) {
-      this.parent = H.interceptedTypeCheck($parent, "$isDisplayInterface");
-    },
-    set$interactiveChildren: function(interactiveChildren) {
-      this.interactiveChildren = H.boolTypeCheck(interactiveChildren);
-    },
+    "^": "Object;hitArea<,_worldTransform<",
     get$worldVisible: function() {
       var item = this;
       do {
         if (!item.visible)
           return false;
-        item = item.parent;
+        item = item._parent;
       } while (item != null);
       return true;
     },
-    updateTransform$0: function() {
-      var t1, parentTransform, worldTransform, px, py, a00, a01, a10, a11, t2, a02, a12, b00, b01, b10, b11;
+    _updateTransform$0: function() {
+      var t1, $parent, parentTransform, worldTransform, px, py, a00, a01, a10, a11, t2, a02, a12, b00, b01, b10, b11;
       t1 = this.rotation;
-      if (t1 !== this.rotationCache) {
-        this.rotationCache = t1;
+      if (t1 !== this._rotationCache) {
+        this._rotationCache = t1;
         this._sr = Math.sin(t1);
         t1 = this.rotation;
         this._cr = Math.cos(t1);
       }
-      parentTransform = this.parent.get$worldTransform();
-      worldTransform = this.get$worldTransform();
+      $parent = this._parent;
+      parentTransform = $parent.get$_worldTransform();
+      worldTransform = this.get$_worldTransform();
       t1 = this.pivot;
       px = t1.x;
       py = t1.y;
@@ -657,16 +656,16 @@ var $$ = {};
       worldTransform.c = H.doubleTypeCheck(b10 * a00 + b11 * a10);
       worldTransform.d = H.doubleTypeCheck(b10 * a01 + b11 * a11);
       worldTransform.ty = H.doubleTypeCheck(b10 * a02 + b11 * a12 + parentTransform.ty);
-      this.worldAlpha = this.alpha * this.parent.worldAlpha;
+      this._worldAlpha = this.alpha * $parent._worldAlpha;
     },
-    setStageReference$1: function(stage) {
-      this.stage = stage;
+    _setStageReference$1: function(stage) {
+      this._stage = stage;
       if (this._interactive)
-        stage.PIXI$Stage$dirty = true;
+        stage.PIXI$Stage$_dirty = true;
     },
     _renderCachedSprite$1: function(renderSession) {
       var t1 = this._cachedSprite;
-      t1.set$worldAlpha(this.worldAlpha);
+      t1.set$_worldAlpha(this._worldAlpha);
       if (renderSession.gl != null)
         t1._renderWebGL$1(renderSession);
       else
@@ -684,16 +683,16 @@ var $$ = {};
     addChildAt$2: function(child, index) {
       var t1, t2;
       if (index <= this.children.length) {
-        t1 = child.parent;
+        t1 = child._parent;
         if (t1 != null) {
           t2 = t1.children;
           t1.removeChildAt$1(H.Lists_indexOf(t2, child, 0, t2.length));
         }
-        child.parent = this;
+        child._parent = this;
         C.JSArray_methods.insert$2(this.children, index, child);
-        t1 = this.stage;
+        t1 = this._stage;
         if (t1 != null)
-          child.setStageReference$1(t1);
+          child._setStageReference$1(t1);
         return child;
       } else
         throw H.wrapException(P.Exception_Exception(J.toString$0(child) + "  The index " + index + " supplied is out of bounds " + this.children.length));
@@ -709,47 +708,47 @@ var $$ = {};
         throw H.wrapException(P.Exception_Exception("Supplied index does not exist in the child list, or the supplied DisplayObject must be a child of the caller"));
     },
     removeChildAt$1: function(index) {
-      var child = this.getChildAt$1(index);
-      if (this.stage != null && !!J.getInterceptor(child).$isDisplayObjectContainer)
-        child.removeStageReference$0();
-      child.set$parent(0, null);
+      var child = H.interceptedTypeCheck(this.getChildAt$1(index), "$isDisplayObject");
+      if (this._stage != null && !!J.getInterceptor(child).$isDisplayObjectContainer)
+        child._removeStageReference$0();
+      child._parent = null;
       C.JSArray_methods.removeAt$1(this.children, index);
       return child;
     },
-    updateTransform$0: function() {
+    _updateTransform$0: function() {
       var t1, j, i;
       if (!this.visible)
         return;
-      M.DisplayObject.prototype.updateTransform$0.call(this);
+      M.DisplayObject.prototype._updateTransform$0.call(this);
       if (this._cacheAsBitmap)
         return;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        t1[i].updateTransform$0();
+        t1[i]._updateTransform$0();
       }
     },
-    setStageReference$1: function(stage) {
+    _setStageReference$1: function(stage) {
       var t1, j, i;
-      this.stage = stage;
+      this._stage = stage;
       if (this._interactive)
-        stage.PIXI$Stage$dirty = true;
+        stage.PIXI$Stage$_dirty = true;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        H.interceptedTypeCheck(t1[i], "$isDisplayInterface").setStageReference$1(stage);
+        H.interceptedTypeCheck(t1[i], "$isDisplayObject")._setStageReference$1(stage);
       }
     },
-    removeStageReference$0: function() {
+    _removeStageReference$0: function() {
       var t1, j, i;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        H.interceptedTypeCheck(t1[i], "$isDisplayObjectContainer").removeStageReference$0();
+        H.interceptedTypeCheck(t1[i], "$isDisplayObjectContainer")._removeStageReference$0();
       }
       if (this._interactive)
-        this.stage.PIXI$Stage$dirty = true;
-      this.stage = null;
+        this._stage.PIXI$Stage$_dirty = true;
+      this._stage = null;
     },
     _renderWebGL$1: function(renderSession) {
       var t1, j, i;
@@ -776,21 +775,21 @@ var $$ = {};
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        H.interceptedTypeCheck(t1[i], "$isDisplayObject")._renderCanvas$1(renderSession);
+        H.interceptedTypeCheck(t1[i], "$isDisplayInterface")._renderCanvas$1(renderSession);
       }
     },
     $isDisplayObjectContainer: true
   },
   Sprite: {
-    "^": "DisplayObjectContainer;anchor,texture,updateFrame,textureChange,PIXI$Sprite$_width,PIXI$Sprite$_height,_uvs,tintedTexture,buffer,tint,cachedTint,blendMode,children,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,renderable,parent,__iParent,interactiveChildren,__hit,__isOver,__mouseIsDown,__isDown,dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,stage,buttonMode,worldAlpha,_interactive,defaultCursor,worldTransform,color,dynamic,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,isMask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,rotationCache",
+    "^": "DisplayObjectContainer;anchor,texture,updateFrame,PIXI$Sprite$_width,PIXI$Sprite$_height,_uvs,tintedTexture,buffer,tint,cachedTint,blendMode,children,interactiveChildren,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,buttonMode,renderable,_parent,__hit,__isOver,__mouseIsDown,__isDown,_dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,_stage,_worldAlpha,_interactive,defaultCursor,_worldTransform,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,_rotationCache",
     _setupTexture$0: function() {
       var t1 = this.texture;
       if (t1.baseTexture._hasLoaded)
-        this.onTextureUpdate$1(null);
+        this._onTextureUpdate$1(null);
       else
-        t1.addEventListener$2(0, "update", this.get$onTextureUpdate());
+        t1.addEventListener$2(0, "update", this.get$_onTextureUpdate());
     },
-    onTextureUpdate$1: [function(e) {
+    _onTextureUpdate$1: [function(e) {
       var t1, t2, t3;
       H.interceptedTypeCheck(e, "$isPixiEvent");
       t1 = this.PIXI$Sprite$_width;
@@ -809,7 +808,7 @@ var $$ = {};
           return t1.$div();
         t2.y = C.JSInt_methods.$div(t1, t3);
       }
-    }, "call$1", "get$onTextureUpdate", 2, 0, 54, 3],
+    }, "call$1", "get$_onTextureUpdate", 2, 0, 54, 3],
     _renderWebGL$1: function(renderSession) {
       var t1, j, i;
       if (!this.visible || this.alpha <= 0)
@@ -832,9 +831,9 @@ var $$ = {};
       }
       if (this.texture.valid) {
         t1 = renderSession.context;
-        t1.globalAlpha = this.worldAlpha;
+        t1.globalAlpha = this._worldAlpha;
         renderSession.roundPixels;
-        t2 = this.worldTransform;
+        t2 = this._worldTransform;
         t3 = t2.a;
         t4 = t2.c;
         t5 = t2.b;
@@ -920,20 +919,20 @@ var $$ = {};
     $isSprite: true
   },
   Stage: {
-    "^": "DisplayObjectContainer;PIXI$Stage$dirty,_interactiveEventsAdded,hitArea:PIXI$Stage$hitArea<,backgroundColor,backgroundColorSplit,backgroundColorString,worldTransform:PIXI$Stage$worldTransform<,interactionManager,children,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,renderable,parent,__iParent,interactiveChildren,__hit,__isOver,__mouseIsDown,__isDown,dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,stage,buttonMode,worldAlpha,_interactive,defaultCursor,worldTransform,color,dynamic,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,isMask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,rotationCache",
+    "^": "DisplayObjectContainer;PIXI$Stage$_dirty,_interactiveEventsAdded,hitArea:PIXI$Stage$hitArea<,backgroundColor,backgroundColorSplit,backgroundColorString,_worldTransform:PIXI$Stage$_worldTransform<,interactionManager,children,interactiveChildren,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,buttonMode,renderable,_parent,__hit,__isOver,__mouseIsDown,__isDown,_dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,_stage,_worldAlpha,_interactive,defaultCursor,_worldTransform,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,_rotationCache",
     set$backgroundColorSplit: function(backgroundColorSplit) {
       this.backgroundColorSplit = H.assertSubtype(backgroundColorSplit, "$isList", [P.num], "$asList");
     },
-    updateTransform$0: function() {
+    _updateTransform$0: function() {
       var t1, j, i;
-      this.worldAlpha = 1;
+      this._worldAlpha = 1;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        t1[i].updateTransform$0();
+        t1[i]._updateTransform$0();
       }
-      if (this.PIXI$Stage$dirty) {
-        this.PIXI$Stage$dirty = false;
+      if (this.PIXI$Stage$_dirty) {
+        this.PIXI$Stage$_dirty = false;
         this.interactionManager.dirty = true;
       }
       if (this._interactive)
@@ -941,11 +940,11 @@ var $$ = {};
     },
     Stage$2: function(backgroundColor, interactive) {
       var t1, t2, t3, t4, hex;
-      this.PIXI$Stage$dirty = true;
-      this.stage = this;
+      this.PIXI$Stage$_dirty = true;
+      this._stage = this;
       this.backgroundColor = backgroundColor;
       this._interactive = interactive;
-      this.PIXI$Stage$dirty = true;
+      this.PIXI$Stage$_dirty = true;
       t1 = new M.Point(null, null);
       t1.x = 0;
       t1.y = 0;
@@ -1630,11 +1629,8 @@ var $$ = {};
           C.JSArray_methods.add$1(this.interactiveItems, child);
           if (child.children.length > 0)
             this.collectInteractiveSprite$2(child, child);
-        } else {
-          child.__iParent = null;
-          if (child.children.length > 0)
-            this.collectInteractiveSprite$2(child, iParent);
-        }
+        } else if (child.children.length > 0)
+          this.collectInteractiveSprite$2(child, iParent);
       }
     },
     setTarget$1: function(target) {
@@ -1691,7 +1687,7 @@ var $$ = {};
         if (t2 && !over) {
           if (item.buttonMode)
             cursor = item.defaultCursor;
-          if (!item.interactiveChildren)
+          if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
             over = true;
           if (!item.__isOver) {
             item.mouseover;
@@ -1708,20 +1704,21 @@ var $$ = {};
       }
     },
     rebuildInteractiveGraph$0: function() {
-      var len, i, t1;
+      var t1, len, i, item;
       this.dirty = false;
-      len = this.interactiveItems.length;
+      t1 = this.interactiveItems;
+      len = t1.length;
       for (i = 0; i < len; ++i) {
-        t1 = this.interactiveItems;
         if (i >= t1.length)
           return H.ioore(t1, i);
-        t1[i].set$interactiveChildren(false);
+        item = H.interceptedTypeCheck(t1[i], "$isDisplayInterface");
+        if (!!J.getInterceptor(item).$isDisplayObjectContainer)
+          item.interactiveChildren = false;
       }
       this.set$interactiveItems([]);
       t1 = this.stage;
       if (t1._interactive)
         C.JSArray_methods.add$1(this.interactiveItems, t1);
-      t1 = this.stage;
       this.collectInteractiveSprite$2(t1, t1);
     },
     onMouseMove$1: [function(_, $event) {
@@ -1758,13 +1755,10 @@ var $$ = {};
       if (typeof t3 !== "number")
         return t3.$div();
       t1.y = t5 * C.JSInt_methods.$div(t3, t2);
-      $length = this.interactiveItems.length;
-      for (i = 0; i < $length; ++i) {
-        t1 = this.interactiveItems;
-        if (i >= t1.length)
-          return H.ioore(t1, i);
-        t1[i].get$mousemove();
-      }
+      t2 = this.interactiveItems;
+      $length = t2.length;
+      for (i = 0; i < $length; ++i)
+        H.interceptedTypeCheck(t2[i], "$isDisplayObject").mousemove;
     }, "call$1", "get$onMouseMove", 2, 0, 55, 4],
     onMouseDown$1: [function(_, $event) {
       var t1, $length, i, item;
@@ -1823,7 +1817,7 @@ var $$ = {};
           item.mouseup;
           if (item.__isDown)
             item.click;
-          if (!item.interactiveChildren)
+          if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
             up = true;
         } else if (item.__isDown)
           item.mouseupoutside;
@@ -1836,7 +1830,7 @@ var $$ = {};
       global = interactionData.global;
       if (!item.get$worldVisible())
         return false;
-      worldTransform = item.get$worldTransform();
+      worldTransform = item.get$_worldTransform();
       a00 = worldTransform.a;
       a01 = worldTransform.b;
       a02 = worldTransform.tx;
@@ -2629,7 +2623,7 @@ var $$ = {};
       var t1, t2;
       C.JSArray_methods.set$length($.get$texturesToUpdate(), 0);
       C.JSArray_methods.set$length($.get$texturesToDestroy(), 0);
-      stage.updateTransform$0();
+      stage._updateTransform$0();
       J.setTransform$6$x(this.context, 1, 0, 0, 1, 0, 0);
       t1 = this.context;
       t1.globalAlpha = 1;
@@ -3112,7 +3106,7 @@ var $$ = {};
       uvs = texture._uvs;
       if (uvs == null)
         return;
-      alpha = sprite.worldAlpha;
+      alpha = sprite._worldAlpha;
       tint = sprite.tint;
       verticies = this.vertices;
       t1 = sprite.anchor;
@@ -3165,7 +3159,7 @@ var $$ = {};
       }
       t1 = this.currentBatchSize;
       index = t1 * 4 * this.vertSize;
-      worldTransform = sprite.worldTransform;
+      worldTransform = sprite._worldTransform;
       a = worldTransform.a;
       b = worldTransform.c;
       c = worldTransform.b;
@@ -3440,7 +3434,7 @@ var $$ = {};
         this.__stage = stage;
       }
       M.WebGLRenderer_updateTextures(this.gl);
-      stage.updateTransform$0();
+      stage._updateTransform$0();
       J.viewport$4$x(this.gl, 0, 0, this.width, this.height);
       J.bindFramebuffer$2$x(this.gl, 36160, null);
       t1 = this.transparent;
@@ -3738,9 +3732,9 @@ var $$ = {};
     $isChar: true
   },
   BitmapText: {
-    "^": "DisplayObjectContainer;text,style,_pool,PIXI$BitmapText$dirty,tint,fontName,fontSize,textWidth,textHeight,children,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,renderable,parent,__iParent,interactiveChildren,__hit,__isOver,__mouseIsDown,__isDown,dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,stage,buttonMode,worldAlpha,_interactive,defaultCursor,worldTransform,color,dynamic,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,isMask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,rotationCache",
+    "^": "DisplayObjectContainer;text,_style,_pool,PIXI$BitmapText$_dirty,tint,fontName,fontSize,_textWidth,_textHeight,children,interactiveChildren,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,buttonMode,renderable,_parent,__hit,__isOver,__mouseIsDown,__isDown,_dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,_stage,_worldAlpha,_interactive,defaultCursor,_worldTransform,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,_rotationCache",
     updateText$0: function() {
-      var data, pos, chars, lineWidths, t1, t2, prevCharCode, maxLineWidth, line, i, t3, charCode, charData, t4, t5, lineAlignOffsets, alignOffset, lenChildren, lenChars, tint, c, t6, t7, t8, t9, t10, child;
+      var data, pos, chars, lineWidths, t1, t2, prevCharCode, maxLineWidth, line, i, t3, charCode, charData, t4, t5, lineAlignOffsets, alignOffset, lenChildren, lenChars, tint, c, t6, t7, t8, t9, t10, t11, child;
       data = $.get$BitmapText_fonts().$index(0, this.fontName);
       pos = new M.Point(null, null);
       pos.x = 0;
@@ -3813,7 +3807,7 @@ var $$ = {};
       maxLineWidth = H.intTypeCheck(P.max(maxLineWidth, pos.x));
       lineAlignOffsets = [];
       for (i = 0; i <= line; ++i) {
-        t1 = this.style.align;
+        t1 = this._style.align;
         if (t1 === "right") {
           if (i >= lineWidths.length)
             return H.ioore(lineWidths, i);
@@ -3830,7 +3824,7 @@ var $$ = {};
       lenChildren = t1.length;
       lenChars = chars.length;
       tint = this.tint;
-      for (i = 0; i < lenChars; ++i) {
+      for (t3 = H.buildFunctionType(H.getVoidRuntimeType(), [H.buildInterfaceType(M.InteractionData)]), i = 0; i < lenChars; ++i) {
         if (i < lenChildren) {
           if (i >= t1.length)
             return H.ioore(t1, i);
@@ -3839,18 +3833,17 @@ var $$ = {};
           c = null;
         H.interceptedTypeCheck(c, "$isSprite");
         if (c == null && this._pool.length > 0) {
-          t3 = this._pool;
-          if (0 >= t3.length)
-            return H.ioore(t3, 0);
-          c = H.interceptedTypeCheck(t3.pop(), "$isSprite");
+          t4 = this._pool;
+          if (0 >= t4.length)
+            return H.ioore(t4, 0);
+          c = H.interceptedTypeCheck(t4.pop(), "$isSprite");
         }
-        t3 = chars[i];
         t4 = chars.length;
-        t3 = t3.texture;
+        t5 = chars[i].texture;
         if (c != null) {
           if (i >= t4)
             return H.ioore(chars, i);
-          c.texture = t3;
+          c.texture = t5;
           c.cachedTint = 16777215;
         } else {
           if (i >= t4)
@@ -3858,46 +3851,46 @@ var $$ = {};
           t4 = new M.Point(null, null);
           t4.x = 0;
           t4.y = 0;
-          t5 = new M.Point(null, null);
-          t5.x = 0;
-          t5.y = 0;
           t6 = new M.Point(null, null);
-          t6.x = 1;
-          t6.y = 1;
+          t6.x = 0;
+          t6.y = 0;
           t7 = new M.Point(null, null);
-          t7.x = 0;
-          t7.y = 0;
-          t8 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
-          t9 = new Float32Array(9);
-          t10 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-          c = new M.Sprite(t4, null, false, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t5, t6, t7, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t8, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t9), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t10, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
-          c.texture = t3;
-          if (t3.baseTexture._hasLoaded)
-            c.onTextureUpdate$1(null);
+          t7.x = 1;
+          t7.y = 1;
+          t8 = new M.Point(null, null);
+          t8.x = 0;
+          t8.y = 0;
+          t9 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
+          t10 = new Float32Array(9);
+          t11 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
+          c = new M.Sprite(t4, null, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t6, t7, t8, 0, 1, true, null, false, false, null, false, false, false, false, false, t3._assertCheck$1(null), t3._assertCheck$1(null), t3._assertCheck$1(null), t3._assertCheck$1(null), t3._assertCheck$1(null), t3._assertCheck$1(null), t3._assertCheck$1(null), t3._assertCheck$1(null), t3._assertCheck$1(null), t3._assertCheck$1(null), t3._assertCheck$1(null), t3._assertCheck$1(null), H.assertSubtype(t9, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t10), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t11, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+          c.texture = t5;
+          if (t5.baseTexture._hasLoaded)
+            c._onTextureUpdate$1(null);
           else
-            t3.addEventListener$2(0, "update", c.get$onTextureUpdate());
+            t5.addEventListener$2(0, "update", c.get$_onTextureUpdate());
         }
-        t3 = c.position;
-        if (i >= chars.length)
-          return H.ioore(chars, i);
-        t4 = chars[i];
-        t5 = t4.position.x;
-        t4 = C.JSArray_methods.$index(lineAlignOffsets, t4.line);
-        if (typeof t5 !== "number")
-          return t5.$add();
-        t3.x = (t5 + t4) * t2;
         t4 = c.position;
         if (i >= chars.length)
           return H.ioore(chars, i);
-        t5 = chars[i].position.y;
-        if (typeof t5 !== "number")
-          return t5.$mul();
-        t4.y = t5 * t2;
-        t5 = c.scale;
-        t5.y = t2;
-        t5.x = t2;
+        t5 = chars[i];
+        t6 = t5.position.x;
+        t5 = C.JSArray_methods.$index(lineAlignOffsets, t5.line);
+        if (typeof t6 !== "number")
+          return t6.$add();
+        t4.x = (t6 + t5) * t2;
+        t5 = c.position;
+        if (i >= chars.length)
+          return H.ioore(chars, i);
+        t6 = chars[i].position.y;
+        if (typeof t6 !== "number")
+          return t6.$mul();
+        t5.y = t6 * t2;
+        t6 = c.scale;
+        t6.y = t2;
+        t6.x = t2;
         c.tint = tint;
-        if (c.parent == null)
+        if (c._parent == null)
           this.addChildAt$2(c, t1.length);
       }
       for (; t3 = t1.length, t3 > lenChars;) {
@@ -3905,28 +3898,28 @@ var $$ = {};
         C.JSArray_methods.add$1(this._pool, child);
         this.removeChildAt$1(H.Lists_indexOf(t1, child, 0, t1.length));
       }
-      this.textWidth = maxLineWidth * t2;
+      this._textWidth = maxLineWidth * t2;
       t1 = pos.y;
       t3 = data.lineHeight;
       if (typeof t1 !== "number")
         return t1.$add();
-      this.textHeight = C.JSNumber_methods.$add(t1, t3) * t2;
+      this._textHeight = C.JSNumber_methods.$add(t1, t3) * t2;
     },
-    updateTransform$0: function() {
-      if (H.boolConversionCheck(this.PIXI$BitmapText$dirty)) {
+    _updateTransform$0: function() {
+      if (H.boolConversionCheck(this.PIXI$BitmapText$_dirty)) {
         this.updateText$0();
-        this.PIXI$BitmapText$dirty = false;
+        this.PIXI$BitmapText$_dirty = false;
       }
-      M.DisplayObjectContainer.prototype.updateTransform$0.call(this);
+      M.DisplayObjectContainer.prototype._updateTransform$0.call(this);
     },
     BitmapText$2: function(text, style) {
       var font, t1, t2;
       this.text = text;
-      this.style = style;
+      this._style = style;
       this._pool = [];
       this.text = text;
-      this.PIXI$BitmapText$dirty = true;
-      this.style = style;
+      this.PIXI$BitmapText$_dirty = true;
+      this._style = style;
       font = style.font.split(" ");
       t1 = font.length;
       t2 = t1 - 1;
@@ -3935,29 +3928,42 @@ var $$ = {};
       t2 = H.stringTypeCheck(font[t2]);
       this.fontName = t2;
       if (t1 >= 2) {
-        t1 = J.replaceAll$2$s(font[t1 - 2], $.get$BitmapText_numReg(), "");
+        t1 = J.replaceAll$2$s(font[t1 - 2], $.get$BitmapText__numReg(), "");
         H.buildFunctionType(H.buildInterfaceType(P.$int), [H.buildInterfaceType(P.String)])._assertCheck$1(null);
         t1 = H.Primitives_parseInt(t1, null, null);
       } else
         t1 = $.get$BitmapText_fonts().$index(0, t2).size;
       this.fontSize = t1;
-      this.PIXI$BitmapText$dirty = true;
+      this.PIXI$BitmapText$_dirty = true;
       this.tint = style.tint;
       this.updateText$0();
-      this.PIXI$BitmapText$dirty = false;
+      this.PIXI$BitmapText$_dirty = false;
     },
-    static: {"^": "BitmapText_fonts,BitmapText_charCodeReg,BitmapText_numReg"}
+    static: {"^": "BitmapText_fonts,BitmapText__charCodeReg,BitmapText__numReg"}
   },
   TextStyle: {
-    "^": "Object;fill,font,align,stroke,strokeThickness,wordWrap,wordWrapWidth,dropShadow,dropShadowAngle,dropShadowDistance,dropShadowColor,shadowOffsetX,shadowOffsetY,shadowColor,shadowBlur,tint",
-    $isTextStyle: true
+    "^": "Object;fill,font,align,stroke,strokeThickness,wordWrap,wordWrapWidth,dropShadow,dropShadowAngle,dropShadowDistance,dropShadowColor,tint",
+    TextStyle$6$align$fill$font$stroke$strokeThickness$tint: function(align, fill, font, stroke, strokeThickness, tint) {
+      this.fill = fill;
+      this.font = font;
+      this.align = align;
+      this.stroke = stroke;
+      this.strokeThickness = strokeThickness;
+      this.tint = tint;
+    },
+    $isTextStyle: true,
+    static: {TextStyle$: function(align, fill, font, stroke, strokeThickness, tint) {
+        var t1 = new M.TextStyle("black", "bold 20pt Arial", "left", "black", 0, false, 100, false, 0.5235987755982988, 4, "black", 16777215);
+        t1.TextStyle$6$align$fill$font$stroke$strokeThickness$tint(align, fill, font, stroke, strokeThickness, tint);
+        return t1;
+      }}
   },
   Text: {
-    "^": "Sprite;_text,style,canvas,context,PIXI$Text$dirty,requiresUpdate,anchor,texture,updateFrame,textureChange,PIXI$Sprite$_width,PIXI$Sprite$_height,_uvs,tintedTexture,buffer,tint,cachedTint,blendMode,children,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,renderable,parent,__iParent,interactiveChildren,__hit,__isOver,__mouseIsDown,__isDown,dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,stage,buttonMode,worldAlpha,_interactive,defaultCursor,worldTransform,color,dynamic,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,isMask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,rotationCache",
-    updateText$0: function() {
+    "^": "Sprite;_text,_style,_canvas,_context,PIXI$Text$_dirty,_requiresUpdate,anchor,texture,updateFrame,PIXI$Sprite$_width,PIXI$Sprite$_height,_uvs,tintedTexture,buffer,tint,cachedTint,blendMode,children,interactiveChildren,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,buttonMode,renderable,_parent,__hit,__isOver,__mouseIsDown,__isDown,_dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,_stage,_worldAlpha,_interactive,defaultCursor,_worldTransform,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,_rotationCache",
+    _updateText$0: function() {
       var t1, t2, outputText, lines, lineWidths, maxLineWidth, i, lineWidth, width, result, t3, body, dummy, lineHeight, height, t4, t5, xShadowOffset, yShadowOffset, linePositionX, linePositionX0, linePositionY;
-      t1 = this.context;
-      t2 = this.style;
+      t1 = this._context;
+      t2 = this._style;
       t1.font = t2.font;
       outputText = this._text;
       if (t2.wordWrap)
@@ -3965,18 +3971,18 @@ var $$ = {};
       lines = J.split$1$s(outputText, $.get$Text_splitReg());
       lineWidths = H.assertSubtype(H.setRuntimeTypeInfo(Array(lines.length), [P.num]), "$isList", [P.num], "$asList");
       for (t1 = lineWidths.length, maxLineWidth = 0, i = 0; i < lines.length; ++i) {
-        lineWidth = J.measureText$1$x(this.context, lines[i]).width;
+        lineWidth = J.measureText$1$x(this._context, lines[i]).width;
         if (i >= t1)
           return H.ioore(lineWidths, i);
         lineWidths[i] = lineWidth;
         maxLineWidth = P.max(maxLineWidth, lineWidth);
       }
-      t2 = this.style;
+      t2 = this._style;
       width = maxLineWidth + t2.strokeThickness;
       if (t2.dropShadow)
         width += t2.dropShadowDistance;
-      this.canvas.width = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(C.JSNumber_methods.$add(width, this.context.lineWidth))));
-      t2 = "font: " + this.style.font + ";";
+      this._canvas.width = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(C.JSNumber_methods.$add(width, this._context.lineWidth))));
+      t2 = "font: " + this._style.font + ";";
       result = $.get$Text_heightCache().$index(0, t2);
       if (result == null) {
         t3 = C.HtmlDocument_methods.getElementsByTagName$1(document, "body");
@@ -3992,7 +3998,7 @@ var $$ = {};
         $.get$Text_heightCache().$indexSet(0, t2, result);
         t3.remove$0(dummy);
       }
-      t2 = this.style;
+      t2 = this._style;
       t3 = t2.strokeThickness;
       if (typeof result !== "number")
         return result.$add();
@@ -4001,8 +4007,8 @@ var $$ = {};
       t4 = t2.dropShadow;
       if (t4)
         height += t2.dropShadowDistance;
-      this.canvas.height = height;
-      t5 = this.context;
+      this._canvas.height = height;
+      t5 = this._context;
       t5.font = t2.font;
       t5.strokeStyle = t2.stroke;
       t5.lineWidth = t3;
@@ -4011,12 +4017,12 @@ var $$ = {};
         t5.fillStyle = t2.dropShadowColor;
         t2 = t2.dropShadowAngle;
         t2 = Math.sin(t2);
-        t3 = this.style;
+        t3 = this._style;
         xShadowOffset = t2 * t3.dropShadowDistance;
         t3 = t3.dropShadowAngle;
-        yShadowOffset = Math.cos(t3) * this.style.dropShadowDistance;
+        yShadowOffset = Math.cos(t3) * this._style.dropShadowDistance;
         for (i = 0; i < lines.length; ++i) {
-          t2 = this.style;
+          t2 = this._style;
           linePositionX = t2.strokeThickness / 2;
           t2 = t2.align;
           if (t2 === "right") {
@@ -4029,8 +4035,8 @@ var $$ = {};
             linePositionX0 = linePositionX + C.JSNumber_methods.$sub(maxLineWidth, lineWidths[i]) / 2;
           } else
             linePositionX0 = linePositionX;
-          this.style.fill;
-          t2 = this.context;
+          this._style.fill;
+          t2 = this._context;
           if (i >= lines.length)
             return H.ioore(lines, i);
           t3 = lines[i];
@@ -4039,9 +4045,9 @@ var $$ = {};
           t2.fillText(t3, linePositionX0 + xShadowOffset, linePositionX + i * lineHeight + yShadowOffset);
         }
       }
-      this.context.fillStyle = this.style.fill;
+      this._context.fillStyle = this._style.fill;
       for (i = 0; i < lines.length; ++i) {
-        t2 = this.style;
+        t2 = this._style;
         linePositionX = t2.strokeThickness / 2;
         linePositionY = linePositionX + i * lineHeight;
         t2 = t2.align;
@@ -4054,16 +4060,16 @@ var $$ = {};
             return H.ioore(lineWidths, i);
           linePositionX += C.JSNumber_methods.$sub(maxLineWidth, lineWidths[i]) / 2;
         }
-        t2 = this.style;
+        t2 = this._style;
         t2.stroke;
         if (t2.strokeThickness !== 0) {
-          t2 = this.context;
+          t2 = this._context;
           if (i >= lines.length)
             return H.ioore(lines, i);
           J.strokeText$3$x(t2, lines[i], linePositionX, linePositionY);
         }
-        this.style.fill;
-        t2 = this.context;
+        this._style.fill;
+        t2 = this._context;
         if (i >= lines.length)
           return H.ioore(lines, i);
         t3 = lines[i];
@@ -4073,7 +4079,7 @@ var $$ = {};
       }
       t1 = this.texture;
       t2 = t1.baseTexture;
-      t3 = this.canvas;
+      t3 = this._canvas;
       t2.width = t3.width;
       t2.height = t3.height;
       t2 = t1.crop;
@@ -4086,31 +4092,31 @@ var $$ = {};
       t2.height = t4;
       this.PIXI$Sprite$_width = t3.width;
       this.PIXI$Sprite$_height = t3.height;
-      this.requiresUpdate = true;
+      this._requiresUpdate = true;
     },
     _renderWebGL$1: function(renderSession) {
-      if (H.boolConversionCheck(this.requiresUpdate)) {
-        this.requiresUpdate = false;
+      if (H.boolConversionCheck(this._requiresUpdate)) {
+        this._requiresUpdate = false;
         M.updateWebGLTexture(this.texture.baseTexture, renderSession.gl);
       }
       M.Sprite.prototype._renderWebGL$1.call(this, renderSession);
     },
-    updateTransform$0: function() {
-      if (H.boolConversionCheck(this.PIXI$Text$dirty)) {
-        this.updateText$0();
-        this.PIXI$Text$dirty = false;
+    _updateTransform$0: function() {
+      if (H.boolConversionCheck(this.PIXI$Text$_dirty)) {
+        this._updateText$0();
+        this.PIXI$Text$_dirty = false;
       }
-      M.DisplayObjectContainer.prototype.updateTransform$0.call(this);
+      M.DisplayObjectContainer.prototype._updateTransform$0.call(this);
     },
     wordWrap$1: function(_, text) {
       var lines, result, i, spaceLeft, words, j, wordWidth, t1;
       lines = H.assertSubtype(text.split("\n"), "$isList", [P.String], "$asList");
       for (result = "", i = 0; i < lines.length; ++i) {
-        spaceLeft = this.style.wordWrapWidth;
+        spaceLeft = this._style.wordWrapWidth;
         words = J.split$1$s(lines[i], " ");
         for (j = 0; j < words.length; ++j) {
-          wordWidth = J.measureText$1$x(this.context, words[j]).width;
-          t1 = J.measureText$1$x(this.context, " ").width;
+          wordWidth = J.measureText$1$x(this._context, words[j]).width;
+          t1 = J.measureText$1$x(this._context, " ").width;
           if (typeof wordWidth !== "number")
             return wordWidth.$add();
           t1 = C.JSDouble_methods.$add(wordWidth, t1);
@@ -4120,7 +4126,7 @@ var $$ = {};
             if (j >= words.length)
               return H.ioore(words, j);
             result = C.JSString_methods.$add(result, words[j]);
-            spaceLeft = this.style.wordWrapWidth - wordWidth;
+            spaceLeft = this._style.wordWrapWidth - wordWidth;
           } else {
             spaceLeft -= t1;
             if (j >= words.length)
@@ -4136,11 +4142,11 @@ var $$ = {};
     Text$2: function(text, style) {
       var t1, t2, t3, baseTexture;
       this._text = text;
-      this.style = style;
+      this._style = style;
       t1 = H.interceptedTypeCheck(C.HtmlDocument_methods._createElement$2(document, "canvas", null), "$isCanvasElement");
-      this.canvas = t1;
-      this.context = H.interceptedTypeCheck(J.getContext$1$x(t1, "2d"), "$isCanvasRenderingContext2D");
-      t1 = this.canvas;
+      this._canvas = t1;
+      this._context = H.interceptedTypeCheck(J.getContext$1$x(t1, "2d"), "$isCanvasRenderingContext2D");
+      t1 = this._canvas;
       t1.toString;
       t2 = H.assertSubtype(new W._ElementAttributeMap(t1), "$isMap", [P.String, P.String], "$asMap");
       H.assertSubtype(t2, "$isMap", [P.String, P.String], "$asMap");
@@ -4167,12 +4173,12 @@ var $$ = {};
       this.texture = M.Texture$(baseTexture, null);
       this._setupTexture$0();
       this._text = text;
-      this.PIXI$Text$dirty = true;
-      this.style = style;
-      this.PIXI$Text$dirty = true;
+      this.PIXI$Text$_dirty = true;
+      this._style = style;
+      this.PIXI$Text$_dirty = true;
     },
     static: {"^": "Text_splitReg,Text_heightCache", Text$: function(text, style) {
-        var t1, t2, t3, t4, t5, t6, t7;
+        var t1, t2, t3, t4, t5, t6, t7, t8;
         t1 = new M.Point(null, null);
         t1.x = 0;
         t1.y = 0;
@@ -4188,7 +4194,8 @@ var $$ = {};
         t5 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
         t6 = new Float32Array(9);
         t7 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-        t7 = new M.Text(null, null, null, null, null, null, t1, null, false, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t2, t3, t4, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t6), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t7, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+        t8 = H.buildFunctionType(H.getVoidRuntimeType(), [H.buildInterfaceType(M.InteractionData)]);
+        t7 = new M.Text(null, null, null, null, null, null, t1, null, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t2, t3, t4, 0, 1, true, null, false, false, null, false, false, false, false, false, t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t6), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t7, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
         t7.renderable = true;
         t7.Text$2(text, style);
         return t7;
@@ -15162,7 +15169,7 @@ var $$ = {};
   main_init: {
     "^": "Closure:36;",
     call$0: function() {
-      var assetsToLoader, t1, t2, t3, t4, t5, t6, t7, t8, t9, stage, loader, texture, background, renderer, textSample, spinningText, countingText;
+      var assetsToLoader, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, stage, loader, texture, background, renderer, textSample, spinningText, countingText;
       assetsToLoader = ["desyrel.xml"];
       t1 = new Float32Array(9);
       t2 = new M.Point(null, null);
@@ -15179,7 +15186,8 @@ var $$ = {};
       t7 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
       t8 = H.assertSubtype([], "$isList", [P.num], "$asList");
       t9 = H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList");
-      stage = new M.Stage(null, false, new M.Rectangle(0, 0, 100000, 100000), 0, t8, null, new M.Matrix(1, 0, 0, 1, 0, 0, t1), null, t9, null, null, t2, t3, t4, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t6), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t7, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+      t10 = H.buildFunctionType(H.getVoidRuntimeType(), [H.buildInterfaceType(M.InteractionData)]);
+      stage = new M.Stage(null, false, new M.Rectangle(0, 0, 100000, 100000), 0, t8, null, new M.Matrix(1, 0, 0, 1, 0, 0, t1), null, t9, false, null, null, t2, t3, t4, 0, 1, true, null, false, false, null, false, false, false, false, false, t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t6), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t7, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
       stage.Stage$2(6750105, true);
       H.assertSubtype(assetsToLoader, "$isList", [P.String], "$asList");
       t7 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
@@ -15202,13 +15210,13 @@ var $$ = {};
       t3 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
       t1 = new Float32Array(9);
       t2 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-      background = new M.Sprite(t7, null, false, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t6, t5, t4, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t3, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t1), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t2, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+      background = new M.Sprite(t7, null, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t6, t5, t4, 0, 1, true, null, false, false, null, false, false, false, false, false, t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), H.assertSubtype(t3, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t1), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t2, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
       background.texture = texture;
       background._setupTexture$0();
       stage.addChildAt$2(background, t9.length);
       renderer = M.autoDetectRenderer(window.innerWidth, window.innerHeight, null, false, false);
       J.append$1$x(document.body, renderer.view);
-      t2 = new M.TextStyle("black", "bold 20pt Arial", "left", "black", 0, false, 100, false, 0.5235987755982988, 4, "black", 0, 0, "rgba(0,0,0,0)", 0, 16777215);
+      t2 = M.TextStyle$("left", "black", "bold 20pt Arial", "black", 0, 16777215);
       t2.font = "35px Snippet";
       t2.fill = "white";
       t2.align = "left";
@@ -15216,7 +15224,7 @@ var $$ = {};
       t2 = textSample.position;
       t2.x = 20;
       t2.y = 20;
-      t2 = new M.TextStyle("black", "bold 20pt Arial", "left", "black", 0, false, 100, false, 0.5235987755982988, 4, "black", 0, 0, "rgba(0,0,0,0)", 0, 16777215);
+      t2 = M.TextStyle$("left", "black", "bold 20pt Arial", "black", 0, 16777215);
       t2.font = "bold 60px Podkova";
       t2.fill = "#cc00ff";
       t2.align = "center";
@@ -15229,7 +15237,7 @@ var $$ = {};
       t2 = spinningText.position;
       t2.x = 310;
       t2.y = 200;
-      t2 = new M.TextStyle("black", "bold 20pt Arial", "left", "black", 0, false, 100, false, 0.5235987755982988, 4, "black", 0, 0, "rgba(0,0,0,0)", 0, 16777215);
+      t2 = M.TextStyle$("left", "black", "bold 20pt Arial", "black", 0, 16777215);
       t2.font = "bold italic 60px Arvo";
       t2.fill = "#3e1707";
       t2.align = "center";
@@ -15250,8 +15258,8 @@ var $$ = {};
   main_init_onAssetsLoaded: {
     "^": "Closure:36;stage_0",
     call$0: function() {
-      var t1, t2, t3, t4, t5, t6, t7, bitmapFontText;
-      t1 = new M.TextStyle("black", "bold 20pt Arial", "left", "black", 0, false, 100, false, 0.5235987755982988, 4, "black", 0, 0, "rgba(0,0,0,0)", 0, 16777215);
+      var t1, t2, t3, t4, t5, t6, t7, t8, bitmapFontText;
+      t1 = M.TextStyle$("left", "black", "bold 20pt Arial", "black", 0, 16777215);
       t1.font = "35px Desyrel";
       t1.align = "right";
       t2 = new M.Point(null, null);
@@ -15266,9 +15274,10 @@ var $$ = {};
       t5 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
       t6 = new Float32Array(9);
       t7 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-      bitmapFontText = new M.BitmapText(null, null, null, null, 16777215, null, null, null, null, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t2, t3, t4, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t6), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t7, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+      t8 = H.buildFunctionType(H.getVoidRuntimeType(), [H.buildInterfaceType(M.InteractionData)]);
+      bitmapFontText = new M.BitmapText(null, null, null, null, 16777215, null, null, null, null, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t2, t3, t4, 0, 1, true, null, false, false, null, false, false, false, false, false, t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t6), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t7, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
       bitmapFontText.BitmapText$2("bitmap fonts are\n now supported!", t1);
-      bitmapFontText.position.x = C.JSInt_methods.$sub(620, bitmapFontText.textWidth) - 20;
+      bitmapFontText.position.x = C.JSInt_methods.$sub(620, bitmapFontText._textWidth) - 20;
       bitmapFontText.position.y = 20;
       t1 = this.stage_0;
       t1.addChildAt$2(bitmapFontText, t1.children.length);
@@ -15376,6 +15385,8 @@ P.Pattern.$isObject = true;
 W.MouseEvent.$isMouseEvent = true;
 W.MouseEvent.$isEvent = true;
 W.MouseEvent.$isObject = true;
+M.InteractionData.$isInteractionData = true;
+M.InteractionData.$isObject = true;
 // getInterceptor methods
 J.getInterceptor = function(receiver) {
   if (typeof receiver == "number") {
@@ -15982,7 +15993,7 @@ Isolate.$lazy($, "glContexts", "glContexts", "get$glContexts", function() {
 Isolate.$lazy($, "fonts", "BitmapText_fonts", "get$BitmapText_fonts", function() {
   return P.LinkedHashMap_LinkedHashMap$_empty(null, null);
 });
-Isolate.$lazy($, "numReg", "BitmapText_numReg", "get$BitmapText_numReg", function() {
+Isolate.$lazy($, "_numReg", "BitmapText__numReg", "get$BitmapText__numReg", function() {
   return new H.JSSyntaxRegExp("[a-zA-Z]", H.JSSyntaxRegExp_makeNative("[a-zA-Z]", false, true, false), null, null);
 });
 Isolate.$lazy($, "splitReg", "Text_splitReg", "get$Text_splitReg", function() {
@@ -19316,6 +19327,15 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   Rectangle.prototype = $desc;
+  function Shape() {
+  }
+  Shape.builtin$cls = "Shape";
+  if (!"name" in Shape)
+    Shape.name = "Shape";
+  $desc = $collectedClasses.Shape;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  Shape.prototype = $desc;
   function DisplayInterface() {
   }
   DisplayInterface.builtin$cls = "DisplayInterface";
@@ -19325,12 +19345,9 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   DisplayInterface.prototype = $desc;
-  function DisplayObject(hitArea, parent, interactiveChildren, mousemove, worldTransform) {
+  function DisplayObject(hitArea, _worldTransform) {
     this.hitArea = hitArea;
-    this.parent = parent;
-    this.interactiveChildren = interactiveChildren;
-    this.mousemove = mousemove;
-    this.worldTransform = worldTransform;
+    this._worldTransform = _worldTransform;
   }
   DisplayObject.builtin$cls = "DisplayObject";
   if (!"name" in DisplayObject)
@@ -19342,11 +19359,8 @@ function dart_precompiled($collectedClasses) {
   DisplayObject.prototype.get$hitArea = function() {
     return this.hitArea;
   };
-  DisplayObject.prototype.get$mousemove = function() {
-    return this.mousemove;
-  };
-  DisplayObject.prototype.get$worldTransform = function() {
-    return this.worldTransform;
+  DisplayObject.prototype.get$_worldTransform = function() {
+    return this._worldTransform;
   };
   function DisplayObjectContainer() {
   }
@@ -19357,11 +19371,10 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   DisplayObjectContainer.prototype = $desc;
-  function Sprite(anchor, texture, updateFrame, textureChange, PIXI$Sprite$_width, PIXI$Sprite$_height, _uvs, tintedTexture, buffer, tint, cachedTint, blendMode, children, _width, _height, position, scale, pivot, rotation, alpha, visible, hitArea, renderable, parent, __iParent, interactiveChildren, __hit, __isOver, __mouseIsDown, __isDown, dirty, click, mousemove, mousedown, mouseout, mouseover, mouseup, mouseupoutside, touchmove, touchstart, touchend, tap, touchendoutside, __touchData, stage, buttonMode, worldAlpha, _interactive, defaultCursor, worldTransform, color, dynamic, _sr, _cr, filterArea, _bounds, _currentBounds, _mask, isMask, _cacheAsBitmap, _cachedSprite, _cacheIsDirty, _filterBlock, _filters, rotationCache) {
+  function Sprite(anchor, texture, updateFrame, PIXI$Sprite$_width, PIXI$Sprite$_height, _uvs, tintedTexture, buffer, tint, cachedTint, blendMode, children, interactiveChildren, _width, _height, position, scale, pivot, rotation, alpha, visible, hitArea, buttonMode, renderable, _parent, __hit, __isOver, __mouseIsDown, __isDown, _dirty, click, mousemove, mousedown, mouseout, mouseover, mouseup, mouseupoutside, touchmove, touchstart, touchend, tap, touchendoutside, __touchData, _stage, _worldAlpha, _interactive, defaultCursor, _worldTransform, _sr, _cr, filterArea, _bounds, _currentBounds, _mask, _cacheAsBitmap, _cachedSprite, _cacheIsDirty, _filterBlock, _filters, _rotationCache) {
     this.anchor = anchor;
     this.texture = texture;
     this.updateFrame = updateFrame;
-    this.textureChange = textureChange;
     this.PIXI$Sprite$_width = PIXI$Sprite$_width;
     this.PIXI$Sprite$_height = PIXI$Sprite$_height;
     this._uvs = _uvs;
@@ -19371,6 +19384,7 @@ function dart_precompiled($collectedClasses) {
     this.cachedTint = cachedTint;
     this.blendMode = blendMode;
     this.children = children;
+    this.interactiveChildren = interactiveChildren;
     this._width = _width;
     this._height = _height;
     this.position = position;
@@ -19380,15 +19394,14 @@ function dart_precompiled($collectedClasses) {
     this.alpha = alpha;
     this.visible = visible;
     this.hitArea = hitArea;
+    this.buttonMode = buttonMode;
     this.renderable = renderable;
-    this.parent = parent;
-    this.__iParent = __iParent;
-    this.interactiveChildren = interactiveChildren;
+    this._parent = _parent;
     this.__hit = __hit;
     this.__isOver = __isOver;
     this.__mouseIsDown = __mouseIsDown;
     this.__isDown = __isDown;
-    this.dirty = dirty;
+    this._dirty = _dirty;
     this.click = click;
     this.mousemove = mousemove;
     this.mousedown = mousedown;
@@ -19402,27 +19415,23 @@ function dart_precompiled($collectedClasses) {
     this.tap = tap;
     this.touchendoutside = touchendoutside;
     this.__touchData = __touchData;
-    this.stage = stage;
-    this.buttonMode = buttonMode;
-    this.worldAlpha = worldAlpha;
+    this._stage = _stage;
+    this._worldAlpha = _worldAlpha;
     this._interactive = _interactive;
     this.defaultCursor = defaultCursor;
-    this.worldTransform = worldTransform;
-    this.color = color;
-    this.dynamic = dynamic;
+    this._worldTransform = _worldTransform;
     this._sr = _sr;
     this._cr = _cr;
     this.filterArea = filterArea;
     this._bounds = _bounds;
     this._currentBounds = _currentBounds;
     this._mask = _mask;
-    this.isMask = isMask;
     this._cacheAsBitmap = _cacheAsBitmap;
     this._cachedSprite = _cachedSprite;
     this._cacheIsDirty = _cacheIsDirty;
     this._filterBlock = _filterBlock;
     this._filters = _filters;
-    this.rotationCache = rotationCache;
+    this._rotationCache = _rotationCache;
   }
   Sprite.builtin$cls = "Sprite";
   if (!"name" in Sprite)
@@ -19431,16 +19440,17 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   Sprite.prototype = $desc;
-  function Stage(PIXI$Stage$dirty, _interactiveEventsAdded, PIXI$Stage$hitArea, backgroundColor, backgroundColorSplit, backgroundColorString, PIXI$Stage$worldTransform, interactionManager, children, _width, _height, position, scale, pivot, rotation, alpha, visible, hitArea, renderable, parent, __iParent, interactiveChildren, __hit, __isOver, __mouseIsDown, __isDown, dirty, click, mousemove, mousedown, mouseout, mouseover, mouseup, mouseupoutside, touchmove, touchstart, touchend, tap, touchendoutside, __touchData, stage, buttonMode, worldAlpha, _interactive, defaultCursor, worldTransform, color, dynamic, _sr, _cr, filterArea, _bounds, _currentBounds, _mask, isMask, _cacheAsBitmap, _cachedSprite, _cacheIsDirty, _filterBlock, _filters, rotationCache) {
-    this.PIXI$Stage$dirty = PIXI$Stage$dirty;
+  function Stage(PIXI$Stage$_dirty, _interactiveEventsAdded, PIXI$Stage$hitArea, backgroundColor, backgroundColorSplit, backgroundColorString, PIXI$Stage$_worldTransform, interactionManager, children, interactiveChildren, _width, _height, position, scale, pivot, rotation, alpha, visible, hitArea, buttonMode, renderable, _parent, __hit, __isOver, __mouseIsDown, __isDown, _dirty, click, mousemove, mousedown, mouseout, mouseover, mouseup, mouseupoutside, touchmove, touchstart, touchend, tap, touchendoutside, __touchData, _stage, _worldAlpha, _interactive, defaultCursor, _worldTransform, _sr, _cr, filterArea, _bounds, _currentBounds, _mask, _cacheAsBitmap, _cachedSprite, _cacheIsDirty, _filterBlock, _filters, _rotationCache) {
+    this.PIXI$Stage$_dirty = PIXI$Stage$_dirty;
     this._interactiveEventsAdded = _interactiveEventsAdded;
     this.PIXI$Stage$hitArea = PIXI$Stage$hitArea;
     this.backgroundColor = backgroundColor;
     this.backgroundColorSplit = backgroundColorSplit;
     this.backgroundColorString = backgroundColorString;
-    this.PIXI$Stage$worldTransform = PIXI$Stage$worldTransform;
+    this.PIXI$Stage$_worldTransform = PIXI$Stage$_worldTransform;
     this.interactionManager = interactionManager;
     this.children = children;
+    this.interactiveChildren = interactiveChildren;
     this._width = _width;
     this._height = _height;
     this.position = position;
@@ -19450,15 +19460,14 @@ function dart_precompiled($collectedClasses) {
     this.alpha = alpha;
     this.visible = visible;
     this.hitArea = hitArea;
+    this.buttonMode = buttonMode;
     this.renderable = renderable;
-    this.parent = parent;
-    this.__iParent = __iParent;
-    this.interactiveChildren = interactiveChildren;
+    this._parent = _parent;
     this.__hit = __hit;
     this.__isOver = __isOver;
     this.__mouseIsDown = __mouseIsDown;
     this.__isDown = __isDown;
-    this.dirty = dirty;
+    this._dirty = _dirty;
     this.click = click;
     this.mousemove = mousemove;
     this.mousedown = mousedown;
@@ -19472,27 +19481,23 @@ function dart_precompiled($collectedClasses) {
     this.tap = tap;
     this.touchendoutside = touchendoutside;
     this.__touchData = __touchData;
-    this.stage = stage;
-    this.buttonMode = buttonMode;
-    this.worldAlpha = worldAlpha;
+    this._stage = _stage;
+    this._worldAlpha = _worldAlpha;
     this._interactive = _interactive;
     this.defaultCursor = defaultCursor;
-    this.worldTransform = worldTransform;
-    this.color = color;
-    this.dynamic = dynamic;
+    this._worldTransform = _worldTransform;
     this._sr = _sr;
     this._cr = _cr;
     this.filterArea = filterArea;
     this._bounds = _bounds;
     this._currentBounds = _currentBounds;
     this._mask = _mask;
-    this.isMask = isMask;
     this._cacheAsBitmap = _cacheAsBitmap;
     this._cachedSprite = _cachedSprite;
     this._cacheIsDirty = _cacheIsDirty;
     this._filterBlock = _filterBlock;
     this._filters = _filters;
-    this.rotationCache = rotationCache;
+    this._rotationCache = _rotationCache;
   }
   Stage.builtin$cls = "Stage";
   if (!"name" in Stage)
@@ -19504,8 +19509,8 @@ function dart_precompiled($collectedClasses) {
   Stage.prototype.get$hitArea = function() {
     return this.PIXI$Stage$hitArea;
   };
-  Stage.prototype.get$worldTransform = function() {
-    return this.PIXI$Stage$worldTransform;
+  Stage.prototype.get$_worldTransform = function() {
+    return this.PIXI$Stage$_worldTransform;
   };
   function BoneData(name, parent, length, x, y, rotation, scaleX, scaleY) {
     this.name = name;
@@ -20496,17 +20501,18 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   Char.prototype = $desc;
-  function BitmapText(text, style, _pool, PIXI$BitmapText$dirty, tint, fontName, fontSize, textWidth, textHeight, children, _width, _height, position, scale, pivot, rotation, alpha, visible, hitArea, renderable, parent, __iParent, interactiveChildren, __hit, __isOver, __mouseIsDown, __isDown, dirty, click, mousemove, mousedown, mouseout, mouseover, mouseup, mouseupoutside, touchmove, touchstart, touchend, tap, touchendoutside, __touchData, stage, buttonMode, worldAlpha, _interactive, defaultCursor, worldTransform, color, dynamic, _sr, _cr, filterArea, _bounds, _currentBounds, _mask, isMask, _cacheAsBitmap, _cachedSprite, _cacheIsDirty, _filterBlock, _filters, rotationCache) {
+  function BitmapText(text, _style, _pool, PIXI$BitmapText$_dirty, tint, fontName, fontSize, _textWidth, _textHeight, children, interactiveChildren, _width, _height, position, scale, pivot, rotation, alpha, visible, hitArea, buttonMode, renderable, _parent, __hit, __isOver, __mouseIsDown, __isDown, _dirty, click, mousemove, mousedown, mouseout, mouseover, mouseup, mouseupoutside, touchmove, touchstart, touchend, tap, touchendoutside, __touchData, _stage, _worldAlpha, _interactive, defaultCursor, _worldTransform, _sr, _cr, filterArea, _bounds, _currentBounds, _mask, _cacheAsBitmap, _cachedSprite, _cacheIsDirty, _filterBlock, _filters, _rotationCache) {
     this.text = text;
-    this.style = style;
+    this._style = _style;
     this._pool = _pool;
-    this.PIXI$BitmapText$dirty = PIXI$BitmapText$dirty;
+    this.PIXI$BitmapText$_dirty = PIXI$BitmapText$_dirty;
     this.tint = tint;
     this.fontName = fontName;
     this.fontSize = fontSize;
-    this.textWidth = textWidth;
-    this.textHeight = textHeight;
+    this._textWidth = _textWidth;
+    this._textHeight = _textHeight;
     this.children = children;
+    this.interactiveChildren = interactiveChildren;
     this._width = _width;
     this._height = _height;
     this.position = position;
@@ -20516,15 +20522,14 @@ function dart_precompiled($collectedClasses) {
     this.alpha = alpha;
     this.visible = visible;
     this.hitArea = hitArea;
+    this.buttonMode = buttonMode;
     this.renderable = renderable;
-    this.parent = parent;
-    this.__iParent = __iParent;
-    this.interactiveChildren = interactiveChildren;
+    this._parent = _parent;
     this.__hit = __hit;
     this.__isOver = __isOver;
     this.__mouseIsDown = __mouseIsDown;
     this.__isDown = __isDown;
-    this.dirty = dirty;
+    this._dirty = _dirty;
     this.click = click;
     this.mousemove = mousemove;
     this.mousedown = mousedown;
@@ -20538,27 +20543,23 @@ function dart_precompiled($collectedClasses) {
     this.tap = tap;
     this.touchendoutside = touchendoutside;
     this.__touchData = __touchData;
-    this.stage = stage;
-    this.buttonMode = buttonMode;
-    this.worldAlpha = worldAlpha;
+    this._stage = _stage;
+    this._worldAlpha = _worldAlpha;
     this._interactive = _interactive;
     this.defaultCursor = defaultCursor;
-    this.worldTransform = worldTransform;
-    this.color = color;
-    this.dynamic = dynamic;
+    this._worldTransform = _worldTransform;
     this._sr = _sr;
     this._cr = _cr;
     this.filterArea = filterArea;
     this._bounds = _bounds;
     this._currentBounds = _currentBounds;
     this._mask = _mask;
-    this.isMask = isMask;
     this._cacheAsBitmap = _cacheAsBitmap;
     this._cachedSprite = _cachedSprite;
     this._cacheIsDirty = _cacheIsDirty;
     this._filterBlock = _filterBlock;
     this._filters = _filters;
-    this.rotationCache = rotationCache;
+    this._rotationCache = _rotationCache;
   }
   BitmapText.builtin$cls = "BitmapText";
   if (!"name" in BitmapText)
@@ -20567,7 +20568,7 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   BitmapText.prototype = $desc;
-  function TextStyle(fill, font, align, stroke, strokeThickness, wordWrap, wordWrapWidth, dropShadow, dropShadowAngle, dropShadowDistance, dropShadowColor, shadowOffsetX, shadowOffsetY, shadowColor, shadowBlur, tint) {
+  function TextStyle(fill, font, align, stroke, strokeThickness, wordWrap, wordWrapWidth, dropShadow, dropShadowAngle, dropShadowDistance, dropShadowColor, tint) {
     this.fill = fill;
     this.font = font;
     this.align = align;
@@ -20579,10 +20580,6 @@ function dart_precompiled($collectedClasses) {
     this.dropShadowAngle = dropShadowAngle;
     this.dropShadowDistance = dropShadowDistance;
     this.dropShadowColor = dropShadowColor;
-    this.shadowOffsetX = shadowOffsetX;
-    this.shadowOffsetY = shadowOffsetY;
-    this.shadowColor = shadowColor;
-    this.shadowBlur = shadowBlur;
     this.tint = tint;
   }
   TextStyle.builtin$cls = "TextStyle";
@@ -20592,17 +20589,16 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   TextStyle.prototype = $desc;
-  function Text(_text, style, canvas, context, PIXI$Text$dirty, requiresUpdate, anchor, texture, updateFrame, textureChange, PIXI$Sprite$_width, PIXI$Sprite$_height, _uvs, tintedTexture, buffer, tint, cachedTint, blendMode, children, _width, _height, position, scale, pivot, rotation, alpha, visible, hitArea, renderable, parent, __iParent, interactiveChildren, __hit, __isOver, __mouseIsDown, __isDown, dirty, click, mousemove, mousedown, mouseout, mouseover, mouseup, mouseupoutside, touchmove, touchstart, touchend, tap, touchendoutside, __touchData, stage, buttonMode, worldAlpha, _interactive, defaultCursor, worldTransform, color, dynamic, _sr, _cr, filterArea, _bounds, _currentBounds, _mask, isMask, _cacheAsBitmap, _cachedSprite, _cacheIsDirty, _filterBlock, _filters, rotationCache) {
+  function Text(_text, _style, _canvas, _context, PIXI$Text$_dirty, _requiresUpdate, anchor, texture, updateFrame, PIXI$Sprite$_width, PIXI$Sprite$_height, _uvs, tintedTexture, buffer, tint, cachedTint, blendMode, children, interactiveChildren, _width, _height, position, scale, pivot, rotation, alpha, visible, hitArea, buttonMode, renderable, _parent, __hit, __isOver, __mouseIsDown, __isDown, _dirty, click, mousemove, mousedown, mouseout, mouseover, mouseup, mouseupoutside, touchmove, touchstart, touchend, tap, touchendoutside, __touchData, _stage, _worldAlpha, _interactive, defaultCursor, _worldTransform, _sr, _cr, filterArea, _bounds, _currentBounds, _mask, _cacheAsBitmap, _cachedSprite, _cacheIsDirty, _filterBlock, _filters, _rotationCache) {
     this._text = _text;
-    this.style = style;
-    this.canvas = canvas;
-    this.context = context;
-    this.PIXI$Text$dirty = PIXI$Text$dirty;
-    this.requiresUpdate = requiresUpdate;
+    this._style = _style;
+    this._canvas = _canvas;
+    this._context = _context;
+    this.PIXI$Text$_dirty = PIXI$Text$_dirty;
+    this._requiresUpdate = _requiresUpdate;
     this.anchor = anchor;
     this.texture = texture;
     this.updateFrame = updateFrame;
-    this.textureChange = textureChange;
     this.PIXI$Sprite$_width = PIXI$Sprite$_width;
     this.PIXI$Sprite$_height = PIXI$Sprite$_height;
     this._uvs = _uvs;
@@ -20612,6 +20608,7 @@ function dart_precompiled($collectedClasses) {
     this.cachedTint = cachedTint;
     this.blendMode = blendMode;
     this.children = children;
+    this.interactiveChildren = interactiveChildren;
     this._width = _width;
     this._height = _height;
     this.position = position;
@@ -20621,15 +20618,14 @@ function dart_precompiled($collectedClasses) {
     this.alpha = alpha;
     this.visible = visible;
     this.hitArea = hitArea;
+    this.buttonMode = buttonMode;
     this.renderable = renderable;
-    this.parent = parent;
-    this.__iParent = __iParent;
-    this.interactiveChildren = interactiveChildren;
+    this._parent = _parent;
     this.__hit = __hit;
     this.__isOver = __isOver;
     this.__mouseIsDown = __mouseIsDown;
     this.__isDown = __isDown;
-    this.dirty = dirty;
+    this._dirty = _dirty;
     this.click = click;
     this.mousemove = mousemove;
     this.mousedown = mousedown;
@@ -20643,27 +20639,23 @@ function dart_precompiled($collectedClasses) {
     this.tap = tap;
     this.touchendoutside = touchendoutside;
     this.__touchData = __touchData;
-    this.stage = stage;
-    this.buttonMode = buttonMode;
-    this.worldAlpha = worldAlpha;
+    this._stage = _stage;
+    this._worldAlpha = _worldAlpha;
     this._interactive = _interactive;
     this.defaultCursor = defaultCursor;
-    this.worldTransform = worldTransform;
-    this.color = color;
-    this.dynamic = dynamic;
+    this._worldTransform = _worldTransform;
     this._sr = _sr;
     this._cr = _cr;
     this.filterArea = filterArea;
     this._bounds = _bounds;
     this._currentBounds = _currentBounds;
     this._mask = _mask;
-    this.isMask = isMask;
     this._cacheAsBitmap = _cacheAsBitmap;
     this._cachedSprite = _cachedSprite;
     this._cacheIsDirty = _cacheIsDirty;
     this._filterBlock = _filterBlock;
     this._filters = _filters;
-    this.rotationCache = rotationCache;
+    this._rotationCache = _rotationCache;
   }
   Text.builtin$cls = "Text";
   if (!"name" in Text)
@@ -23721,5 +23713,5 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   main_init_animate.prototype = $desc;
-  return [HtmlElement, AnchorElement, AnimationEvent, AreaElement, AudioElement, AutocompleteErrorEvent, BRElement, BaseElement, BeforeLoadEvent, BeforeUnloadEvent, Blob, BodyElement, ButtonElement, CDataSection, CanvasElement, CanvasGradient, CanvasPattern, CanvasRenderingContext, CanvasRenderingContext2D, CharacterData, CloseEvent, Comment, CompositionEvent, ContentElement, CssFontFaceLoadEvent, CssStyleDeclaration, CustomEvent, DListElement, DataListElement, DetailsElement, DeviceMotionEvent, DeviceOrientationEvent, DialogElement, DivElement, Document, DocumentFragment, DomError, DomException, Element, EmbedElement, ErrorEvent, Event, EventTarget, FieldSetElement, File, FileError, FocusEvent, FormElement, HRElement, HashChangeEvent, HeadElement, HeadingElement, HtmlCollection, HtmlDocument, HtmlFormControlsCollection, HtmlHtmlElement, HtmlOptionsCollection, HttpRequest, HttpRequestEventTarget, HttpRequestUpload, IFrameElement, ImageData, ImageElement, InputElement, InstallEvent, InstallPhaseEvent, KeyboardEvent, KeygenElement, LIElement, LabelElement, LegendElement, LinkElement, Location, MapElement, MediaElement, MediaError, MediaKeyError, MediaKeyEvent, MediaKeyMessageEvent, MediaKeyNeededEvent, MediaStream, MediaStreamEvent, MediaStreamTrackEvent, MenuElement, MessageEvent, MetaElement, MeterElement, MidiConnectionEvent, MidiMessageEvent, ModElement, MouseEvent, Navigator, NavigatorUserMediaError, Node, NodeList, OListElement, ObjectElement, OptGroupElement, OptionElement, OutputElement, OverflowEvent, PageTransitionEvent, ParagraphElement, ParamElement, PopStateEvent, PositionError, PreElement, ProcessingInstruction, ProgressElement, ProgressEvent, QuoteElement, ResourceProgressEvent, RtcDataChannelEvent, RtcDtmfToneChangeEvent, RtcIceCandidateEvent, ScriptElement, SecurityPolicyViolationEvent, SelectElement, ShadowElement, ShadowRoot, SourceElement, SpanElement, SpeechInputEvent, SpeechRecognitionError, SpeechRecognitionEvent, SpeechSynthesisEvent, StorageEvent, StyleElement, TableCaptionElement, TableCellElement, TableColElement, TableElement, TableRowElement, TableSectionElement, TemplateElement, Text0, TextAreaElement, TextEvent, TextMetrics, TitleElement, TouchEvent, TrackElement, TrackEvent, TransitionEvent, UIEvent, UListElement, UnknownElement, VideoElement, WheelEvent, Window, XmlDocument, _Attr, _ClientRect, _DocumentType, _HTMLAppletElement, _HTMLDirectoryElement, _HTMLFontElement, _HTMLFrameElement, _HTMLFrameSetElement, _HTMLMarqueeElement, _MutationEvent, _NamedNodeMap, _Notation, _XMLHttpRequestProgressEvent, KeyRange, VersionChangeEvent, AElement, AltGlyphElement, AnimateElement, AnimateMotionElement, AnimateTransformElement, AnimatedEnumeration, AnimatedLength, AnimatedLengthList, AnimatedNumber, AnimatedNumberList, AnimatedString, AnimationElement, CircleElement, ClipPathElement, DefsElement, DescElement, DiscardElement, EllipseElement, FEBlendElement, FEColorMatrixElement, FEComponentTransferElement, FECompositeElement, FEConvolveMatrixElement, FEDiffuseLightingElement, FEDisplacementMapElement, FEDistantLightElement, FEFloodElement, FEFuncAElement, FEFuncBElement, FEFuncGElement, FEFuncRElement, FEGaussianBlurElement, FEImageElement, FEMergeElement, FEMergeNodeElement, FEMorphologyElement, FEOffsetElement, FEPointLightElement, FESpecularLightingElement, FESpotLightElement, FETileElement, FETurbulenceElement, FilterElement, ForeignObjectElement, GElement, GeometryElement, GraphicsElement, ImageElement0, LineElement, LinearGradientElement, MarkerElement, MaskElement, MetadataElement, PathElement, PatternElement, PointList, PolygonElement, PolylineElement, RadialGradientElement, Rect, RectElement, ScriptElement0, SetElement, StopElement, StyleElement0, SvgElement, SvgSvgElement, SwitchElement, SymbolElement, TSpanElement, TextContentElement, TextElement, TextPathElement, TextPositioningElement, TitleElement0, UseElement, ViewElement, ZoomEvent, _GradientElement, _SVGAltGlyphDefElement, _SVGAltGlyphItemElement, _SVGComponentTransferFunctionElement, _SVGCursorElement, _SVGFEDropShadowElement, _SVGFontElement, _SVGFontFaceElement, _SVGFontFaceFormatElement, _SVGFontFaceNameElement, _SVGFontFaceSrcElement, _SVGFontFaceUriElement, _SVGGlyphElement, _SVGGlyphRefElement, _SVGHKernElement, _SVGMPathElement, _SVGMissingGlyphElement, _SVGVKernElement, AudioProcessingEvent, OfflineAudioCompletionEvent, Buffer, ContextEvent, Framebuffer, Program, Renderbuffer, RenderingContext, Shader0, Texture0, UniformLocation, SqlError, NativeByteBuffer, NativeTypedData, NativeByteData, NativeFloat32List, NativeFloat64List, NativeInt16List, NativeInt32List, NativeInt8List, NativeUint16List, NativeUint32List, NativeUint8ClampedList, NativeUint8List, Matrix, Point, Rectangle, DisplayInterface, DisplayObject, DisplayObjectContainer, Sprite, Stage, BoneData, SlotData, Skin, Animation, Curves, Timeline, RotateTimeline, TranslateTimeline, ScaleTimeline, ColorTimeline, AttachmentTimeline, SkeletonData, Attachment, RegionAttachment, SkeletonJson, AtlasRegion, AbstractFilter, FilterBlock, InteractionData, InteractionManager, AssetLoader, AssetLoader_load_onLoad, AtlasLoader, BitmapFontLoader, BitmapFontLoader_onXMLLoaded_closure, ImageLoader, ImageLoader_load_closure, JsonLoader, JsonLoader_load_closure, JsonLoader_onJSONLoaded_closure, Loader, SpineLoader, SpineLoader_load_closure, BlendModes, scaleModes, CanvasRenderer, CanvasMaskManager, MaskManager, RenderSession, Renderer, ComplexPrimitiveShader, PixiFastShader, PixiShader, PrimitiveShader, Shader, StripShader, FilterTexture, WebGLBlendModeManager, WebGLFilterManager, WebGLMaskManager, WebGLShaderManager, WebGLSpriteBatch, WebGLStencilManager, WebGLRenderer, ChartData, Char, BitmapText, TextStyle, Text, BaseTexture, BaseTexture_closure, BaseTexture_closure0, Texture, Texture_closure, TextureUvs, PixiEvent, EventTarget0, JS_CONST, Interceptor, JSBool, JSNull, JavaScriptObject, PlainJavaScriptObject, UnknownJavaScriptObject, JSArray, JSNumber, JSInt, JSDouble, JSString, startRootIsolate_closure, startRootIsolate_closure0, _Manager, _IsolateContext, _IsolateContext_handlePing_respond, _EventLoop, _EventLoop__runHelper_next, _IsolateEvent, _MainManagerStub, IsolateNatives__processWorkerMessage_closure, IsolateNatives__processWorkerMessage_closure0, IsolateNatives__processWorkerMessage_closure1, IsolateNatives_spawn_closure, IsolateNatives_spawn_closure0, IsolateNatives__startNonWorker_closure, IsolateNatives__startIsolate_runStartFunction, _BaseSendPort, _NativeJsSendPort, _NativeJsSendPort_send_closure, _WorkerSendPort, RawReceivePortImpl, ReceivePortImpl, _JsSerializer, _JsCopier, _JsDeserializer, _JsVisitedMap, _MessageTraverserVisitedMap, _MessageTraverser, _Copier, _Copier_visitMap_closure, _Serializer, _Deserializer, TimerImpl, TimerImpl_internalCallback, TimerImpl_internalCallback0, CapabilityImpl, JSInvocationMirror, ReflectionInfo, ReflectionInfo_sortedIndex_closure, Primitives_functionNoSuchMethod_closure, Primitives_applyFunction_closure, TypeErrorDecoder, NullError, JsNoSuchMethodError, UnknownJsTypeError, unwrapException_saveStackTrace, _StackTrace, invokeClosure_closure, invokeClosure_closure0, invokeClosure_closure1, invokeClosure_closure2, invokeClosure_closure3, Closure, TearOffClosure, BoundClosure, TypeErrorImplementation, CastErrorImplementation, RuntimeError, RuntimeType, RuntimeFunctionType, DynamicRuntimeType, VoidRuntimeType, RuntimeTypePlain, RuntimeTypeGeneric, FunctionTypeInfoDecoderRing, TypeImpl, initHooks_closure, initHooks_closure0, initHooks_closure1, JSSyntaxRegExp, ListIterable, ListIterator, MappedIterable, EfficientLengthMappedIterable, MappedIterator, MappedListIterable, FixedLengthListMixin, Symbol0, _AsyncRun__scheduleImmediateJsOverride_internalCallback, _AsyncError, Future, _Completer, _AsyncCompleter, _Future, _Future__addListener_closure, _Future__chainForeignFuture_closure, _Future__chainForeignFuture_closure0, _Future__asyncComplete_closure, _Future__asyncComplete_closure0, _Future__asyncCompleteError_closure, _Future__propagateToListeners_handleValueCallback, _Future__propagateToListeners_handleError, _Future__propagateToListeners_handleWhenCompleteCallback, _Future__propagateToListeners_handleWhenCompleteCallback_closure, _Future__propagateToListeners_handleWhenCompleteCallback_closure0, _AsyncCallbackEntry, Stream, Stream_forEach_closure, Stream_forEach__closure, Stream_forEach__closure0, Stream_forEach_closure0, Stream_length_closure, Stream_length_closure0, Stream_first_closure, Stream_first_closure0, StreamSubscription, _StreamController, _StreamController__subscribe_closure, _StreamController__recordCancel_complete, _SyncStreamControllerDispatch, _AsyncStreamControllerDispatch, _AsyncStreamController, _StreamController__AsyncStreamControllerDispatch, _SyncStreamController, _StreamController__SyncStreamControllerDispatch, _ControllerStream, _ControllerSubscription, _EventSink, _BufferingStreamSubscription, _BufferingStreamSubscription__sendError_sendError, _BufferingStreamSubscription__sendDone_sendDone, _StreamImpl, _DelayedEvent, _DelayedData, _DelayedError, _DelayedDone, _PendingEvents, _PendingEvents_schedule_closure, _StreamImplEvents, _cancelAndError_closure, _cancelAndErrorClosure_closure, _cancelAndValue_closure, _ForwardingStream, _ForwardingStreamSubscription, _MapStream, _BaseZone, _BaseZone_bindCallback_closure, _BaseZone_bindCallback_closure0, _BaseZone_bindUnaryCallback_closure, _BaseZone_bindUnaryCallback_closure0, _rootHandleUncaughtError_closure, _rootHandleUncaughtError__closure, _RootZone, _HashMap, _HashMap_values_closure, HashMapKeyIterable, HashMapKeyIterator, _LinkedHashMap, _LinkedHashMap_values_closure, LinkedHashMapCell, LinkedHashMapKeyIterable, LinkedHashMapKeyIterator, _LinkedHashSet, LinkedHashSetCell, LinkedHashSetIterator, HashMap, _HashSetBase, IterableBase, LinkedHashMap, LinkedHashSet, ListMixin, Maps_mapToString_closure, ListQueue, _ListQueueIterator, SetMixin, SetBase, _convertJsonToDart_closure, _convertJsonToDart_walk, Codec, Converter, JsonCodec, JsonDecoder, Function__toMangledNames_closure, NoSuchMethodError_toString_closure, bool, Comparable, DateTime, $double, Duration, Duration_toString_sixDigits, Duration_toString_twoDigits, Error, AssertionError, NullThrownError, ArgumentError, RangeError, NoSuchMethodError, UnsupportedError, UnimplementedError, StateError, ConcurrentModificationError, OutOfMemoryError, StackOverflowError, CyclicInitializationError, _ExceptionImplementation, FormatException, Expando, Function, $int, Iterator, List, Null, num, Object, Pattern, Match, StackTrace, String, StringBuffer, Symbol, Interceptor_CssStyleDeclarationBase, CssStyleDeclarationBase, Interceptor_ListMixin, Interceptor_ListMixin_ImmutableListMixin, Interceptor_ListMixin0, Interceptor_ListMixin_ImmutableListMixin0, Interceptor_ListMixin1, Interceptor_ListMixin_ImmutableListMixin1, _AttributeMap, _ElementAttributeMap, _DataAttributeMap, _DataAttributeMap_forEach_closure, _DataAttributeMap_keys_closure, _DataAttributeMap_values_closure, EventStreamProvider, _EventStream, _ElementEventStreamImpl, _EventStreamSubscription, ImmutableListMixin, FixedSizeListIterator, Capability, SendPort, JsObject, JsFunction, JsArray, JsObject_ListMixin, _convertToJS_closure, _convertToJS_closure0, _wrapToDart_closure, _wrapToDart_closure0, _wrapToDart_closure1, Point0, Float32List, NativeTypedArray, NativeTypedArrayOfDouble, NativeTypedArray_ListMixin, NativeTypedArray_ListMixin_FixedLengthListMixin, NativeTypedArrayOfInt, NativeTypedArray_ListMixin0, NativeTypedArray_ListMixin_FixedLengthListMixin0, convertDartToNative_Dictionary_closure, _TypedImageData, main_runList, main_init, main_init_onAssetsLoaded, main_init_animate];
+  return [HtmlElement, AnchorElement, AnimationEvent, AreaElement, AudioElement, AutocompleteErrorEvent, BRElement, BaseElement, BeforeLoadEvent, BeforeUnloadEvent, Blob, BodyElement, ButtonElement, CDataSection, CanvasElement, CanvasGradient, CanvasPattern, CanvasRenderingContext, CanvasRenderingContext2D, CharacterData, CloseEvent, Comment, CompositionEvent, ContentElement, CssFontFaceLoadEvent, CssStyleDeclaration, CustomEvent, DListElement, DataListElement, DetailsElement, DeviceMotionEvent, DeviceOrientationEvent, DialogElement, DivElement, Document, DocumentFragment, DomError, DomException, Element, EmbedElement, ErrorEvent, Event, EventTarget, FieldSetElement, File, FileError, FocusEvent, FormElement, HRElement, HashChangeEvent, HeadElement, HeadingElement, HtmlCollection, HtmlDocument, HtmlFormControlsCollection, HtmlHtmlElement, HtmlOptionsCollection, HttpRequest, HttpRequestEventTarget, HttpRequestUpload, IFrameElement, ImageData, ImageElement, InputElement, InstallEvent, InstallPhaseEvent, KeyboardEvent, KeygenElement, LIElement, LabelElement, LegendElement, LinkElement, Location, MapElement, MediaElement, MediaError, MediaKeyError, MediaKeyEvent, MediaKeyMessageEvent, MediaKeyNeededEvent, MediaStream, MediaStreamEvent, MediaStreamTrackEvent, MenuElement, MessageEvent, MetaElement, MeterElement, MidiConnectionEvent, MidiMessageEvent, ModElement, MouseEvent, Navigator, NavigatorUserMediaError, Node, NodeList, OListElement, ObjectElement, OptGroupElement, OptionElement, OutputElement, OverflowEvent, PageTransitionEvent, ParagraphElement, ParamElement, PopStateEvent, PositionError, PreElement, ProcessingInstruction, ProgressElement, ProgressEvent, QuoteElement, ResourceProgressEvent, RtcDataChannelEvent, RtcDtmfToneChangeEvent, RtcIceCandidateEvent, ScriptElement, SecurityPolicyViolationEvent, SelectElement, ShadowElement, ShadowRoot, SourceElement, SpanElement, SpeechInputEvent, SpeechRecognitionError, SpeechRecognitionEvent, SpeechSynthesisEvent, StorageEvent, StyleElement, TableCaptionElement, TableCellElement, TableColElement, TableElement, TableRowElement, TableSectionElement, TemplateElement, Text0, TextAreaElement, TextEvent, TextMetrics, TitleElement, TouchEvent, TrackElement, TrackEvent, TransitionEvent, UIEvent, UListElement, UnknownElement, VideoElement, WheelEvent, Window, XmlDocument, _Attr, _ClientRect, _DocumentType, _HTMLAppletElement, _HTMLDirectoryElement, _HTMLFontElement, _HTMLFrameElement, _HTMLFrameSetElement, _HTMLMarqueeElement, _MutationEvent, _NamedNodeMap, _Notation, _XMLHttpRequestProgressEvent, KeyRange, VersionChangeEvent, AElement, AltGlyphElement, AnimateElement, AnimateMotionElement, AnimateTransformElement, AnimatedEnumeration, AnimatedLength, AnimatedLengthList, AnimatedNumber, AnimatedNumberList, AnimatedString, AnimationElement, CircleElement, ClipPathElement, DefsElement, DescElement, DiscardElement, EllipseElement, FEBlendElement, FEColorMatrixElement, FEComponentTransferElement, FECompositeElement, FEConvolveMatrixElement, FEDiffuseLightingElement, FEDisplacementMapElement, FEDistantLightElement, FEFloodElement, FEFuncAElement, FEFuncBElement, FEFuncGElement, FEFuncRElement, FEGaussianBlurElement, FEImageElement, FEMergeElement, FEMergeNodeElement, FEMorphologyElement, FEOffsetElement, FEPointLightElement, FESpecularLightingElement, FESpotLightElement, FETileElement, FETurbulenceElement, FilterElement, ForeignObjectElement, GElement, GeometryElement, GraphicsElement, ImageElement0, LineElement, LinearGradientElement, MarkerElement, MaskElement, MetadataElement, PathElement, PatternElement, PointList, PolygonElement, PolylineElement, RadialGradientElement, Rect, RectElement, ScriptElement0, SetElement, StopElement, StyleElement0, SvgElement, SvgSvgElement, SwitchElement, SymbolElement, TSpanElement, TextContentElement, TextElement, TextPathElement, TextPositioningElement, TitleElement0, UseElement, ViewElement, ZoomEvent, _GradientElement, _SVGAltGlyphDefElement, _SVGAltGlyphItemElement, _SVGComponentTransferFunctionElement, _SVGCursorElement, _SVGFEDropShadowElement, _SVGFontElement, _SVGFontFaceElement, _SVGFontFaceFormatElement, _SVGFontFaceNameElement, _SVGFontFaceSrcElement, _SVGFontFaceUriElement, _SVGGlyphElement, _SVGGlyphRefElement, _SVGHKernElement, _SVGMPathElement, _SVGMissingGlyphElement, _SVGVKernElement, AudioProcessingEvent, OfflineAudioCompletionEvent, Buffer, ContextEvent, Framebuffer, Program, Renderbuffer, RenderingContext, Shader0, Texture0, UniformLocation, SqlError, NativeByteBuffer, NativeTypedData, NativeByteData, NativeFloat32List, NativeFloat64List, NativeInt16List, NativeInt32List, NativeInt8List, NativeUint16List, NativeUint32List, NativeUint8ClampedList, NativeUint8List, Matrix, Point, Rectangle, Shape, DisplayInterface, DisplayObject, DisplayObjectContainer, Sprite, Stage, BoneData, SlotData, Skin, Animation, Curves, Timeline, RotateTimeline, TranslateTimeline, ScaleTimeline, ColorTimeline, AttachmentTimeline, SkeletonData, Attachment, RegionAttachment, SkeletonJson, AtlasRegion, AbstractFilter, FilterBlock, InteractionData, InteractionManager, AssetLoader, AssetLoader_load_onLoad, AtlasLoader, BitmapFontLoader, BitmapFontLoader_onXMLLoaded_closure, ImageLoader, ImageLoader_load_closure, JsonLoader, JsonLoader_load_closure, JsonLoader_onJSONLoaded_closure, Loader, SpineLoader, SpineLoader_load_closure, BlendModes, scaleModes, CanvasRenderer, CanvasMaskManager, MaskManager, RenderSession, Renderer, ComplexPrimitiveShader, PixiFastShader, PixiShader, PrimitiveShader, Shader, StripShader, FilterTexture, WebGLBlendModeManager, WebGLFilterManager, WebGLMaskManager, WebGLShaderManager, WebGLSpriteBatch, WebGLStencilManager, WebGLRenderer, ChartData, Char, BitmapText, TextStyle, Text, BaseTexture, BaseTexture_closure, BaseTexture_closure0, Texture, Texture_closure, TextureUvs, PixiEvent, EventTarget0, JS_CONST, Interceptor, JSBool, JSNull, JavaScriptObject, PlainJavaScriptObject, UnknownJavaScriptObject, JSArray, JSNumber, JSInt, JSDouble, JSString, startRootIsolate_closure, startRootIsolate_closure0, _Manager, _IsolateContext, _IsolateContext_handlePing_respond, _EventLoop, _EventLoop__runHelper_next, _IsolateEvent, _MainManagerStub, IsolateNatives__processWorkerMessage_closure, IsolateNatives__processWorkerMessage_closure0, IsolateNatives__processWorkerMessage_closure1, IsolateNatives_spawn_closure, IsolateNatives_spawn_closure0, IsolateNatives__startNonWorker_closure, IsolateNatives__startIsolate_runStartFunction, _BaseSendPort, _NativeJsSendPort, _NativeJsSendPort_send_closure, _WorkerSendPort, RawReceivePortImpl, ReceivePortImpl, _JsSerializer, _JsCopier, _JsDeserializer, _JsVisitedMap, _MessageTraverserVisitedMap, _MessageTraverser, _Copier, _Copier_visitMap_closure, _Serializer, _Deserializer, TimerImpl, TimerImpl_internalCallback, TimerImpl_internalCallback0, CapabilityImpl, JSInvocationMirror, ReflectionInfo, ReflectionInfo_sortedIndex_closure, Primitives_functionNoSuchMethod_closure, Primitives_applyFunction_closure, TypeErrorDecoder, NullError, JsNoSuchMethodError, UnknownJsTypeError, unwrapException_saveStackTrace, _StackTrace, invokeClosure_closure, invokeClosure_closure0, invokeClosure_closure1, invokeClosure_closure2, invokeClosure_closure3, Closure, TearOffClosure, BoundClosure, TypeErrorImplementation, CastErrorImplementation, RuntimeError, RuntimeType, RuntimeFunctionType, DynamicRuntimeType, VoidRuntimeType, RuntimeTypePlain, RuntimeTypeGeneric, FunctionTypeInfoDecoderRing, TypeImpl, initHooks_closure, initHooks_closure0, initHooks_closure1, JSSyntaxRegExp, ListIterable, ListIterator, MappedIterable, EfficientLengthMappedIterable, MappedIterator, MappedListIterable, FixedLengthListMixin, Symbol0, _AsyncRun__scheduleImmediateJsOverride_internalCallback, _AsyncError, Future, _Completer, _AsyncCompleter, _Future, _Future__addListener_closure, _Future__chainForeignFuture_closure, _Future__chainForeignFuture_closure0, _Future__asyncComplete_closure, _Future__asyncComplete_closure0, _Future__asyncCompleteError_closure, _Future__propagateToListeners_handleValueCallback, _Future__propagateToListeners_handleError, _Future__propagateToListeners_handleWhenCompleteCallback, _Future__propagateToListeners_handleWhenCompleteCallback_closure, _Future__propagateToListeners_handleWhenCompleteCallback_closure0, _AsyncCallbackEntry, Stream, Stream_forEach_closure, Stream_forEach__closure, Stream_forEach__closure0, Stream_forEach_closure0, Stream_length_closure, Stream_length_closure0, Stream_first_closure, Stream_first_closure0, StreamSubscription, _StreamController, _StreamController__subscribe_closure, _StreamController__recordCancel_complete, _SyncStreamControllerDispatch, _AsyncStreamControllerDispatch, _AsyncStreamController, _StreamController__AsyncStreamControllerDispatch, _SyncStreamController, _StreamController__SyncStreamControllerDispatch, _ControllerStream, _ControllerSubscription, _EventSink, _BufferingStreamSubscription, _BufferingStreamSubscription__sendError_sendError, _BufferingStreamSubscription__sendDone_sendDone, _StreamImpl, _DelayedEvent, _DelayedData, _DelayedError, _DelayedDone, _PendingEvents, _PendingEvents_schedule_closure, _StreamImplEvents, _cancelAndError_closure, _cancelAndErrorClosure_closure, _cancelAndValue_closure, _ForwardingStream, _ForwardingStreamSubscription, _MapStream, _BaseZone, _BaseZone_bindCallback_closure, _BaseZone_bindCallback_closure0, _BaseZone_bindUnaryCallback_closure, _BaseZone_bindUnaryCallback_closure0, _rootHandleUncaughtError_closure, _rootHandleUncaughtError__closure, _RootZone, _HashMap, _HashMap_values_closure, HashMapKeyIterable, HashMapKeyIterator, _LinkedHashMap, _LinkedHashMap_values_closure, LinkedHashMapCell, LinkedHashMapKeyIterable, LinkedHashMapKeyIterator, _LinkedHashSet, LinkedHashSetCell, LinkedHashSetIterator, HashMap, _HashSetBase, IterableBase, LinkedHashMap, LinkedHashSet, ListMixin, Maps_mapToString_closure, ListQueue, _ListQueueIterator, SetMixin, SetBase, _convertJsonToDart_closure, _convertJsonToDart_walk, Codec, Converter, JsonCodec, JsonDecoder, Function__toMangledNames_closure, NoSuchMethodError_toString_closure, bool, Comparable, DateTime, $double, Duration, Duration_toString_sixDigits, Duration_toString_twoDigits, Error, AssertionError, NullThrownError, ArgumentError, RangeError, NoSuchMethodError, UnsupportedError, UnimplementedError, StateError, ConcurrentModificationError, OutOfMemoryError, StackOverflowError, CyclicInitializationError, _ExceptionImplementation, FormatException, Expando, Function, $int, Iterator, List, Null, num, Object, Pattern, Match, StackTrace, String, StringBuffer, Symbol, Interceptor_CssStyleDeclarationBase, CssStyleDeclarationBase, Interceptor_ListMixin, Interceptor_ListMixin_ImmutableListMixin, Interceptor_ListMixin0, Interceptor_ListMixin_ImmutableListMixin0, Interceptor_ListMixin1, Interceptor_ListMixin_ImmutableListMixin1, _AttributeMap, _ElementAttributeMap, _DataAttributeMap, _DataAttributeMap_forEach_closure, _DataAttributeMap_keys_closure, _DataAttributeMap_values_closure, EventStreamProvider, _EventStream, _ElementEventStreamImpl, _EventStreamSubscription, ImmutableListMixin, FixedSizeListIterator, Capability, SendPort, JsObject, JsFunction, JsArray, JsObject_ListMixin, _convertToJS_closure, _convertToJS_closure0, _wrapToDart_closure, _wrapToDart_closure0, _wrapToDart_closure1, Point0, Float32List, NativeTypedArray, NativeTypedArrayOfDouble, NativeTypedArray_ListMixin, NativeTypedArray_ListMixin_FixedLengthListMixin, NativeTypedArrayOfInt, NativeTypedArray_ListMixin0, NativeTypedArray_ListMixin_FixedLengthListMixin0, convertDartToNative_Dictionary_closure, _TypedImageData, main_runList, main_init, main_init_onAssetsLoaded, main_init_animate];
 }

@@ -276,120 +276,120 @@ var $$ = {};
 ["PIXI", "../../lib/pixi.dart", , M, {
   "^": "",
   CanvasGraphics_renderGraphics: function(graphics, context) {
-    var worldAlpha, i, t1, data, points, t2, j, t3, t4, ellipseData, w, h, x, y, ox, oy, xe, t5, ye, xm, ym, rx, ry, width, height, radius, maxRadius;
-    worldAlpha = graphics.worldAlpha;
-    for (i = 0; t1 = graphics.graphicsData, i < t1.length; ++i) {
+    var worldAlpha, t1, i, data, t2, points, t3, j, t4, t5, ellipseData, w, h, x, y, ox, oy, xe, t6, ye, xm, ym, rx, ry, width, height, radius, maxRadius;
+    worldAlpha = graphics._worldAlpha;
+    for (t1 = graphics._graphicsData, i = 0; i < t1.length; ++i) {
       data = t1[i];
-      t1 = J.getInterceptor$x(data);
-      points = t1.get$points(data);
-      t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(data.get$lineColor())));
-      context.strokeStyle = "#" + C.JSString_methods.padLeft$2(t2.toString(16), 6, "0");
-      context.lineWidth = H.numTypeCheck(t1.get$lineWidth(data));
-      if (t1.get$type(data) === $.Graphics_POLY) {
+      t2 = J.getInterceptor$x(data);
+      points = t2.get$points(data);
+      t3 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(data.get$lineColor())));
+      context.strokeStyle = "#" + C.JSString_methods.padLeft$2(t3.toString(16), 6, "0");
+      context.lineWidth = H.numTypeCheck(t2.get$lineWidth(data));
+      if (t2.get$type(data) === $.Graphics_POLY) {
         context.beginPath();
-        t2 = J.getInterceptor$asx(points);
-        C.CanvasRenderingContext2D_methods.moveTo$2(context, t2.$index(points, 0), t2.$index(points, 1));
-        for (j = 1; j < t2.get$length(points) / 2; ++j) {
-          t3 = j * 2;
-          C.CanvasRenderingContext2D_methods.lineTo$2(context, t2.$index(points, t3), t2.$index(points, t3 + 1));
+        t3 = J.getInterceptor$asx(points);
+        C.CanvasRenderingContext2D_methods.moveTo$2(context, t3.$index(points, 0), t3.$index(points, 1));
+        for (j = 1; j < t3.get$length(points) / 2; ++j) {
+          t4 = j * 2;
+          C.CanvasRenderingContext2D_methods.lineTo$2(context, t3.$index(points, t4), t3.$index(points, t4 + 1));
         }
-        if (J.$eq(t2.$index(points, 0), t2.$index(points, t2.get$length(points) - 2)) && J.$eq(t2.$index(points, 1), t2.$index(points, t2.get$length(points) - 1)))
+        if (J.$eq(t3.$index(points, 0), t3.$index(points, t3.get$length(points) - 2)) && J.$eq(t3.$index(points, 1), t3.$index(points, t3.get$length(points) - 1)))
           context.closePath();
-        if (H.boolConversionCheck(t1.get$fill(data))) {
+        if (H.boolConversionCheck(t2.get$fill(data))) {
           context.globalAlpha = data.get$fillAlpha() * worldAlpha;
-          t2 = data.get$fillColor();
-          t2.toString;
-          t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(t2)));
-          context.fillStyle = "#" + C.JSString_methods.padLeft$2(t2.toString(16), 6, "0");
+          t3 = data.get$fillColor();
+          t3.toString;
+          t3 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(t3)));
+          context.fillStyle = "#" + C.JSString_methods.padLeft$2(t3.toString(16), 6, "0");
           context.fill("nonzero");
         }
-        if (!J.$eq(t1.get$lineWidth(data), 0)) {
+        if (!J.$eq(t2.get$lineWidth(data), 0)) {
           context.globalAlpha = data.get$lineAlpha() * worldAlpha;
           context.stroke();
         }
-      } else if (t1.get$type(data) === $.Graphics_RECT) {
-        if (H.boolConversionCheck(t1.get$fill(data))) {
+      } else if (t2.get$type(data) === $.Graphics_RECT) {
+        if (H.boolConversionCheck(t2.get$fill(data))) {
           context.globalAlpha = data.get$fillAlpha() * worldAlpha;
-          t2 = data.get$fillColor();
-          t2.toString;
-          t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(t2)));
-          context.fillStyle = "#" + C.JSString_methods.padLeft$2(t2.toString(16), 6, "0");
+          t3 = data.get$fillColor();
+          t3.toString;
+          t3 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(t3)));
+          context.fillStyle = "#" + C.JSString_methods.padLeft$2(t3.toString(16), 6, "0");
+          t3 = J.getInterceptor$asx(points);
+          C.CanvasRenderingContext2D_methods.fillRect$4(context, t3.$index(points, 0), t3.$index(points, 1), t3.$index(points, 2), t3.$index(points, 3));
+        }
+        if (!J.$eq(t2.get$lineWidth(data), 0)) {
+          context.globalAlpha = data.get$lineAlpha() * worldAlpha;
           t2 = J.getInterceptor$asx(points);
-          C.CanvasRenderingContext2D_methods.fillRect$4(context, t2.$index(points, 0), t2.$index(points, 1), t2.$index(points, 2), t2.$index(points, 3));
+          C.CanvasRenderingContext2D_methods.strokeRect$4(context, t2.$index(points, 0), t2.$index(points, 1), t2.$index(points, 2), t2.$index(points, 3));
         }
-        if (!J.$eq(t1.get$lineWidth(data), 0)) {
-          context.globalAlpha = data.get$lineAlpha() * worldAlpha;
-          t1 = J.getInterceptor$asx(points);
-          C.CanvasRenderingContext2D_methods.strokeRect$4(context, t1.$index(points, 0), t1.$index(points, 1), t1.$index(points, 2), t1.$index(points, 3));
-        }
-      } else if (t1.get$type(data) === $.Graphics_CIRC) {
+      } else if (t2.get$type(data) === $.Graphics_CIRC) {
         context.beginPath();
-        t2 = J.getInterceptor$asx(points);
-        t3 = t2.$index(points, 0);
-        t4 = t2.$index(points, 1);
-        t2 = t2.$index(points, 2);
-        H.numTypeCheck(t3);
+        t3 = J.getInterceptor$asx(points);
+        t4 = t3.$index(points, 0);
+        t5 = t3.$index(points, 1);
+        t3 = t3.$index(points, 2);
         H.numTypeCheck(t4);
-        H.numTypeCheck(t2);
-        C.CanvasRenderingContext2D_methods._arc$6(context, t3, t4, t2, 0, 6.283185307179586, false);
+        H.numTypeCheck(t5);
+        H.numTypeCheck(t3);
+        C.CanvasRenderingContext2D_methods._arc$6(context, t4, t5, t3, 0, 6.283185307179586, false);
         context.closePath();
-        if (H.boolConversionCheck(t1.get$fill(data))) {
+        if (H.boolConversionCheck(t2.get$fill(data))) {
           context.globalAlpha = data.get$fillAlpha() * worldAlpha;
-          t2 = data.get$fillColor();
-          t2.toString;
-          t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(t2)));
-          context.fillStyle = "#" + C.JSString_methods.padLeft$2(t2.toString(16), 6, "0");
+          t3 = data.get$fillColor();
+          t3.toString;
+          t3 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(t3)));
+          context.fillStyle = "#" + C.JSString_methods.padLeft$2(t3.toString(16), 6, "0");
           context.fill("nonzero");
         }
-        if (!J.$eq(t1.get$lineWidth(data), 0)) {
+        if (!J.$eq(t2.get$lineWidth(data), 0)) {
           context.globalAlpha = data.get$lineAlpha() * worldAlpha;
           context.stroke();
         }
-      } else if (t1.get$type(data) === $.Graphics_ELIP) {
-        ellipseData = t1.get$points(data);
-        t2 = J.getInterceptor$asx(ellipseData);
-        w = J.$mul$ns(t2.$index(ellipseData, 2), 2);
-        h = J.$mul$ns(t2.$index(ellipseData, 3), 2);
-        t3 = J.getInterceptor$n(w);
-        x = J.$sub$n(t2.$index(ellipseData, 0), t3.$div(w, 2));
-        t4 = J.getInterceptor$n(h);
-        y = J.$sub$n(t2.$index(ellipseData, 1), t4.$div(h, 2));
+      } else if (t2.get$type(data) === $.Graphics_ELIP) {
+        ellipseData = t2.get$points(data);
+        t3 = J.getInterceptor$asx(ellipseData);
+        w = J.$mul$ns(t3.$index(ellipseData, 2), 2);
+        h = J.$mul$ns(t3.$index(ellipseData, 3), 2);
+        t4 = J.getInterceptor$n(w);
+        x = J.$sub$n(t3.$index(ellipseData, 0), t4.$div(w, 2));
+        t5 = J.getInterceptor$n(h);
+        y = J.$sub$n(t3.$index(ellipseData, 1), t5.$div(h, 2));
         context.beginPath();
-        ox = t3.$div(w, 2) * 0.5522848;
-        oy = t4.$div(h, 2) * 0.5522848;
-        t2 = J.getInterceptor$ns(x);
-        xe = t2.$add(x, w);
-        t5 = J.getInterceptor$ns(y);
-        ye = t5.$add(y, h);
-        xm = t2.$add(x, t3.$div(w, 2));
-        ym = t5.$add(y, t4.$div(h, 2));
+        ox = t4.$div(w, 2) * 0.5522848;
+        oy = t5.$div(h, 2) * 0.5522848;
+        t3 = J.getInterceptor$ns(x);
+        xe = t3.$add(x, w);
+        t6 = J.getInterceptor$ns(y);
+        ye = t6.$add(y, h);
+        xm = t3.$add(x, t4.$div(w, 2));
+        ym = t6.$add(y, t5.$div(h, 2));
         C.CanvasRenderingContext2D_methods.moveTo$2(context, x, ym);
-        t4 = J.getInterceptor$n(ym);
-        t5 = J.getInterceptor$n(xm);
-        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, x, t4.$sub(ym, oy), t5.$sub(xm, ox), y, xm, y);
-        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, t5.$add(xm, ox), y, xe, t4.$sub(ym, oy), xe, ym);
-        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, xe, t4.$add(ym, oy), t5.$add(xm, ox), ye, xm, ye);
-        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, t5.$sub(xm, ox), ye, x, t4.$add(ym, oy), x, ym);
+        t5 = J.getInterceptor$n(ym);
+        t6 = J.getInterceptor$n(xm);
+        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, x, t5.$sub(ym, oy), t6.$sub(xm, ox), y, xm, y);
+        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, t6.$add(xm, ox), y, xe, t5.$sub(ym, oy), xe, ym);
+        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, xe, t5.$add(ym, oy), t6.$add(xm, ox), ye, xm, ye);
+        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, t6.$sub(xm, ox), ye, x, t5.$add(ym, oy), x, ym);
         context.closePath();
-        if (H.boolConversionCheck(t1.get$fill(data))) {
+        if (H.boolConversionCheck(t2.get$fill(data))) {
           context.globalAlpha = data.get$fillAlpha() * worldAlpha;
-          t2 = data.get$fillColor();
-          t2.toString;
-          t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(t2)));
-          context.fillStyle = "#" + C.JSString_methods.padLeft$2(t2.toString(16), 6, "0");
+          t3 = data.get$fillColor();
+          t3.toString;
+          t3 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(t3)));
+          context.fillStyle = "#" + C.JSString_methods.padLeft$2(t3.toString(16), 6, "0");
           context.fill("nonzero");
         }
-        if (!J.$eq(t1.get$lineWidth(data), 0)) {
+        if (!J.$eq(t2.get$lineWidth(data), 0)) {
           context.globalAlpha = data.get$lineAlpha() * worldAlpha;
           context.stroke();
         }
-      } else if (t1.get$type(data) === $.Graphics_RREC) {
-        t2 = J.getInterceptor$asx(points);
-        rx = H.numTypeCheck(t2.$index(points, 0));
-        ry = H.numTypeCheck(t2.$index(points, 1));
-        width = H.numTypeCheck(t2.$index(points, 2));
-        height = H.numTypeCheck(t2.$index(points, 3));
-        radius = H.numTypeCheck(t2.$index(points, 4));
+      } else if (t2.get$type(data) === $.Graphics_RREC) {
+        t3 = J.getInterceptor$asx(points);
+        rx = H.numTypeCheck(t3.$index(points, 0));
+        ry = H.numTypeCheck(t3.$index(points, 1));
+        width = H.numTypeCheck(t3.$index(points, 2));
+        height = H.numTypeCheck(t3.$index(points, 3));
+        radius = H.numTypeCheck(t3.$index(points, 4));
         maxRadius = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(P.min(width, height) / 2)));
         if (typeof radius !== "number")
           return radius.$gt();
@@ -398,30 +398,30 @@ var $$ = {};
         context.beginPath();
         if (typeof ry !== "number")
           return ry.$add();
-        t2 = ry + radius;
-        C.CanvasRenderingContext2D_methods.moveTo$2(context, rx, t2);
+        t3 = ry + radius;
+        C.CanvasRenderingContext2D_methods.moveTo$2(context, rx, t3);
         C.CanvasRenderingContext2D_methods.lineTo$2(context, rx, C.JSNumber_methods.$add(ry, height) - radius);
-        t3 = C.JSNumber_methods.$add(ry, height);
+        t4 = C.JSNumber_methods.$add(ry, height);
         if (typeof rx !== "number")
           return rx.$add();
-        t4 = rx + radius;
-        C.CanvasRenderingContext2D_methods.quadraticCurveTo$4(context, rx, t3, t4, C.JSNumber_methods.$add(ry, height));
+        t5 = rx + radius;
+        C.CanvasRenderingContext2D_methods.quadraticCurveTo$4(context, rx, t4, t5, C.JSNumber_methods.$add(ry, height));
         C.CanvasRenderingContext2D_methods.lineTo$2(context, C.JSNumber_methods.$add(rx, width) - radius, C.JSNumber_methods.$add(ry, height));
         C.CanvasRenderingContext2D_methods.quadraticCurveTo$4(context, C.JSNumber_methods.$add(rx, width), C.JSNumber_methods.$add(ry, height), C.JSNumber_methods.$add(rx, width), C.JSNumber_methods.$add(ry, height) - radius);
-        C.CanvasRenderingContext2D_methods.lineTo$2(context, C.JSNumber_methods.$add(rx, width), t2);
+        C.CanvasRenderingContext2D_methods.lineTo$2(context, C.JSNumber_methods.$add(rx, width), t3);
         C.CanvasRenderingContext2D_methods.quadraticCurveTo$4(context, C.JSNumber_methods.$add(rx, width), ry, C.JSNumber_methods.$add(rx, width) - radius, ry);
-        C.CanvasRenderingContext2D_methods.lineTo$2(context, t4, ry);
-        C.CanvasRenderingContext2D_methods.quadraticCurveTo$4(context, rx, ry, rx, t2);
+        C.CanvasRenderingContext2D_methods.lineTo$2(context, t5, ry);
+        C.CanvasRenderingContext2D_methods.quadraticCurveTo$4(context, rx, ry, rx, t3);
         context.closePath();
-        if (H.boolConversionCheck(t1.get$fill(data))) {
+        if (H.boolConversionCheck(t2.get$fill(data))) {
           context.globalAlpha = data.get$fillAlpha() * worldAlpha;
-          t2 = data.get$fillColor();
-          t2.toString;
-          t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(t2)));
-          context.fillStyle = "#" + C.JSString_methods.padLeft$2(t2.toString(16), 6, "0");
+          t3 = data.get$fillColor();
+          t3.toString;
+          t3 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(t3)));
+          context.fillStyle = "#" + C.JSString_methods.padLeft$2(t3.toString(16), 6, "0");
           context.fill("nonzero");
         }
-        if (!J.$eq(t1.get$lineWidth(data), 0)) {
+        if (!J.$eq(t2.get$lineWidth(data), 0)) {
           context.globalAlpha = data.get$lineAlpha() * worldAlpha;
           context.stroke();
         }
@@ -545,60 +545,61 @@ var $$ = {};
     t1.putImageData$3(context, pixelData, 0, 0);
   }, "call$3", "CanvasTinter_tintWithPerPixel$closure", 6, 0, 1],
   WebGLGraphics_renderGraphics: function(graphics, renderSession) {
-    var gl, projection, offset, shader, webGL, t1, t2, t3, t4, i, t5, t6, webGLData, colorList, tintColor, t7;
+    var gl, projection, offset, shader, webGL, t1, i, t2, t3, webGLData, colorList, tintColor, t4;
     gl = renderSession.gl;
     projection = renderSession.projection;
     offset = renderSession.offset;
     shader = renderSession.shaderManager.primitiveShader;
-    if (graphics.dirty)
+    if (graphics._dirty)
       M.WebGLGraphics_updateGraphics(graphics, gl);
     webGL = graphics._webGL.$index(0, gl);
-    for (t1 = J.getInterceptor$x(gl), t2 = graphics.tint, t3 = (t2 >>> 16 & 255) / 255, t4 = (t2 >>> 8 & 255) / 255, t2 = (t2 & 255) / 255, i = 0; t5 = webGL.data, i < t5.length; ++i) {
-      t5 = J.get$mode$x(t5[i]);
-      t6 = webGL.data;
-      if (t5 === 1) {
-        if (i >= t6.length)
-          return H.ioore(t6, i);
-        webGLData = H.interceptedTypeCheck(t6[i], "$isWebGLGraphicsData");
+    for (t1 = J.getInterceptor$x(gl), i = 0; t2 = webGL.data, i < t2.length; ++i) {
+      t2 = J.get$mode$x(t2[i]);
+      t3 = webGL.data;
+      if (t2 === 1) {
+        if (i >= t3.length)
+          return H.ioore(t3, i);
+        webGLData = H.interceptedTypeCheck(t3[i], "$isWebGLGraphicsData");
         renderSession.stencilManager.pushStencil$3(graphics, webGLData, renderSession);
         t1.drawElements$4(gl, 6, 4, 5123, (webGLData.indices.length - 4) * 2);
         renderSession.stencilManager.popStencil$3(graphics, webGLData, renderSession);
         $.WebGLGraphics_last = webGLData.mode;
       } else {
-        if (i >= t6.length)
-          return H.ioore(t6, i);
-        webGLData = H.interceptedTypeCheck(t6[i], "$isWebGLGraphicsData");
-        colorList = H.assertSubtype(H.assertSubtype([t3, t4, t2], "$isList", [P.num], "$asList"), "$isList", [P.num], "$asList");
+        if (i >= t3.length)
+          return H.ioore(t3, i);
+        webGLData = H.interceptedTypeCheck(t3[i], "$isWebGLGraphicsData");
+        t2 = graphics.tint;
+        colorList = H.assertSubtype(H.assertSubtype([(t2 >>> 16 & 255) / 255, (t2 >>> 8 & 255) / 255, (t2 & 255) / 255], "$isList", [P.num], "$asList"), "$isList", [P.num], "$asList");
         tintColor = new Float32Array(3);
-        t5 = colorList.length;
-        if (0 >= t5)
+        t2 = colorList.length;
+        if (0 >= t2)
           return H.ioore(colorList, 0);
         tintColor[0] = colorList[0];
-        if (1 >= t5)
+        if (1 >= t2)
           return H.ioore(colorList, 1);
         tintColor[1] = colorList[1];
-        if (2 >= t5)
+        if (2 >= t2)
           return H.ioore(colorList, 2);
         tintColor[2] = colorList[2];
         renderSession.shaderManager.setShader$1(shader);
         shader = renderSession.shaderManager.primitiveShader;
-        t1.uniformMatrix3fv$3(gl, shader.PIXI$PrimitiveShader$translationMatrix, false, graphics.worldTransform.toArray$1(true));
-        t5 = shader.PIXI$PrimitiveShader$projectionVector;
-        t6 = projection.x;
-        t7 = projection.y;
-        if (typeof t7 !== "number")
-          return t7.$negate();
-        C.RenderingContext_methods.uniform2f$3(gl, t5, t6, -t7);
-        t7 = shader.PIXI$PrimitiveShader$offsetVector;
-        t6 = offset.x;
-        if (typeof t6 !== "number")
-          return t6.$negate();
-        t5 = offset.y;
-        if (typeof t5 !== "number")
-          return t5.$negate();
-        C.RenderingContext_methods.uniform2f$3(gl, t7, -t6, -t5);
+        t1.uniformMatrix3fv$3(gl, shader.PIXI$PrimitiveShader$translationMatrix, false, graphics._worldTransform.toArray$1(true));
+        t2 = shader.PIXI$PrimitiveShader$projectionVector;
+        t3 = projection.x;
+        t4 = projection.y;
+        if (typeof t4 !== "number")
+          return t4.$negate();
+        C.RenderingContext_methods.uniform2f$3(gl, t2, t3, -t4);
+        t4 = shader.PIXI$PrimitiveShader$offsetVector;
+        t3 = offset.x;
+        if (typeof t3 !== "number")
+          return t3.$negate();
+        t2 = offset.y;
+        if (typeof t2 !== "number")
+          return t2.$negate();
+        C.RenderingContext_methods.uniform2f$3(gl, t4, -t3, -t2);
         C.RenderingContext_methods.uniform3fv$2(gl, shader.PIXI$PrimitiveShader$tintColor, tintColor);
-        C.RenderingContext_methods.uniform1f$2(gl, shader.PIXI$PrimitiveShader$alpha, graphics.worldAlpha);
+        C.RenderingContext_methods.uniform1f$2(gl, shader.PIXI$PrimitiveShader$alpha, graphics._worldAlpha);
         C.RenderingContext_methods.bindBuffer$2(gl, 34962, webGLData.buffer);
         C.RenderingContext_methods.vertexAttribPointer$6(gl, shader.PIXI$PrimitiveShader$aVertexPosition, 2, 5126, false, 24, 0);
         C.RenderingContext_methods.vertexAttribPointer$6(gl, shader.PIXI$PrimitiveShader$colorAttribute, 4, 5126, false, 24, 8);
@@ -608,7 +609,7 @@ var $$ = {};
     }
   },
   WebGLGraphics_updateGraphics: function(graphics, gl) {
-    var t1, webGL, i, graphicsData, webGLData, data, rectData, x, y, width, height, color, alpha, r, g, b, verts, indices, vertPos, t2, tempPoints;
+    var t1, webGL, i, graphicsData, webGLData, data, t2, rectData, x, y, width, height, color, alpha, r, g, b, verts, indices, vertPos, t3, tempPoints;
     t1 = graphics._webGL;
     webGL = t1.$index(0, gl);
     if (webGL == null) {
@@ -618,7 +619,7 @@ var $$ = {};
       webGL.gl = gl;
       t1.$indexSet(0, gl, webGL);
     }
-    graphics.dirty = false;
+    graphics._dirty = false;
     if (graphics.clearDirty) {
       graphics.clearDirty = false;
       for (i = 0; t1 = webGL.data, i < t1.length; ++i) {
@@ -631,13 +632,13 @@ var $$ = {};
       webGL.set$data(0, []);
       webGL.lastIndex = 0;
     }
-    for (i = webGL.lastIndex, webGLData = null; t1 = graphics.graphicsData, i < t1.length; ++i) {
+    for (i = webGL.lastIndex, t1 = graphics._graphicsData, webGLData = null; i < t1.length; ++i) {
       data = H.interceptedTypeCheck(t1[i], "$isGraphicsData");
       if (data.type === $.Graphics_POLY) {
         if (H.boolConversionCheck(data.fill)) {
-          t1 = data.points.length;
-          if (t1 > 6)
-            if (t1 > 10) {
+          t2 = data.points.length;
+          if (t2 > 6)
+            if (t2 > 10) {
               webGLData = M.WebGLGraphics_switchMode(webGL, 1);
               M.WebGLGraphics_buildComplexPoly(data, webGLData);
             } else {
@@ -651,27 +652,27 @@ var $$ = {};
         }
       } else {
         webGLData = M.WebGLGraphics_switchMode(webGL, 0);
-        t1 = data.type;
-        if (t1 === $.Graphics_RECT) {
+        t2 = data.type;
+        if (t2 === $.Graphics_RECT) {
           rectData = data.points;
-          t1 = rectData.length;
-          if (0 >= t1)
+          t2 = rectData.length;
+          if (0 >= t2)
             return H.ioore(rectData, 0);
           x = rectData[0];
-          if (1 >= t1)
+          if (1 >= t2)
             return H.ioore(rectData, 1);
           y = rectData[1];
-          if (2 >= t1)
+          if (2 >= t2)
             return H.ioore(rectData, 2);
           width = rectData[2];
-          if (3 >= t1)
+          if (3 >= t2)
             return H.ioore(rectData, 3);
           height = rectData[3];
           if (H.boolConversionCheck(data.fill)) {
-            t1 = data.fillColor;
-            if (typeof t1 !== "number")
-              return t1.$shr();
-            color = H.assertSubtype(H.assertSubtype([(t1 >>> 16 & 255) / 255, (t1 >>> 8 & 255) / 255, (t1 & 255) / 255], "$isList", [P.num], "$asList"), "$isList", [P.num], "$asList");
+            t2 = data.fillColor;
+            if (typeof t2 !== "number")
+              return t2.$shr();
+            color = H.assertSubtype(H.assertSubtype([(t2 >>> 16 & 255) / 255, (t2 >>> 8 & 255) / 255, (t2 & 255) / 255], "$isList", [P.num], "$asList"), "$isList", [P.num], "$asList");
             alpha = data.fillAlpha;
             if (0 >= color.length)
               return H.ioore(color, 0);
@@ -687,28 +688,28 @@ var $$ = {};
             vertPos = verts.length / 6;
             C.JSArray_methods.addAll$1(verts, [x, y]);
             C.JSArray_methods.addAll$1(verts, [r, g, b, alpha]);
-            t1 = J.getInterceptor$ns(x);
-            C.JSArray_methods.addAll$1(verts, [t1.$add(x, width), y]);
+            t2 = J.getInterceptor$ns(x);
+            C.JSArray_methods.addAll$1(verts, [t2.$add(x, width), y]);
             C.JSArray_methods.addAll$1(verts, [r, g, b, alpha]);
-            t2 = J.getInterceptor$ns(y);
-            C.JSArray_methods.addAll$1(verts, [x, t2.$add(y, height)]);
+            t3 = J.getInterceptor$ns(y);
+            C.JSArray_methods.addAll$1(verts, [x, t3.$add(y, height)]);
             C.JSArray_methods.addAll$1(verts, [r, g, b, alpha]);
-            C.JSArray_methods.addAll$1(verts, [t1.$add(x, width), t2.$add(y, height)]);
+            C.JSArray_methods.addAll$1(verts, [t2.$add(x, width), t3.$add(y, height)]);
             C.JSArray_methods.addAll$1(verts, [r, g, b, alpha]);
-            t2 = vertPos + 3;
-            C.JSArray_methods.addAll$1(indices, [vertPos, vertPos, vertPos + 1, vertPos + 2, t2, t2]);
+            t3 = vertPos + 3;
+            C.JSArray_methods.addAll$1(indices, [vertPos, vertPos, vertPos + 1, vertPos + 2, t3, t3]);
           }
           if (data.lineWidth !== 0) {
             tempPoints = data.points;
-            t1 = J.getInterceptor$ns(x);
-            t2 = J.getInterceptor$ns(y);
-            data.set$points(0, [x, y, t1.$add(x, width), y, t1.$add(x, width), t2.$add(y, height), x, t2.$add(y, height), x, y]);
+            t2 = J.getInterceptor$ns(x);
+            t3 = J.getInterceptor$ns(y);
+            data.set$points(0, [x, y, t2.$add(x, width), y, t2.$add(x, width), t3.$add(y, height), x, t3.$add(y, height), x, y]);
             M.WebGLGraphics_buildLine(data, webGLData);
             data.set$points(0, tempPoints);
           }
-        } else if (t1 === $.Graphics_CIRC || t1 === $.Graphics_ELIP)
+        } else if (t2 === $.Graphics_CIRC || t2 === $.Graphics_ELIP)
           M.WebGLGraphics_buildCircle(data, webGLData);
-        else if (t1 === $.Graphics_RREC)
+        else if (t2 === $.Graphics_RREC)
           M.WebGLGraphics_buildRoundedRectangle(data, webGLData);
       }
       ++webGL.lastIndex;
@@ -1531,7 +1532,7 @@ var $$ = {};
     $isPoint: true
   },
   Rectangle: {
-    "^": "Object;x,y,width,height",
+    "^": "Shape;x,y,width,height",
     contains$2: [function(_, x, y) {
       var t1, t2, x1, y1;
       t1 = this.width;
@@ -1556,20 +1557,18 @@ var $$ = {};
     }, "call$2", "get$contains", 4, 0, 58],
     $isRectangle: true
   },
+  Shape: {
+    "^": "Object;",
+    $isShape: true
+  },
   DisplayInterface: {
     "^": "Object;",
     $isDisplayInterface: true
   },
   DisplayObject: {
-    "^": "Object;visible<,hitArea<,parent,interactiveChildren,mousemove<,worldTransform<",
-    set$parent: function(_, $parent) {
-      this.parent = H.interceptedTypeCheck($parent, "$isDisplayInterface");
-    },
-    set$interactiveChildren: function(interactiveChildren) {
-      this.interactiveChildren = H.boolTypeCheck(interactiveChildren);
-    },
-    set$worldTransform: function(worldTransform) {
-      this.worldTransform = H.interceptedTypeCheck(worldTransform, "$isMatrix");
+    "^": "Object;hitArea<,_worldTransform<",
+    set$_worldTransform: function(_worldTransform) {
+      this._worldTransform = H.interceptedTypeCheck(_worldTransform, "$isMatrix");
     },
     mousemove$1: function(arg0) {
       return this.mousemove.call$1(arg0);
@@ -1592,29 +1591,30 @@ var $$ = {};
     set$interactive: function(value) {
       var t1;
       this._interactive = value;
-      t1 = this.stage;
+      t1 = this._stage;
       if (t1 != null)
-        t1.PIXI$Stage$dirty = true;
+        t1.PIXI$Stage$_dirty = true;
     },
     get$worldVisible: function() {
       var item = this;
       do {
         if (!item.visible)
           return false;
-        item = item.parent;
+        item = item._parent;
       } while (item != null);
       return true;
     },
-    updateTransform$0: function() {
-      var t1, parentTransform, worldTransform, px, py, a00, a01, a10, a11, t2, t3, a02, a12, b00, b01, b10, b11;
+    _updateTransform$0: function() {
+      var t1, $parent, parentTransform, worldTransform, px, py, a00, a01, a10, a11, t2, t3, a02, a12, b00, b01, b10, b11;
       t1 = this.rotation;
-      if (t1 !== this.rotationCache) {
-        this.rotationCache = t1;
+      if (t1 !== this._rotationCache) {
+        this._rotationCache = t1;
         this._sr = Math.sin(t1);
         this._cr = Math.cos(t1);
       }
-      parentTransform = this.parent.get$worldTransform();
-      worldTransform = this.get$worldTransform();
+      $parent = this._parent;
+      parentTransform = $parent.get$_worldTransform();
+      worldTransform = this.get$_worldTransform();
       t1 = this.pivot;
       px = t1.x;
       py = t1.y;
@@ -1647,19 +1647,19 @@ var $$ = {};
       worldTransform.c = H.doubleTypeCheck(b10 * a00 + b11 * a10);
       worldTransform.d = H.doubleTypeCheck(b10 * a01 + b11 * a11);
       worldTransform.ty = C.JSNumber_methods.$add(b10 * a02 + b11 * a12, parentTransform.ty);
-      this.worldAlpha = this.alpha * this.parent.worldAlpha;
+      this._worldAlpha = this.alpha * $parent._worldAlpha;
     },
     getBounds$1: function(matrix) {
       return $.get$EmptyRectangle();
     },
-    setStageReference$1: function(stage) {
-      this.stage = stage;
+    _setStageReference$1: function(stage) {
+      this._stage = stage;
       if (this._interactive)
-        stage.PIXI$Stage$dirty = true;
+        stage.PIXI$Stage$_dirty = true;
     },
     _renderCachedSprite$1: function(renderSession) {
       var t1 = this._cachedSprite;
-      t1.worldAlpha = this.worldAlpha;
+      t1._worldAlpha = this._worldAlpha;
       if (renderSession.gl != null)
         t1._renderWebGL$1(renderSession);
       else
@@ -1673,25 +1673,25 @@ var $$ = {};
     $isDisplayInterface: true
   },
   DisplayObjectContainer: {
-    "^": "DisplayObject;children,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,renderable,parent,__iParent,interactiveChildren,__hit,__isOver,__mouseIsDown,__isDown,dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,stage,buttonMode,worldAlpha,_interactive,defaultCursor,worldTransform,color,dynamic,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,isMask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,rotationCache",
+    "^": "DisplayObject;children,interactiveChildren,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,buttonMode,renderable,_parent,__hit,__isOver,__mouseIsDown,__isDown,_dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,_stage,_worldAlpha,_interactive,defaultCursor,_worldTransform,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,_rotationCache",
     addChildAt$2: function(child, index) {
       var t1, t2, t3, child0;
       if (index <= this.children.length) {
-        t1 = child.parent;
+        t1 = child._parent;
         if (t1 != null) {
           t2 = t1.children;
           t3 = H.Lists_indexOf(t2, child, 0, t2.length);
-          child0 = t1.getChildAt$1(t3);
-          if (t1.stage != null && !!J.getInterceptor(child0).$isDisplayObjectContainer)
-            child0.removeStageReference$0();
-          child0.set$parent(0, null);
+          child0 = H.interceptedTypeCheck(t1.getChildAt$1(t3), "$isDisplayObject");
+          if (t1._stage != null && !!J.getInterceptor(child0).$isDisplayObjectContainer)
+            child0._removeStageReference$0();
+          child0._parent = null;
           C.JSArray_methods.removeAt$1(t2, t3);
         }
-        child.parent = this;
+        child._parent = this;
         C.JSArray_methods.insert$2(this.children, index, child);
-        t1 = this.stage;
+        t1 = this._stage;
         if (t1 != null)
-          child.setStageReference$1(t1);
+          child._setStageReference$1(t1);
         return child;
       } else
         throw H.wrapException(P.Exception_Exception(child.toString$0(0) + "  The index " + index + " supplied is out of bounds " + this.children.length));
@@ -1706,38 +1706,37 @@ var $$ = {};
       } else
         throw H.wrapException(P.Exception_Exception("Supplied index does not exist in the child list, or the supplied DisplayObject must be a child of the caller"));
     },
-    updateTransform$0: function() {
+    _updateTransform$0: function() {
       var t1, j, i;
       if (!this.visible)
         return;
-      M.DisplayObject.prototype.updateTransform$0.call(this);
+      M.DisplayObject.prototype._updateTransform$0.call(this);
       if (this._cacheAsBitmap)
         return;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        t1[i].updateTransform$0();
+        t1[i]._updateTransform$0();
       }
     },
     getBounds$1: function(matrix) {
-      var t1, matrixCache, j, minX, minY, maxX, maxY, childBounds, childMaxX, childMaxY, childVisible, i, minX0, minY0, t2, bounds;
+      var t1, matrixCache, j, minX, minY, maxX, maxY, childBounds, childMaxX, childMaxY, childVisible, i, child, minX0, minY0, t2, bounds;
       t1 = this.children;
       if (t1.length === 0)
         return $.get$EmptyRectangle();
       if (matrix != null) {
-        matrixCache = this.get$worldTransform();
-        this.set$worldTransform(matrix);
-        this.updateTransform$0();
-        this.set$worldTransform(matrixCache);
+        matrixCache = this.get$_worldTransform();
+        this.set$_worldTransform(matrix);
+        this._updateTransform$0();
+        this.set$_worldTransform(matrixCache);
       }
       for (j = t1.length, minX = 1 / 0, minY = 1 / 0, maxX = -1 / 0, maxY = -1 / 0, childBounds = null, childMaxX = null, childMaxY = null, childVisible = false, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        if (!H.interceptedTypeCheck(t1[i], "$isDisplayInterface").get$visible())
+        child = H.interceptedTypeCheck(t1[i], "$isDisplayObject");
+        if (!child.visible)
           continue;
-        if (i >= t1.length)
-          return H.ioore(t1, i);
-        childBounds = t1[i].getBounds$1(matrix);
+        childBounds = child.getBounds$1(matrix);
         minX0 = childBounds.x;
         minX = minX < minX0 ? minX : minX0;
         minY0 = childBounds.y;
@@ -1766,40 +1765,40 @@ var $$ = {};
     getBounds$0: function() {
       return this.getBounds$1(null);
     },
-    getLocalBounds$0: function() {
+    _getLocalBounds$0: function() {
       var matrixCache, t1, j, i, bounds;
-      matrixCache = this.get$worldTransform();
-      this.set$worldTransform($.get$IdentityMatrix());
+      matrixCache = this.get$_worldTransform();
+      this.set$_worldTransform($.get$IdentityMatrix());
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        t1[i].updateTransform$0();
+        t1[i]._updateTransform$0();
       }
       bounds = this.getBounds$0();
-      this.set$worldTransform(matrixCache);
+      this.set$_worldTransform(matrixCache);
       return bounds;
     },
-    setStageReference$1: function(stage) {
+    _setStageReference$1: function(stage) {
       var t1, j, i;
-      this.stage = stage;
+      this._stage = stage;
       if (this._interactive)
-        stage.PIXI$Stage$dirty = true;
+        stage.PIXI$Stage$_dirty = true;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        H.interceptedTypeCheck(t1[i], "$isDisplayInterface").setStageReference$1(stage);
+        H.interceptedTypeCheck(t1[i], "$isDisplayObject")._setStageReference$1(stage);
       }
     },
-    removeStageReference$0: function() {
+    _removeStageReference$0: function() {
       var t1, j, i;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        H.interceptedTypeCheck(t1[i], "$isDisplayObjectContainer").removeStageReference$0();
+        H.interceptedTypeCheck(t1[i], "$isDisplayObjectContainer")._removeStageReference$0();
       }
       if (this._interactive)
-        this.stage.PIXI$Stage$dirty = true;
-      this.stage = null;
+        this._stage.PIXI$Stage$_dirty = true;
+      this._stage = null;
     },
     _renderWebGL$1: function(renderSession) {
       var t1, j, i;
@@ -1826,20 +1825,20 @@ var $$ = {};
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        H.interceptedTypeCheck(t1[i], "$isDisplayObject")._renderCanvas$1(renderSession);
+        H.interceptedTypeCheck(t1[i], "$isDisplayInterface")._renderCanvas$1(renderSession);
       }
     },
     $isDisplayObjectContainer: true
   },
   Sprite: {
-    "^": "DisplayObjectContainer;anchor,texture,updateFrame,textureChange,PIXI$Sprite$_width,PIXI$Sprite$_height,_uvs,tintedTexture,buffer,tint,cachedTint,blendMode,children,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,renderable,parent,__iParent,interactiveChildren,__hit,__isOver,__mouseIsDown,__isDown,dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,stage,buttonMode,worldAlpha,_interactive,defaultCursor,worldTransform,color,dynamic,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,isMask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,rotationCache",
+    "^": "DisplayObjectContainer;anchor,texture,updateFrame,PIXI$Sprite$_width,PIXI$Sprite$_height,_uvs,tintedTexture,buffer,tint,cachedTint,blendMode,children,interactiveChildren,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,buttonMode,renderable,_parent,__hit,__isOver,__mouseIsDown,__isDown,_dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,_stage,_worldAlpha,_interactive,defaultCursor,_worldTransform,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,_rotationCache",
     _setupTexture$0: function() {
       if (this.texture.get$baseTexture()._hasLoaded)
-        this.onTextureUpdate$1(null);
+        this._onTextureUpdate$1(null);
       else
-        this.texture.addEventListener$2(0, "update", this.get$onTextureUpdate());
+        this.texture.addEventListener$2(0, "update", this.get$_onTextureUpdate());
     },
-    onTextureUpdate$1: [function(e) {
+    _onTextureUpdate$1: [function(e) {
       var t1, t2;
       H.interceptedTypeCheck(e, "$isPixiEvent");
       t1 = this.PIXI$Sprite$_width;
@@ -1856,7 +1855,7 @@ var $$ = {};
           return t1.$div();
         this.scale.y = C.JSInt_methods.$div(t1, t2);
       }
-    }, "call$1", "get$onTextureUpdate", 2, 0, 59, 3],
+    }, "call$1", "get$_onTextureUpdate", 2, 0, 59, 3],
     getBounds$1: function(matrix) {
       var width, height, t1, t2, w0, w1, h0, h1, worldTransform, a, b, c, d, tx, ty, x1, t3, t4, y1, t5, x2, y2, x3, y3, x4, y4, minX, minY, maxX, maxY, bounds;
       width = this.texture.get$frame().width;
@@ -1878,7 +1877,7 @@ var $$ = {};
       if (typeof t1 !== "number")
         return t1.$negate();
       h1 = height * -t1;
-      worldTransform = matrix == null ? this.worldTransform : matrix;
+      worldTransform = matrix == null ? this._worldTransform : matrix;
       a = worldTransform.a;
       b = worldTransform.c;
       c = worldTransform.b;
@@ -1962,9 +1961,9 @@ var $$ = {};
       }
       if (H.boolConversionCheck(this.texture.get$valid())) {
         t1 = renderSession.context;
-        t1.globalAlpha = this.worldAlpha;
+        t1.globalAlpha = this._worldAlpha;
         renderSession.roundPixels;
-        t2 = this.worldTransform;
+        t2 = this._worldTransform;
         t3 = t2.a;
         t4 = t2.c;
         t5 = t2.b;
@@ -2031,23 +2030,23 @@ var $$ = {};
     $isSprite: true
   },
   Stage: {
-    "^": "DisplayObjectContainer;PIXI$Stage$dirty,_interactiveEventsAdded,hitArea:PIXI$Stage$hitArea<,backgroundColor,backgroundColorSplit,backgroundColorString,worldTransform:PIXI$Stage$worldTransform<,interactionManager,children,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,renderable,parent,__iParent,interactiveChildren,__hit,__isOver,__mouseIsDown,__isDown,dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,stage,buttonMode,worldAlpha,_interactive,defaultCursor,worldTransform,color,dynamic,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,isMask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,rotationCache",
+    "^": "DisplayObjectContainer;PIXI$Stage$_dirty,_interactiveEventsAdded,hitArea:PIXI$Stage$hitArea<,backgroundColor,backgroundColorSplit,backgroundColorString,_worldTransform:PIXI$Stage$_worldTransform<,interactionManager,children,interactiveChildren,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,buttonMode,renderable,_parent,__hit,__isOver,__mouseIsDown,__isDown,_dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,_stage,_worldAlpha,_interactive,defaultCursor,_worldTransform,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,_rotationCache",
     set$backgroundColorSplit: function(backgroundColorSplit) {
       this.backgroundColorSplit = H.assertSubtype(backgroundColorSplit, "$isList", [P.num], "$asList");
     },
-    set$worldTransform: function(worldTransform) {
-      this.PIXI$Stage$worldTransform = H.interceptedTypeCheck(worldTransform, "$isMatrix");
+    set$_worldTransform: function(_worldTransform) {
+      this.PIXI$Stage$_worldTransform = H.interceptedTypeCheck(_worldTransform, "$isMatrix");
     },
-    updateTransform$0: function() {
+    _updateTransform$0: function() {
       var t1, j, i;
-      this.worldAlpha = 1;
+      this._worldAlpha = 1;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        t1[i].updateTransform$0();
+        t1[i]._updateTransform$0();
       }
-      if (this.PIXI$Stage$dirty) {
-        this.PIXI$Stage$dirty = false;
+      if (this.PIXI$Stage$_dirty) {
+        this.PIXI$Stage$_dirty = false;
         this.interactionManager.dirty = true;
       }
       if (this._interactive)
@@ -2055,8 +2054,8 @@ var $$ = {};
     },
     Stage$2: function(backgroundColor, interactive) {
       var t1, t2, t3, t4, hex;
-      this.PIXI$Stage$dirty = true;
-      this.stage = this;
+      this.PIXI$Stage$_dirty = true;
+      this._stage = this;
       this.backgroundColor = backgroundColor;
       this.set$interactive(interactive);
       t1 = new M.Point(null, null);
@@ -2104,11 +2103,8 @@ var $$ = {};
           C.JSArray_methods.add$1(this.interactiveItems, child);
           if (child.children.length > 0)
             this.collectInteractiveSprite$2(child, child);
-        } else {
-          child.__iParent = null;
-          if (child.children.length > 0)
-            this.collectInteractiveSprite$2(child, iParent);
-        }
+        } else if (child.children.length > 0)
+          this.collectInteractiveSprite$2(child, iParent);
       }
     },
     setTarget$1: function(target) {
@@ -2165,7 +2161,7 @@ var $$ = {};
         if (t2 && !over) {
           if (item.buttonMode)
             cursor = item.defaultCursor;
-          if (!item.interactiveChildren)
+          if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
             over = true;
           if (!item.__isOver) {
             item.mouseover;
@@ -2182,20 +2178,21 @@ var $$ = {};
       }
     },
     rebuildInteractiveGraph$0: function() {
-      var len, i, t1;
+      var t1, len, i, item;
       this.dirty = false;
-      len = this.interactiveItems.length;
+      t1 = this.interactiveItems;
+      len = t1.length;
       for (i = 0; i < len; ++i) {
-        t1 = this.interactiveItems;
         if (i >= t1.length)
           return H.ioore(t1, i);
-        t1[i].set$interactiveChildren(false);
+        item = H.interceptedTypeCheck(t1[i], "$isDisplayInterface");
+        if (!!J.getInterceptor(item).$isDisplayObjectContainer)
+          item.interactiveChildren = false;
       }
       this.set$interactiveItems([]);
       t1 = this.stage;
       if (t1._interactive)
         C.JSArray_methods.add$1(this.interactiveItems, t1);
-      t1 = this.stage;
       this.collectInteractiveSprite$2(t1, t1);
     },
     onMouseMove$1: [function(_, $event) {
@@ -2237,8 +2234,8 @@ var $$ = {};
         t2 = this.interactiveItems;
         if (i >= t2.length)
           return H.ioore(t2, i);
-        item = t2[i];
-        if (item.get$mousemove() != null)
+        item = H.interceptedTypeCheck(t2[i], "$isDisplayObject");
+        if (item.mousemove != null)
           item.mousemove$1(t1);
       }
     }, "call$1", "get$onMouseMove", 2, 0, 60, 4],
@@ -2269,7 +2266,7 @@ var $$ = {};
             if (item.mousedown != null)
               item.mousedown$1(t1);
             item.__isDown = true;
-            if (!item.interactiveChildren)
+            if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
               break;
           }
         }
@@ -2318,7 +2315,7 @@ var $$ = {};
             item.mouseup$1(t1);
           if (item.__isDown)
             item.click;
-          if (!item.interactiveChildren)
+          if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
             up = true;
         } else if (item.__isDown)
           item.mouseupoutside;
@@ -2331,7 +2328,7 @@ var $$ = {};
       global = interactionData.global;
       if (!item.get$worldVisible())
         return false;
-      worldTransform = item.get$worldTransform();
+      worldTransform = item.get$_worldTransform();
       a00 = worldTransform.a;
       a01 = worldTransform.b;
       a02 = worldTransform.tx;
@@ -2508,7 +2505,7 @@ var $$ = {};
               item.__isDown = true;
               t3 = item.__touchData;
               t3.$indexSet(0, touchEvent.$index(0, "identifier"), touchData);
-              if (!item.interactiveChildren)
+              if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
                 break;
             }
           }
@@ -2578,7 +2575,7 @@ var $$ = {};
                   item.touchend$1(touchData);
                 if (item.__isDown)
                   item.tap;
-                if (!item.interactiveChildren)
+                if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
                   up = true;
               } else if (item.__isDown)
                 item.touchendoutside;
@@ -2611,15 +2608,12 @@ var $$ = {};
     $isGraphicsData: true
   },
   Graphics: {
-    "^": "DisplayObjectContainer;fillAlpha<,fillColor<,filling,lineWidth>,lineAlpha<,lineColor<,graphicsData,tint,blendMode,currentPath,_webGL,PIXI$Graphics$isMask,bounds,boundsPadding,clearDirty,children,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,renderable,parent,__iParent,interactiveChildren,__hit,__isOver,__mouseIsDown,__isDown,dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,stage,buttonMode,worldAlpha,_interactive,defaultCursor,worldTransform,color,dynamic,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,isMask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,rotationCache",
-    set$graphicsData: function(graphicsData) {
-      this.graphicsData = H.assertSubtype(graphicsData, "$isList", [M.GraphicsData], "$asList");
-    },
+    "^": "DisplayObjectContainer;fillAlpha<,lineWidth>,lineColor<,fillColor<,filling,lineAlpha<,_graphicsData,tint,blendMode,_currentPath,_webGL,_isMask,bounds,boundsPadding,clearDirty,children,interactiveChildren,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,buttonMode,renderable,_parent,__hit,__isOver,__mouseIsDown,__isDown,_dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,_stage,_worldAlpha,_interactive,defaultCursor,_worldTransform,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,_rotationCache",
     drawPath$1: function(path) {
       var t1;
       H.assertSubtype(path, "$isList", [P.num], "$asList");
-      if (this.currentPath.points.length === 0) {
-        t1 = this.graphicsData;
+      if (this._currentPath.points.length === 0) {
+        t1 = this._graphicsData;
         if (t1.length > 0)
           t1.pop();
       }
@@ -2633,10 +2627,10 @@ var $$ = {};
       t1.fill = this.filling;
       t1.set$points(0, []);
       t1.type = $.Graphics_POLY;
-      this.currentPath = t1;
-      C.JSArray_methods.add$1(this.graphicsData, t1);
-      C.JSArray_methods.addAll$1(this.currentPath.points, path);
-      this.dirty = true;
+      this._currentPath = t1;
+      C.JSArray_methods.add$1(this._graphicsData, t1);
+      C.JSArray_methods.addAll$1(this._currentPath.points, path);
+      this._dirty = true;
       return this;
     },
     beginFill$2: function(color, alpha) {
@@ -2655,12 +2649,12 @@ var $$ = {};
       return this;
     },
     _renderWebGL$1: function(renderSession) {
-      var bounds, t1, canvasBuffer, texture, t2, t3, t4, t5, t6, t7, blendModeWebGL, i;
-      if (!this.visible || this.alpha === 0 || this.PIXI$Graphics$isMask)
+      var bounds, t1, canvasBuffer, texture, t2, t3, t4, t5, t6, t7, t8, blendModeWebGL, i;
+      if (!this.visible || this.alpha === 0 || this._isMask)
         return;
       if (this._cacheAsBitmap) {
-        if (this.dirty) {
-          bounds = this.getLocalBounds$0();
+        if (this._dirty) {
+          bounds = this._getLocalBounds$0();
           t1 = this._cachedSprite;
           if (t1 == null) {
             canvasBuffer = M.CanvasBuffer$(bounds.width, bounds.height);
@@ -2680,12 +2674,13 @@ var $$ = {};
             t5 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
             t6 = new Float32Array(9);
             t7 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-            t7 = new M.Sprite(t1, null, false, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t2, t3, t4, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t6), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t7, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+            t8 = H.buildFunctionType(H.getVoidRuntimeType(), [H.buildInterfaceType(M.InteractionData)]);
+            t7 = new M.Sprite(t1, null, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t2, t3, t4, 0, 1, true, null, false, false, null, false, false, false, false, false, t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t6), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t7, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
             t7.texture = texture;
             t7._setupTexture$0();
             this._cachedSprite = t7;
             t7.buffer = canvasBuffer;
-            t7.worldTransform = this.worldTransform;
+            t7._worldTransform = this._worldTransform;
           } else
             t1.buffer.resize$2(0, bounds.width, bounds.height);
           this._cachedSprite.anchor.x = -C.JSNumber_methods.$div(bounds.x, bounds.width);
@@ -2695,7 +2690,7 @@ var $$ = {};
           t1 = this._cachedSprite;
           t1.alpha = this.alpha;
           M.updateWebGLTexture(t1.texture.get$baseTexture(), renderSession.gl);
-          this.dirty = false;
+          this._dirty = false;
         }
         t1 = this._cachedSprite;
         t1.alpha = this.alpha;
@@ -2730,10 +2725,10 @@ var $$ = {};
     },
     _renderCanvas$1: function(renderSession) {
       var context, transform, t1, j, i;
-      if (!this.visible || this.alpha === 0 || this.PIXI$Graphics$isMask)
+      if (!this.visible || this.alpha === 0 || this._isMask)
         return;
       context = renderSession.context;
-      transform = this.worldTransform;
+      transform = this._worldTransform;
       t1 = this.blendMode;
       if (t1 !== renderSession.currentBlendMode) {
         renderSession.currentBlendMode = t1;
@@ -2750,9 +2745,9 @@ var $$ = {};
     getBounds$1: function(matrix) {
       var t1, w0, t2, w1, h0, h1, a, b, c, d, tx, ty, x1, t3, t4, y1, t5, x2, y2, x3, y3, x4, y4, minX, minY, maxX, maxY, bounds;
       if (matrix == null)
-        matrix = this.worldTransform;
+        matrix = this._worldTransform;
       if (this.bounds == null)
-        this.updateBounds$0();
+        this._updateBounds$0();
       t1 = this.bounds;
       w0 = t1.x;
       t2 = t1.width;
@@ -2816,62 +2811,62 @@ var $$ = {};
     getBounds$0: function() {
       return this.getBounds$1(null);
     },
-    updateBounds$0: function() {
-      var minX, maxX, minY, maxY, x, y, w, h, i, t1, data, type, lineWidth, points, t2, j, padding, t3, t4;
-      for (minX = 1 / 0, maxX = -1 / 0, minY = 1 / 0, maxY = -1 / 0, x = null, y = null, w = null, h = null, i = 0; t1 = this.graphicsData, i < t1.length; ++i) {
+    _updateBounds$0: function() {
+      var t1, minX, maxX, minY, maxY, x, y, w, h, i, data, t2, type, lineWidth, points, t3, j, padding, t4;
+      for (t1 = this._graphicsData, minX = 1 / 0, maxX = -1 / 0, minY = 1 / 0, maxY = -1 / 0, x = null, y = null, w = null, h = null, i = 0; i < t1.length; ++i) {
         data = t1[i];
-        t1 = J.getInterceptor$x(data);
-        type = t1.get$type(data);
-        lineWidth = t1.get$lineWidth(data);
-        points = t1.get$points(data);
+        t2 = J.getInterceptor$x(data);
+        type = t2.get$type(data);
+        lineWidth = t2.get$lineWidth(data);
+        points = t2.get$points(data);
         if (type === $.Graphics_RECT) {
-          t1 = J.getInterceptor$asx(points);
-          t2 = J.getInterceptor$n(lineWidth);
-          x = J.$sub$n(t1.$index(points, 0), t2.$div(lineWidth, 2));
-          y = J.$sub$n(t1.$index(points, 1), t2.$div(lineWidth, 2));
-          w = J.$add$ns(t1.$index(points, 2), lineWidth);
-          h = J.$add$ns(t1.$index(points, 3), lineWidth);
-          t1 = J.getInterceptor$n(x);
-          if (t1.$lt(x, minX))
+          t2 = J.getInterceptor$asx(points);
+          t3 = J.getInterceptor$n(lineWidth);
+          x = J.$sub$n(t2.$index(points, 0), t3.$div(lineWidth, 2));
+          y = J.$sub$n(t2.$index(points, 1), t3.$div(lineWidth, 2));
+          w = J.$add$ns(t2.$index(points, 2), lineWidth);
+          h = J.$add$ns(t2.$index(points, 3), lineWidth);
+          t2 = J.getInterceptor$n(x);
+          if (t2.$lt(x, minX))
             minX = x;
-          if (J.$gt$n(t1.$add(x, w), maxX))
-            maxX = t1.$add(x, w);
-          t1 = J.getInterceptor$n(y);
-          if (t1.$lt(y, minY))
+          if (J.$gt$n(t2.$add(x, w), maxX))
+            maxX = t2.$add(x, w);
+          t2 = J.getInterceptor$n(y);
+          if (t2.$lt(y, minY))
             minY = x;
-          if (J.$gt$n(t1.$add(y, h), maxY))
-            maxY = t1.$add(y, h);
+          if (J.$gt$n(t2.$add(y, h), maxY))
+            maxY = t2.$add(y, h);
         } else if (type === $.Graphics_CIRC || type === $.Graphics_ELIP) {
-          t1 = J.getInterceptor$asx(points);
-          x = t1.$index(points, 0);
-          y = t1.$index(points, 1);
-          t2 = J.getInterceptor$n(lineWidth);
-          w = J.$add$ns(t1.$index(points, 2), t2.$div(lineWidth, 2));
-          h = J.$add$ns(t1.$index(points, 3), t2.$div(lineWidth, 2));
-          t1 = J.getInterceptor$n(x);
-          if (J.$lt$n(t1.$sub(x, w), minX))
-            minX = t1.$sub(x, w);
-          if (J.$gt$n(t1.$add(x, w), maxX))
-            maxX = t1.$add(x, w);
-          t1 = J.getInterceptor$n(y);
-          if (J.$lt$n(t1.$sub(y, h), minY))
-            minY = t1.$sub(y, h);
-          if (J.$gt$n(t1.$add(y, h), maxY))
-            maxY = t1.$add(y, h);
+          t2 = J.getInterceptor$asx(points);
+          x = t2.$index(points, 0);
+          y = t2.$index(points, 1);
+          t3 = J.getInterceptor$n(lineWidth);
+          w = J.$add$ns(t2.$index(points, 2), t3.$div(lineWidth, 2));
+          h = J.$add$ns(t2.$index(points, 3), t3.$div(lineWidth, 2));
+          t2 = J.getInterceptor$n(x);
+          if (J.$lt$n(t2.$sub(x, w), minX))
+            minX = t2.$sub(x, w);
+          if (J.$gt$n(t2.$add(x, w), maxX))
+            maxX = t2.$add(x, w);
+          t2 = J.getInterceptor$n(y);
+          if (J.$lt$n(t2.$sub(y, h), minY))
+            minY = t2.$sub(y, h);
+          if (J.$gt$n(t2.$add(y, h), maxY))
+            maxY = t2.$add(y, h);
         } else
-          for (t1 = J.getInterceptor$asx(points), j = 0; j < t1.get$length(points); j += 2) {
-            x = t1.$index(points, j);
-            y = t1.$index(points, j + 1);
-            t2 = J.getInterceptor$n(x);
-            if (J.$lt$n(t2.$sub(x, lineWidth), minX))
-              minX = t2.$sub(x, lineWidth);
-            if (J.$gt$n(t2.$add(x, lineWidth), maxX))
-              maxX = t2.$add(x, lineWidth);
-            t2 = J.getInterceptor$n(y);
-            if (J.$lt$n(t2.$sub(y, lineWidth), minY))
-              minY = t2.$sub(y, lineWidth);
-            if (J.$gt$n(t2.$add(y, lineWidth), maxY))
-              maxY = t2.$add(y, lineWidth);
+          for (t2 = J.getInterceptor$asx(points), j = 0; j < t2.get$length(points); j += 2) {
+            x = t2.$index(points, j);
+            y = t2.$index(points, j + 1);
+            t3 = J.getInterceptor$n(x);
+            if (J.$lt$n(t3.$sub(x, lineWidth), minX))
+              minX = t3.$sub(x, lineWidth);
+            if (J.$gt$n(t3.$add(x, lineWidth), maxX))
+              maxX = t3.$add(x, lineWidth);
+            t3 = J.getInterceptor$n(y);
+            if (J.$lt$n(t3.$sub(y, lineWidth), minY))
+              minY = t3.$sub(y, lineWidth);
+            if (J.$gt$n(t3.$add(y, lineWidth), maxY))
+              maxY = t3.$add(y, lineWidth);
           }
       }
       padding = this.boundsPadding;
@@ -2885,11 +2880,11 @@ var $$ = {};
     Graphics$0: function() {
       this.renderable = true;
       this.blendMode = C.BlendModes_0;
-      this.dirty = true;
+      this._dirty = true;
     },
     $isGraphics: true,
     static: {"^": "Graphics_POLY,Graphics_RECT,Graphics_CIRC,Graphics_ELIP,Graphics_RREC", Graphics$: function() {
-        var t1, t2, t3, t4, t5, t6, t7, t8, t9;
+        var t1, t2, t3, t4, t5, t6, t7, t8, t9, t10;
         t1 = $.Graphics_POLY;
         t2 = H.assertSubtype([], "$isList", [P.num], "$asList");
         t3 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
@@ -2905,7 +2900,8 @@ var $$ = {};
         t7 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
         t8 = new Float32Array(9);
         t9 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-        t9 = new M.Graphics(1, 0, false, 1, 1, 0, H.assertSubtype([], "$isList", [M.GraphicsData], "$asList"), 16777215, null, new M.GraphicsData(t2, 1, 0, null, 1, 1, 0, t1), H.assertSubtype(t3, "$isMap", [P.RenderingContext, M.WebGLGraphicsData], "$asMap"), false, null, 10, false, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t4, t5, t6, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t7, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t8), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t9, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+        t10 = H.buildFunctionType(H.getVoidRuntimeType(), [H.buildInterfaceType(M.InteractionData)]);
+        t9 = new M.Graphics(1, 1, 0, 0, false, 1, H.assertSubtype([], "$isList", [M.GraphicsData], "$asList"), 16777215, null, new M.GraphicsData(t2, 1, 0, null, 1, 1, 0, t1), H.assertSubtype(t3, "$isMap", [P.RenderingContext, M.WebGLGraphicsData], "$asMap"), false, null, 10, false, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t4, t5, t6, 0, 1, true, null, false, false, null, false, false, false, false, false, t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), H.assertSubtype(t7, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t8), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t9, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
         t9.Graphics$0();
         return t9;
       }}
@@ -2916,7 +2912,7 @@ var $$ = {};
       var t1, t2;
       C.JSArray_methods.set$length($.get$texturesToUpdate(), 0);
       C.JSArray_methods.set$length($.get$texturesToDestroy(), 0);
-      stage.updateTransform$0();
+      stage._updateTransform$0();
       J.setTransform$6$x(this.context, 1, 0, 0, 1, 0, 0);
       t1 = this.context;
       t1.globalAlpha = 1;
@@ -2940,7 +2936,7 @@ var $$ = {};
       var t1;
       H.interceptedTypeCheck(context, "$isCanvasRenderingContext2D");
       t1 = this.renderSession;
-      t1.context = context == null ? this.context : context;
+      t1.context = this.context;
       displayObject._renderCanvas$1(t1);
     },
     renderDisplayObject$1: function(displayObject) {
@@ -3521,7 +3517,7 @@ var $$ = {};
       uvs = texture._uvs;
       if (uvs == null)
         return;
-      alpha = sprite.worldAlpha;
+      alpha = sprite._worldAlpha;
       tint = sprite.tint;
       verticies = this.vertices;
       t1 = sprite.anchor;
@@ -3551,7 +3547,7 @@ var $$ = {};
         return t1.$mul();
       h1 = t1 * -aY;
       index = this.currentBatchSize * 4 * this.vertSize;
-      worldTransform = sprite.worldTransform;
+      worldTransform = sprite._worldTransform;
       a = worldTransform.a;
       b = worldTransform.c;
       c = worldTransform.b;
@@ -3889,7 +3885,7 @@ var $$ = {};
         t1 = renderSession.shaderManager;
         shader = t1.complexPrimativeShader;
         t1.setShader$1(shader);
-        J.uniformMatrix3fv$3$x(this.gl, shader.translationMatrix, false, graphics.worldTransform.toArray$1(true));
+        J.uniformMatrix3fv$3$x(this.gl, shader.translationMatrix, false, graphics._worldTransform.toArray$1(true));
         t1 = this.gl;
         t2 = shader.projectionVector;
         t3 = projection.x;
@@ -3918,7 +3914,7 @@ var $$ = {};
         H.assertSubtype(t1, "$isList", [P.$double], "$asList");
         H.assertSubtype(t1, "$isList", [P.$double], "$asList");
         J.uniform3fv$2$x(t3, t2, new Float32Array(H._ensureNativeList(t1)));
-        J.uniform1f$2$x(this.gl, shader.alpha, graphics.worldAlpha * webGLData.alpha);
+        J.uniform1f$2$x(this.gl, shader.alpha, graphics._worldAlpha * webGLData.alpha);
         J.bindBuffer$2$x(this.gl, 34962, webGLData.buffer);
         J.vertexAttribPointer$6$x(this.gl, shader.aVertexPosition, 2, 5126, false, 8, 0);
         J.bindBuffer$2$x(this.gl, 34963, webGLData.indexBuffer);
@@ -3926,7 +3922,7 @@ var $$ = {};
         t1 = renderSession.shaderManager;
         shader = t1.primitiveShader;
         t1.setShader$1(shader);
-        J.uniformMatrix3fv$3$x(this.gl, shader.PIXI$PrimitiveShader$translationMatrix, false, graphics.worldTransform.toArray$1(true));
+        J.uniformMatrix3fv$3$x(this.gl, shader.PIXI$PrimitiveShader$translationMatrix, false, graphics._worldTransform.toArray$1(true));
         t1 = this.gl;
         t2 = shader.PIXI$PrimitiveShader$projectionVector;
         t3 = projection.x;
@@ -3949,7 +3945,7 @@ var $$ = {};
         H.assertSubtype(t3, "$isList", [P.$double], "$asList");
         H.assertSubtype(t3, "$isList", [P.$double], "$asList");
         J.uniform3fv$2$x(t1, t2, new Float32Array(H._ensureNativeList(t3)));
-        J.uniform1f$2$x(this.gl, shader.PIXI$PrimitiveShader$alpha, graphics.worldAlpha);
+        J.uniform1f$2$x(this.gl, shader.PIXI$PrimitiveShader$alpha, graphics._worldAlpha);
         J.bindBuffer$2$x(this.gl, 34962, webGLData.buffer);
         J.vertexAttribPointer$6$x(this.gl, shader.PIXI$PrimitiveShader$aVertexPosition, 2, 5126, false, 24, 0);
         J.vertexAttribPointer$6$x(this.gl, shader.PIXI$PrimitiveShader$colorAttribute, 4, 5126, false, 24, 8);
@@ -4030,7 +4026,7 @@ var $$ = {};
         this.__stage = stage;
       }
       M.WebGLRenderer_updateTextures(this.gl);
-      stage.updateTransform$0();
+      stage._updateTransform$0();
       J.viewport$4$x(this.gl, 0, 0, this.width, this.height);
       J.bindFramebuffer$2$x(this.gl, 36160, null);
       t1 = this.transparent;
@@ -4064,7 +4060,6 @@ var $$ = {};
     },
     renderDisplayObject$3: function(displayObject, projection, buffer) {
       var t1, t2, t3;
-      H.interceptedTypeCheck(projection, "$isPoint");
       this.renderSession.blendModeManager.setBlendMode$1(C.BlendModes_0);
       t1 = this.renderSession;
       t1.drawCount = 0;
@@ -4288,15 +4283,23 @@ var $$ = {};
       }}
   },
   TextStyle: {
-    "^": "Object;fill>,font,align,stroke,strokeThickness,wordWrap,wordWrapWidth,dropShadow,dropShadowAngle,dropShadowDistance,dropShadowColor,shadowOffsetX,shadowOffsetY,shadowColor,shadowBlur,tint",
+    "^": "Object;fill>,font,align,stroke,strokeThickness,wordWrap,wordWrapWidth,dropShadow,dropShadowAngle,dropShadowDistance,dropShadowColor,tint",
+    TextStyle$6$align$fill$font$stroke$strokeThickness$tint: function(align, fill, font, stroke, strokeThickness, tint) {
+      this.fill = fill;
+      this.font = font;
+      this.align = align;
+      this.stroke = stroke;
+      this.strokeThickness = strokeThickness;
+      this.tint = tint;
+    },
     $isTextStyle: true
   },
   Text: {
-    "^": "Sprite;_text,style,canvas,context,PIXI$Text$dirty,requiresUpdate,anchor,texture,updateFrame,textureChange,PIXI$Sprite$_width,PIXI$Sprite$_height,_uvs,tintedTexture,buffer,tint,cachedTint,blendMode,children,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,renderable,parent,__iParent,interactiveChildren,__hit,__isOver,__mouseIsDown,__isDown,dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,stage,buttonMode,worldAlpha,_interactive,defaultCursor,worldTransform,color,dynamic,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,isMask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,rotationCache",
-    updateText$0: function() {
+    "^": "Sprite;_text,_style,_canvas,_context,PIXI$Text$_dirty,_requiresUpdate,anchor,texture,updateFrame,PIXI$Sprite$_width,PIXI$Sprite$_height,_uvs,tintedTexture,buffer,tint,cachedTint,blendMode,children,interactiveChildren,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,buttonMode,renderable,_parent,__hit,__isOver,__mouseIsDown,__isDown,_dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,_stage,_worldAlpha,_interactive,defaultCursor,_worldTransform,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,_rotationCache",
+    _updateText$0: function() {
       var t1, t2, outputText, lines, lineWidths, maxLineWidth, i, lineWidth, width, result, t3, body, dummy, lineHeight, height, t4, t5, xShadowOffset, yShadowOffset, linePositionX, linePositionX0, linePositionY;
-      t1 = this.context;
-      t2 = this.style;
+      t1 = this._context;
+      t2 = this._style;
       t1.font = t2.font;
       outputText = this._text;
       if (t2.wordWrap)
@@ -4304,18 +4307,18 @@ var $$ = {};
       lines = J.split$1$s(outputText, $.get$Text_splitReg());
       lineWidths = H.assertSubtype(H.setRuntimeTypeInfo(Array(lines.length), [P.num]), "$isList", [P.num], "$asList");
       for (t1 = lineWidths.length, maxLineWidth = 0, i = 0; i < lines.length; ++i) {
-        lineWidth = J.measureText$1$x(this.context, lines[i]).width;
+        lineWidth = J.measureText$1$x(this._context, lines[i]).width;
         if (i >= t1)
           return H.ioore(lineWidths, i);
         lineWidths[i] = lineWidth;
         maxLineWidth = P.max(maxLineWidth, lineWidth);
       }
-      t2 = this.style;
+      t2 = this._style;
       width = maxLineWidth + t2.strokeThickness;
       if (t2.dropShadow)
         width += t2.dropShadowDistance;
-      this.canvas.width = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(C.JSNumber_methods.$add(width, this.context.lineWidth))));
-      t2 = "font: " + this.style.font + ";";
+      this._canvas.width = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(C.JSNumber_methods.$add(width, this._context.lineWidth))));
+      t2 = "font: " + this._style.font + ";";
       result = $.get$Text_heightCache().$index(0, t2);
       if (result == null) {
         t3 = C.HtmlDocument_methods.getElementsByTagName$1(document, "body");
@@ -4331,7 +4334,7 @@ var $$ = {};
         $.get$Text_heightCache().$indexSet(0, t2, result);
         t3.remove$0(dummy);
       }
-      t2 = this.style;
+      t2 = this._style;
       t3 = t2.strokeThickness;
       if (typeof result !== "number")
         return result.$add();
@@ -4340,8 +4343,8 @@ var $$ = {};
       t4 = t2.dropShadow;
       if (t4)
         height += t2.dropShadowDistance;
-      this.canvas.height = height;
-      t5 = this.context;
+      this._canvas.height = height;
+      t5 = this._context;
       t5.font = t2.font;
       t5.strokeStyle = t2.stroke;
       t5.lineWidth = t3;
@@ -4350,12 +4353,12 @@ var $$ = {};
         t5.fillStyle = t2.dropShadowColor;
         t2 = t2.dropShadowAngle;
         t2 = Math.sin(t2);
-        t3 = this.style;
+        t3 = this._style;
         xShadowOffset = t2 * t3.dropShadowDistance;
         t3 = t3.dropShadowAngle;
-        yShadowOffset = Math.cos(t3) * this.style.dropShadowDistance;
+        yShadowOffset = Math.cos(t3) * this._style.dropShadowDistance;
         for (i = 0; i < lines.length; ++i) {
-          t2 = this.style;
+          t2 = this._style;
           linePositionX = t2.strokeThickness / 2;
           t2 = t2.align;
           if (t2 === "right") {
@@ -4368,8 +4371,8 @@ var $$ = {};
             linePositionX0 = linePositionX + C.JSNumber_methods.$sub(maxLineWidth, lineWidths[i]) / 2;
           } else
             linePositionX0 = linePositionX;
-          this.style.fill;
-          t2 = this.context;
+          this._style.fill;
+          t2 = this._context;
           if (i >= lines.length)
             return H.ioore(lines, i);
           t3 = lines[i];
@@ -4378,9 +4381,9 @@ var $$ = {};
           t2.fillText(t3, linePositionX0 + xShadowOffset, linePositionX + i * lineHeight + yShadowOffset);
         }
       }
-      this.context.fillStyle = this.style.fill;
+      this._context.fillStyle = this._style.fill;
       for (i = 0; i < lines.length; ++i) {
-        t2 = this.style;
+        t2 = this._style;
         linePositionX = t2.strokeThickness / 2;
         linePositionY = linePositionX + i * lineHeight;
         t2 = t2.align;
@@ -4393,16 +4396,16 @@ var $$ = {};
             return H.ioore(lineWidths, i);
           linePositionX += C.JSNumber_methods.$sub(maxLineWidth, lineWidths[i]) / 2;
         }
-        t2 = this.style;
+        t2 = this._style;
         t2.stroke;
         if (t2.strokeThickness !== 0) {
-          t2 = this.context;
+          t2 = this._context;
           if (i >= lines.length)
             return H.ioore(lines, i);
           J.strokeText$3$x(t2, lines[i], linePositionX, linePositionY);
         }
-        this.style.fill;
-        t2 = this.context;
+        this._style.fill;
+        t2 = this._context;
         if (i >= lines.length)
           return H.ioore(lines, i);
         t3 = lines[i];
@@ -4410,48 +4413,48 @@ var $$ = {};
         H.stringTypeCheck(t3);
         t2.fillText(t3, linePositionX, linePositionY);
       }
-      this.texture.get$baseTexture().width = this.canvas.width;
-      this.texture.get$baseTexture().height = this.canvas.height;
+      this.texture.get$baseTexture().width = this._canvas.width;
+      this.texture.get$baseTexture().height = this._canvas.height;
       t1 = this.texture;
       t2 = t1.crop;
       t1 = t1.get$frame();
-      t3 = this.canvas.width;
+      t3 = this._canvas.width;
       t1.width = t3;
       t2.width = t3;
       t3 = this.texture;
       t2 = t3.crop;
       t3 = t3.get$frame();
-      t1 = this.canvas;
+      t1 = this._canvas;
       t4 = t1.height;
       t3.height = t4;
       t2.height = t4;
       this.PIXI$Sprite$_width = t1.width;
       this.PIXI$Sprite$_height = t1.height;
-      this.requiresUpdate = true;
+      this._requiresUpdate = true;
     },
     _renderWebGL$1: function(renderSession) {
-      if (H.boolConversionCheck(this.requiresUpdate)) {
-        this.requiresUpdate = false;
+      if (H.boolConversionCheck(this._requiresUpdate)) {
+        this._requiresUpdate = false;
         M.updateWebGLTexture(this.texture.get$baseTexture(), renderSession.gl);
       }
       M.Sprite.prototype._renderWebGL$1.call(this, renderSession);
     },
-    updateTransform$0: function() {
-      if (H.boolConversionCheck(this.PIXI$Text$dirty)) {
-        this.updateText$0();
-        this.PIXI$Text$dirty = false;
+    _updateTransform$0: function() {
+      if (H.boolConversionCheck(this.PIXI$Text$_dirty)) {
+        this._updateText$0();
+        this.PIXI$Text$_dirty = false;
       }
-      M.DisplayObjectContainer.prototype.updateTransform$0.call(this);
+      M.DisplayObjectContainer.prototype._updateTransform$0.call(this);
     },
     wordWrap$1: function(_, text) {
       var lines, result, i, spaceLeft, words, j, wordWidth, t1;
       lines = H.assertSubtype(text.split("\n"), "$isList", [P.String], "$asList");
       for (result = "", i = 0; i < lines.length; ++i) {
-        spaceLeft = this.style.wordWrapWidth;
+        spaceLeft = this._style.wordWrapWidth;
         words = J.split$1$s(lines[i], " ");
         for (j = 0; j < words.length; ++j) {
-          wordWidth = J.measureText$1$x(this.context, words[j]).width;
-          t1 = J.measureText$1$x(this.context, " ").width;
+          wordWidth = J.measureText$1$x(this._context, words[j]).width;
+          t1 = J.measureText$1$x(this._context, " ").width;
           if (typeof wordWidth !== "number")
             return wordWidth.$add();
           t1 = C.JSDouble_methods.$add(wordWidth, t1);
@@ -4461,7 +4464,7 @@ var $$ = {};
             if (j >= words.length)
               return H.ioore(words, j);
             result = C.JSString_methods.$add(result, words[j]);
-            spaceLeft = this.style.wordWrapWidth - wordWidth;
+            spaceLeft = this._style.wordWrapWidth - wordWidth;
           } else {
             spaceLeft -= t1;
             if (j >= words.length)
@@ -4477,16 +4480,16 @@ var $$ = {};
     Text$2: function(text, style) {
       var t1;
       this._text = text;
-      this.style = style;
+      this._style = style;
       t1 = H.interceptedTypeCheck(C.HtmlDocument_methods._createElement$2(document, "canvas", null), "$isCanvasElement");
-      this.canvas = t1;
-      this.context = H.interceptedTypeCheck(J.getContext$1$x(t1, "2d"), "$isCanvasRenderingContext2D");
-      this.texture = M.Texture$(M.BaseTexture_fromCanvas(this.canvas, null), null);
+      this._canvas = t1;
+      this._context = H.interceptedTypeCheck(J.getContext$1$x(t1, "2d"), "$isCanvasRenderingContext2D");
+      this.texture = M.Texture$(M.BaseTexture_fromCanvas(this._canvas, null), null);
       this._setupTexture$0();
       this._text = text;
-      this.PIXI$Text$dirty = true;
-      this.style = style;
-      this.PIXI$Text$dirty = true;
+      this.PIXI$Text$_dirty = true;
+      this._style = style;
+      this.PIXI$Text$_dirty = true;
     },
     static: {"^": "Text_splitReg,Text_heightCache"}
   },
@@ -15177,7 +15180,7 @@ var $$ = {};
 ["", "main.dart", , F, {
   "^": "",
   main: [function() {
-    var t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, stage, renderer, graphics, liveGraphics, label;
+    var t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, stage, renderer, t12, t13, t14, t15, t16, t17, t18, t19, t20, t21, t22, graphics, liveGraphics, label;
     t1 = {};
     t1.count_0 = 0;
     t2 = new Float32Array(9);
@@ -15195,7 +15198,8 @@ var $$ = {};
     t8 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
     t9 = H.assertSubtype([], "$isList", [P.num], "$asList");
     t10 = H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList");
-    stage = new M.Stage(null, false, new M.Rectangle(0, 0, 100000, 100000), 0, t9, null, new M.Matrix(1, 0, 0, 1, 0, 0, t2), null, t10, null, null, t3, t4, t5, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t6, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t7), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t8, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+    t11 = H.buildFunctionType(H.getVoidRuntimeType(), [H.buildInterfaceType(M.InteractionData)]);
+    stage = new M.Stage(null, false, new M.Rectangle(0, 0, 100000, 100000), 0, t9, null, new M.Matrix(1, 0, 0, 1, 0, 0, t2), null, t10, false, null, null, t3, t4, t5, 0, 1, true, null, false, false, null, false, false, false, false, false, t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), H.assertSubtype(t6, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t7), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t8, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
     stage.Stage$2(4040891, true);
     renderer = M.autoDetectRenderer(window.innerWidth, window.innerHeight, null, false, false);
     J.append$1$x(document.body, renderer.view);
@@ -15212,11 +15216,23 @@ var $$ = {};
     t2 = new Float32Array(9);
     t3 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
     t4 = H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList");
+    t9 = t11._assertCheck$1(null);
+    t12 = t11._assertCheck$1(null);
+    t13 = t11._assertCheck$1(null);
+    t14 = t11._assertCheck$1(null);
+    t15 = t11._assertCheck$1(null);
+    t16 = t11._assertCheck$1(null);
+    t17 = t11._assertCheck$1(null);
+    t18 = t11._assertCheck$1(null);
+    t19 = t11._assertCheck$1(null);
+    t20 = t11._assertCheck$1(null);
+    t21 = t11._assertCheck$1(null);
+    t22 = t11._assertCheck$1(null);
     H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap");
     H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList");
     t8.x = 400;
     t8.y = 300;
-    stage.addChildAt$2(new M.DisplayObjectContainer(t4, null, null, t8, t7, t6, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, t5, null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t2), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t3, null), null, 0), t10.length);
+    stage.addChildAt$2(new M.DisplayObjectContainer(t4, false, null, null, t8, t7, t6, 0, 1, true, null, false, false, null, false, false, false, false, false, t9, t12, t13, t14, t15, t16, t17, t18, t19, t20, t21, t22, t5, null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t2), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t3, null), null, 0), t10.length);
     t1.count_0 = 0;
     graphics = M.Graphics$().beginFill$1(16711680);
     liveGraphics = M.Graphics$().beginFill$1(16711680);
@@ -15225,7 +15241,8 @@ var $$ = {};
     t1.isDown_2 = false;
     t1.color_3 = 0;
     t1.colorCount_4 = 0;
-    t2 = new M.TextStyle("black", "bold 20pt Arial", "left", "black", 0, false, 100, false, 0.5235987755982988, 4, "black", 0, 0, "rgba(0,0,0,0)", 0, 16777215);
+    t2 = new M.TextStyle("black", "bold 20pt Arial", "left", "black", 0, false, 100, false, 0.5235987755982988, 4, "black", 16777215);
+    t2.TextStyle$6$align$fill$font$stroke$strokeThickness$tint("left", "black", "bold 20pt Arial", "black", 0, 16777215);
     t2.fill = "white";
     t2.font = "16px Arial";
     t3 = new M.Point(null, null);
@@ -15243,7 +15260,7 @@ var $$ = {};
     t7 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
     t8 = new Float32Array(9);
     t9 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-    label = new M.Text(null, null, null, null, null, null, t3, null, false, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t4, t5, t6, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t7, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t8), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t9, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+    label = new M.Text(null, null, null, null, null, null, t3, null, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t4, t5, t6, 0, 1, true, null, false, false, null, false, false, false, false, false, t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), H.assertSubtype(t7, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t8), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t9, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
     label.renderable = true;
     label.Text$2("Click and drag anywhere do draw complex geometry in pixi / do an art attack", t2);
     t4.x = 10;
@@ -15286,9 +15303,9 @@ var $$ = {};
       t3 = this.liveGraphics_2;
       t3.lineWidth = 0;
       t3.filling = false;
-      t3.dirty = true;
+      t3._dirty = true;
       t3.clearDirty = true;
-      t3.set$graphicsData([]);
+      C.JSArray_methods.set$length(t3._graphicsData, 0);
       t3.bounds = null;
       if (t1.path_1.length <= 12)
         return;
@@ -15311,8 +15328,8 @@ var $$ = {};
       t2 = this.graphics_3;
       t2.beginFill$1(t1.color_3);
       t3 = t1.color_3;
-      if (t2.currentPath.points.length === 0) {
-        t4 = t2.graphicsData;
+      if (t2._currentPath.points.length === 0) {
+        t4 = t2._graphicsData;
         if (t4.length > 0)
           t4.pop();
       }
@@ -15329,8 +15346,8 @@ var $$ = {};
       t4.fill = t2.filling;
       t4.set$points(0, []);
       t4.type = $.Graphics_POLY;
-      t2.currentPath = t4;
-      C.JSArray_methods.add$1(t2.graphicsData, t4);
+      t2._currentPath = t4;
+      C.JSArray_methods.add$1(t2._graphicsData, t4);
       t2.drawPath$1(t1.path_1);
       t2.endFill$0();
       t1.path_1 = [];
@@ -15441,6 +15458,8 @@ P.Pattern.$isObject = true;
 W.MouseEvent.$isMouseEvent = true;
 W.MouseEvent.$isEvent = true;
 W.MouseEvent.$isObject = true;
+M.InteractionData.$isInteractionData = true;
+M.InteractionData.$isObject = true;
 // getInterceptor methods
 J.getInterceptor = function(receiver) {
   if (typeof receiver == "number") {

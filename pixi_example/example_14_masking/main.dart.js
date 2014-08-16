@@ -276,112 +276,181 @@ var $$ = {};
 ["PIXI", "../../lib/pixi.dart", , M, {
   "^": "",
   CanvasGraphics_renderGraphics: function(graphics, context) {
-    var worldAlpha, i, t1, data, points, t2, j, t3, t4, ellipseData, w, h, x, y, ox, oy, xe, t5, ye, xm, ym, rx, ry, width, height, radius, maxRadius;
-    worldAlpha = graphics.worldAlpha;
-    for (i = 0; t1 = graphics.graphicsData, i < t1.length; ++i) {
+    var worldAlpha, t1, i, data, points, t2, t3, j, t4, t5, ellipseData, w, h, x, y, ox, oy, xe, ye, xm, ym, rx, ry, width, height, radius, maxRadius;
+    worldAlpha = graphics._worldAlpha;
+    for (t1 = graphics._graphicsData, i = 0; i < t1.length; ++i) {
       data = t1[i];
-      t1 = J.getInterceptor$x(data);
-      points = t1.get$points(data);
-      t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(data.get$lineColor())));
+      points = data.points;
+      t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(data.lineColor)));
       context.strokeStyle = "#" + C.JSString_methods.padLeft$2(t2.toString(16), 6, "0");
-      context.lineWidth = H.numTypeCheck(t1.get$lineWidth(data));
-      if (t1.get$type(data) === $.Graphics_POLY) {
+      context.lineWidth = data.lineWidth;
+      t2 = data.type;
+      if (t2 === $.Graphics_POLY) {
         context.beginPath();
-        t2 = J.getInterceptor$asx(points);
-        C.CanvasRenderingContext2D_methods.moveTo$2(context, t2.$index(points, 0), t2.$index(points, 1));
-        for (j = 1; j < t2.get$length(points) / 2; ++j) {
+        t2 = points.length;
+        if (0 >= t2)
+          return H.ioore(points, 0);
+        t3 = points[0];
+        if (1 >= t2)
+          return H.ioore(points, 1);
+        C.CanvasRenderingContext2D_methods.moveTo$2(context, t3, points[1]);
+        for (j = 1; t2 = points.length, j < t2 / 2; ++j) {
           t3 = j * 2;
-          C.CanvasRenderingContext2D_methods.lineTo$2(context, t2.$index(points, t3), t2.$index(points, t3 + 1));
+          if (t3 >= t2)
+            return H.ioore(points, t3);
+          t4 = points[t3];
+          ++t3;
+          if (t3 >= t2)
+            return H.ioore(points, t3);
+          C.CanvasRenderingContext2D_methods.lineTo$2(context, t4, points[t3]);
         }
-        if (J.$eq(t2.$index(points, 0), t2.$index(points, t2.get$length(points) - 2)) && J.$eq(t2.$index(points, 1), t2.$index(points, t2.get$length(points) - 1)))
+        if (0 >= t2)
+          return H.ioore(points, 0);
+        t3 = points[0];
+        t4 = t2 - 2;
+        if (t4 < 0)
+          return H.ioore(points, t4);
+        if (J.$eq(t3, points[t4])) {
+          t2 = points.length;
+          if (1 >= t2)
+            return H.ioore(points, 1);
+          t2 = J.$eq(points[1], points[t2 - 1]);
+        } else
+          t2 = false;
+        if (t2)
           context.closePath();
-        if (H.boolConversionCheck(t1.get$fill(data))) {
-          context.globalAlpha = data.get$fillAlpha() * worldAlpha;
-          t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(data.get$fillColor())));
+        if (H.boolConversionCheck(data.fill)) {
+          context.globalAlpha = data.fillAlpha * worldAlpha;
+          t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(data.fillColor)));
           context.fillStyle = "#" + C.JSString_methods.padLeft$2(t2.toString(16), 6, "0");
           context.fill("nonzero");
         }
-        if (!J.$eq(t1.get$lineWidth(data), 0)) {
-          context.globalAlpha = data.get$lineAlpha() * worldAlpha;
+        if (data.lineWidth !== 0) {
+          context.globalAlpha = data.lineAlpha * worldAlpha;
           context.stroke();
         }
-      } else if (t1.get$type(data) === $.Graphics_RECT) {
-        if (H.boolConversionCheck(t1.get$fill(data))) {
-          context.globalAlpha = data.get$fillAlpha() * worldAlpha;
-          t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(data.get$fillColor())));
+      } else if (t2 === $.Graphics_RECT) {
+        if (H.boolConversionCheck(data.fill)) {
+          context.globalAlpha = data.fillAlpha * worldAlpha;
+          t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(data.fillColor)));
           context.fillStyle = "#" + C.JSString_methods.padLeft$2(t2.toString(16), 6, "0");
-          t2 = J.getInterceptor$asx(points);
-          C.CanvasRenderingContext2D_methods.fillRect$4(context, t2.$index(points, 0), t2.$index(points, 1), t2.$index(points, 2), t2.$index(points, 3));
+          t2 = points.length;
+          if (0 >= t2)
+            return H.ioore(points, 0);
+          t3 = points[0];
+          if (1 >= t2)
+            return H.ioore(points, 1);
+          t4 = points[1];
+          if (2 >= t2)
+            return H.ioore(points, 2);
+          t5 = points[2];
+          if (3 >= t2)
+            return H.ioore(points, 3);
+          C.CanvasRenderingContext2D_methods.fillRect$4(context, t3, t4, t5, points[3]);
         }
-        if (!J.$eq(t1.get$lineWidth(data), 0)) {
-          context.globalAlpha = data.get$lineAlpha() * worldAlpha;
-          t1 = J.getInterceptor$asx(points);
-          C.CanvasRenderingContext2D_methods.strokeRect$4(context, t1.$index(points, 0), t1.$index(points, 1), t1.$index(points, 2), t1.$index(points, 3));
+        if (data.lineWidth !== 0) {
+          context.globalAlpha = data.lineAlpha * worldAlpha;
+          t2 = points.length;
+          if (0 >= t2)
+            return H.ioore(points, 0);
+          t3 = points[0];
+          if (1 >= t2)
+            return H.ioore(points, 1);
+          t4 = points[1];
+          if (2 >= t2)
+            return H.ioore(points, 2);
+          t5 = points[2];
+          if (3 >= t2)
+            return H.ioore(points, 3);
+          C.CanvasRenderingContext2D_methods.strokeRect$4(context, t3, t4, t5, points[3]);
         }
-      } else if (t1.get$type(data) === $.Graphics_CIRC) {
+      } else if (t2 === $.Graphics_CIRC) {
         context.beginPath();
-        t2 = J.getInterceptor$asx(points);
-        t3 = t2.$index(points, 0);
-        t4 = t2.$index(points, 1);
-        t2 = t2.$index(points, 2);
+        t2 = points.length;
+        if (0 >= t2)
+          return H.ioore(points, 0);
+        t3 = points[0];
+        if (1 >= t2)
+          return H.ioore(points, 1);
+        t4 = points[1];
+        if (2 >= t2)
+          return H.ioore(points, 2);
+        t2 = points[2];
         H.numTypeCheck(t3);
         H.numTypeCheck(t4);
         H.numTypeCheck(t2);
         C.CanvasRenderingContext2D_methods._arc$6(context, t3, t4, t2, 0, 6.283185307179586, false);
         context.closePath();
-        if (H.boolConversionCheck(t1.get$fill(data))) {
-          context.globalAlpha = data.get$fillAlpha() * worldAlpha;
-          t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(data.get$fillColor())));
+        if (H.boolConversionCheck(data.fill)) {
+          context.globalAlpha = data.fillAlpha * worldAlpha;
+          t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(data.fillColor)));
           context.fillStyle = "#" + C.JSString_methods.padLeft$2(t2.toString(16), 6, "0");
           context.fill("nonzero");
         }
-        if (!J.$eq(t1.get$lineWidth(data), 0)) {
-          context.globalAlpha = data.get$lineAlpha() * worldAlpha;
+        if (data.lineWidth !== 0) {
+          context.globalAlpha = data.lineAlpha * worldAlpha;
           context.stroke();
         }
-      } else if (t1.get$type(data) === $.Graphics_ELIP) {
-        ellipseData = t1.get$points(data);
-        t2 = J.getInterceptor$asx(ellipseData);
-        w = J.$mul$ns(t2.$index(ellipseData, 2), 2);
-        h = J.$mul$ns(t2.$index(ellipseData, 3), 2);
-        t3 = J.getInterceptor$n(w);
-        x = J.$sub$n(t2.$index(ellipseData, 0), t3.$div(w, 2));
-        t4 = J.getInterceptor$n(h);
-        y = J.$sub$n(t2.$index(ellipseData, 1), t4.$div(h, 2));
+      } else if (t2 === $.Graphics_ELIP) {
+        ellipseData = data.points;
+        if (2 >= ellipseData.length)
+          return H.ioore(ellipseData, 2);
+        w = J.$mul$ns(ellipseData[2], 2);
+        if (3 >= ellipseData.length)
+          return H.ioore(ellipseData, 3);
+        h = J.$mul$ns(ellipseData[3], 2);
+        if (0 >= ellipseData.length)
+          return H.ioore(ellipseData, 0);
+        t2 = J.getInterceptor$n(w);
+        x = J.$sub$n(ellipseData[0], t2.$div(w, 2));
+        if (1 >= ellipseData.length)
+          return H.ioore(ellipseData, 1);
+        t3 = J.getInterceptor$n(h);
+        y = J.$sub$n(ellipseData[1], t3.$div(h, 2));
         context.beginPath();
-        ox = t3.$div(w, 2) * 0.5522848;
-        oy = t4.$div(h, 2) * 0.5522848;
-        t2 = J.getInterceptor$ns(x);
-        xe = t2.$add(x, w);
+        ox = t2.$div(w, 2) * 0.5522848;
+        oy = t3.$div(h, 2) * 0.5522848;
+        t4 = J.getInterceptor$ns(x);
+        xe = t4.$add(x, w);
         t5 = J.getInterceptor$ns(y);
         ye = t5.$add(y, h);
-        xm = t2.$add(x, t3.$div(w, 2));
-        ym = t5.$add(y, t4.$div(h, 2));
+        xm = t4.$add(x, t2.$div(w, 2));
+        ym = t5.$add(y, t3.$div(h, 2));
         C.CanvasRenderingContext2D_methods.moveTo$2(context, x, ym);
-        t4 = J.getInterceptor$n(ym);
+        t3 = J.getInterceptor$n(ym);
         t5 = J.getInterceptor$n(xm);
-        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, x, t4.$sub(ym, oy), t5.$sub(xm, ox), y, xm, y);
-        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, t5.$add(xm, ox), y, xe, t4.$sub(ym, oy), xe, ym);
-        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, xe, t4.$add(ym, oy), t5.$add(xm, ox), ye, xm, ye);
-        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, t5.$sub(xm, ox), ye, x, t4.$add(ym, oy), x, ym);
+        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, x, t3.$sub(ym, oy), t5.$sub(xm, ox), y, xm, y);
+        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, t5.$add(xm, ox), y, xe, t3.$sub(ym, oy), xe, ym);
+        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, xe, t3.$add(ym, oy), t5.$add(xm, ox), ye, xm, ye);
+        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, t5.$sub(xm, ox), ye, x, t3.$add(ym, oy), x, ym);
         context.closePath();
-        if (H.boolConversionCheck(t1.get$fill(data))) {
-          context.globalAlpha = data.get$fillAlpha() * worldAlpha;
-          t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(data.get$fillColor())));
+        if (H.boolConversionCheck(data.fill)) {
+          context.globalAlpha = data.fillAlpha * worldAlpha;
+          t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(data.fillColor)));
           context.fillStyle = "#" + C.JSString_methods.padLeft$2(t2.toString(16), 6, "0");
           context.fill("nonzero");
         }
-        if (!J.$eq(t1.get$lineWidth(data), 0)) {
-          context.globalAlpha = data.get$lineAlpha() * worldAlpha;
+        if (data.lineWidth !== 0) {
+          context.globalAlpha = data.lineAlpha * worldAlpha;
           context.stroke();
         }
-      } else if (t1.get$type(data) === $.Graphics_RREC) {
-        t2 = J.getInterceptor$asx(points);
-        rx = H.numTypeCheck(t2.$index(points, 0));
-        ry = H.numTypeCheck(t2.$index(points, 1));
-        width = H.numTypeCheck(t2.$index(points, 2));
-        height = H.numTypeCheck(t2.$index(points, 3));
-        radius = H.numTypeCheck(t2.$index(points, 4));
+      } else if (t2 === $.Graphics_RREC) {
+        t2 = points.length;
+        if (0 >= t2)
+          return H.ioore(points, 0);
+        rx = H.numTypeCheck(points[0]);
+        if (1 >= t2)
+          return H.ioore(points, 1);
+        ry = H.numTypeCheck(points[1]);
+        if (2 >= t2)
+          return H.ioore(points, 2);
+        width = H.numTypeCheck(points[2]);
+        if (3 >= t2)
+          return H.ioore(points, 3);
+        height = H.numTypeCheck(points[3]);
+        if (4 >= t2)
+          return H.ioore(points, 4);
+        radius = H.numTypeCheck(points[4]);
         maxRadius = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(P.min(width, height) / 2)));
         if (typeof radius !== "number")
           return radius.$gt();
@@ -405,23 +474,24 @@ var $$ = {};
         C.CanvasRenderingContext2D_methods.lineTo$2(context, t4, ry);
         C.CanvasRenderingContext2D_methods.quadraticCurveTo$4(context, rx, ry, rx, t2);
         context.closePath();
-        if (H.boolConversionCheck(t1.get$fill(data))) {
-          context.globalAlpha = data.get$fillAlpha() * worldAlpha;
-          t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(data.get$fillColor())));
+        if (H.boolConversionCheck(data.fill)) {
+          context.globalAlpha = data.fillAlpha * worldAlpha;
+          t2 = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(data.fillColor)));
           context.fillStyle = "#" + C.JSString_methods.padLeft$2(t2.toString(16), 6, "0");
           context.fill("nonzero");
         }
-        if (!J.$eq(t1.get$lineWidth(data), 0)) {
-          context.globalAlpha = data.get$lineAlpha() * worldAlpha;
+        if (data.lineWidth !== 0) {
+          context.globalAlpha = data.lineAlpha * worldAlpha;
           context.stroke();
         }
       }
     }
   },
   CanvasGraphics_renderGraphicsMask: function(graphics, context) {
-    var len, i, t1, data, points, j, t2, t3, ellipseData, w, h, x, y, ox, oy, xe, t4, ye, xm, ym, rx, ry, width, height, radius, maxRadius;
+    var t1, len, i, data, points, t2, t3, j, t4, t5, w, h, x, y, ox, oy, xe, ye, xm, ym, rx, ry, width, height, radius, maxRadius;
     H.interceptedTypeCheck(context, "$isCanvasRenderingContext2D");
-    len = graphics.graphicsData.length;
+    t1 = graphics._graphicsData;
+    len = t1.length;
     if (len === 0)
       return;
     if (len > 1) {
@@ -429,71 +499,127 @@ var $$ = {};
       H.voidTypeCheck(typeof console != "undefined" ? console.log("Pixi.js warning: masks in canvas can only mask using the first path in the graphics object") : null);
     }
     for (i = 0; i < 1; ++i) {
-      t1 = graphics.graphicsData;
       if (i >= t1.length)
         return H.ioore(t1, i);
       data = t1[i];
-      t1 = J.getInterceptor$x(data);
-      points = t1.get$points(data);
-      if (t1.get$type(data) === $.Graphics_POLY) {
+      points = data.points;
+      t2 = data.type;
+      if (t2 === $.Graphics_POLY) {
         context.beginPath();
-        t1 = J.getInterceptor$asx(points);
-        C.CanvasRenderingContext2D_methods.moveTo$2(context, t1.$index(points, 0), t1.$index(points, 1));
-        for (j = 1; j < t1.get$length(points) / 2; ++j) {
-          t2 = j * 2;
-          C.CanvasRenderingContext2D_methods.lineTo$2(context, t1.$index(points, t2), t1.$index(points, t2 + 1));
+        t2 = points.length;
+        if (0 >= t2)
+          return H.ioore(points, 0);
+        t3 = points[0];
+        if (1 >= t2)
+          return H.ioore(points, 1);
+        C.CanvasRenderingContext2D_methods.moveTo$2(context, t3, points[1]);
+        for (j = 1; t2 = points.length, j < t2 / 2; ++j) {
+          t3 = j * 2;
+          if (t3 >= t2)
+            return H.ioore(points, t3);
+          t4 = points[t3];
+          ++t3;
+          if (t3 >= t2)
+            return H.ioore(points, t3);
+          C.CanvasRenderingContext2D_methods.lineTo$2(context, t4, points[t3]);
         }
-        if (J.$eq(t1.$index(points, 0), t1.$index(points, t1.get$length(points) - 2)) && J.$eq(t1.$index(points, 1), t1.$index(points, t1.get$length(points) - 1)))
+        if (0 >= t2)
+          return H.ioore(points, 0);
+        t3 = points[0];
+        t4 = t2 - 2;
+        if (t4 < 0)
+          return H.ioore(points, t4);
+        if (J.$eq(t3, points[t4])) {
+          t2 = points.length;
+          if (1 >= t2)
+            return H.ioore(points, 1);
+          t2 = J.$eq(points[1], points[t2 - 1]);
+        } else
+          t2 = false;
+        if (t2)
           context.closePath();
-      } else if (t1.get$type(data) === $.Graphics_RECT) {
+      } else if (t2 === $.Graphics_RECT) {
         context.beginPath();
-        t1 = J.getInterceptor$asx(points);
-        C.CanvasRenderingContext2D_methods.rect$4(context, t1.$index(points, 0), t1.$index(points, 1), t1.$index(points, 2), t1.$index(points, 3));
+        t2 = points.length;
+        if (0 >= t2)
+          return H.ioore(points, 0);
+        t3 = points[0];
+        if (1 >= t2)
+          return H.ioore(points, 1);
+        t4 = points[1];
+        if (2 >= t2)
+          return H.ioore(points, 2);
+        t5 = points[2];
+        if (3 >= t2)
+          return H.ioore(points, 3);
+        C.CanvasRenderingContext2D_methods.rect$4(context, t3, t4, t5, points[3]);
         context.closePath();
-      } else if (t1.get$type(data) === $.Graphics_CIRC) {
+      } else if (t2 === $.Graphics_CIRC) {
         context.beginPath();
-        t1 = J.getInterceptor$asx(points);
-        t2 = t1.$index(points, 0);
-        t3 = t1.$index(points, 1);
-        t1 = t1.$index(points, 2);
-        H.numTypeCheck(t2);
+        t2 = points.length;
+        if (0 >= t2)
+          return H.ioore(points, 0);
+        t3 = points[0];
+        if (1 >= t2)
+          return H.ioore(points, 1);
+        t4 = points[1];
+        if (2 >= t2)
+          return H.ioore(points, 2);
+        t2 = points[2];
         H.numTypeCheck(t3);
-        H.numTypeCheck(t1);
-        C.CanvasRenderingContext2D_methods._arc$6(context, t2, t3, t1, 0, 6.283185307179586, false);
+        H.numTypeCheck(t4);
+        H.numTypeCheck(t2);
+        C.CanvasRenderingContext2D_methods._arc$6(context, t3, t4, t2, 0, 6.283185307179586, false);
         context.closePath();
-      } else if (t1.get$type(data) === $.Graphics_ELIP) {
-        ellipseData = t1.get$points(data);
-        t1 = J.getInterceptor$asx(ellipseData);
-        w = J.$mul$ns(t1.$index(ellipseData, 2), 2);
-        h = J.$mul$ns(t1.$index(ellipseData, 3), 2);
+      } else if (t2 === $.Graphics_ELIP) {
+        if (2 >= points.length)
+          return H.ioore(points, 2);
+        w = J.$mul$ns(points[2], 2);
+        if (3 >= points.length)
+          return H.ioore(points, 3);
+        h = J.$mul$ns(points[3], 2);
+        if (0 >= points.length)
+          return H.ioore(points, 0);
         t2 = J.getInterceptor$n(w);
-        x = J.$sub$n(t1.$index(ellipseData, 0), t2.$div(w, 2));
+        x = J.$sub$n(points[0], t2.$div(w, 2));
+        if (1 >= points.length)
+          return H.ioore(points, 1);
         t3 = J.getInterceptor$n(h);
-        y = J.$sub$n(t1.$index(ellipseData, 1), t3.$div(h, 2));
+        y = J.$sub$n(points[1], t3.$div(h, 2));
         context.beginPath();
         ox = t2.$div(w, 2) * 0.5522848;
         oy = t3.$div(h, 2) * 0.5522848;
-        t1 = J.getInterceptor$ns(x);
-        xe = t1.$add(x, w);
-        t4 = J.getInterceptor$ns(y);
-        ye = t4.$add(y, h);
-        xm = t1.$add(x, t2.$div(w, 2));
-        ym = t4.$add(y, t3.$div(h, 2));
+        t4 = J.getInterceptor$ns(x);
+        xe = t4.$add(x, w);
+        t5 = J.getInterceptor$ns(y);
+        ye = t5.$add(y, h);
+        xm = t4.$add(x, t2.$div(w, 2));
+        ym = t5.$add(y, t3.$div(h, 2));
         C.CanvasRenderingContext2D_methods.moveTo$2(context, x, ym);
         t3 = J.getInterceptor$n(ym);
-        t4 = J.getInterceptor$n(xm);
-        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, x, t3.$sub(ym, oy), t4.$sub(xm, ox), y, xm, y);
-        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, t4.$add(xm, ox), y, xe, t3.$sub(ym, oy), xe, ym);
-        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, xe, t3.$add(ym, oy), t4.$add(xm, ox), ye, xm, ye);
-        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, t4.$sub(xm, ox), ye, x, t3.$add(ym, oy), x, ym);
+        t5 = J.getInterceptor$n(xm);
+        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, x, t3.$sub(ym, oy), t5.$sub(xm, ox), y, xm, y);
+        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, t5.$add(xm, ox), y, xe, t3.$sub(ym, oy), xe, ym);
+        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, xe, t3.$add(ym, oy), t5.$add(xm, ox), ye, xm, ye);
+        C.CanvasRenderingContext2D_methods.bezierCurveTo$6(context, t5.$sub(xm, ox), ye, x, t3.$add(ym, oy), x, ym);
         context.closePath();
-      } else if (t1.get$type(data) === $.Graphics_RREC) {
-        t1 = J.getInterceptor$asx(points);
-        rx = H.numTypeCheck(t1.$index(points, 0));
-        ry = H.numTypeCheck(t1.$index(points, 1));
-        width = H.numTypeCheck(t1.$index(points, 2));
-        height = H.numTypeCheck(t1.$index(points, 3));
-        radius = H.numTypeCheck(t1.$index(points, 4));
+      } else if (t2 === $.Graphics_RREC) {
+        t2 = points.length;
+        if (0 >= t2)
+          return H.ioore(points, 0);
+        rx = H.numTypeCheck(points[0]);
+        if (1 >= t2)
+          return H.ioore(points, 1);
+        ry = H.numTypeCheck(points[1]);
+        if (2 >= t2)
+          return H.ioore(points, 2);
+        width = H.numTypeCheck(points[2]);
+        if (3 >= t2)
+          return H.ioore(points, 3);
+        height = H.numTypeCheck(points[3]);
+        if (4 >= t2)
+          return H.ioore(points, 4);
+        radius = H.numTypeCheck(points[4]);
         maxRadius = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(P.min(width, height) / 2)));
         if (typeof radius !== "number")
           return radius.$gt();
@@ -502,20 +628,20 @@ var $$ = {};
         context.beginPath();
         if (typeof ry !== "number")
           return ry.$add();
-        t1 = ry + radius;
-        C.CanvasRenderingContext2D_methods.moveTo$2(context, rx, t1);
+        t2 = ry + radius;
+        C.CanvasRenderingContext2D_methods.moveTo$2(context, rx, t2);
         C.CanvasRenderingContext2D_methods.lineTo$2(context, rx, C.JSNumber_methods.$add(ry, height) - radius);
-        t2 = C.JSNumber_methods.$add(ry, height);
+        t3 = C.JSNumber_methods.$add(ry, height);
         if (typeof rx !== "number")
           return rx.$add();
-        t3 = rx + radius;
-        C.CanvasRenderingContext2D_methods.quadraticCurveTo$4(context, rx, t2, t3, C.JSNumber_methods.$add(ry, height));
+        t4 = rx + radius;
+        C.CanvasRenderingContext2D_methods.quadraticCurveTo$4(context, rx, t3, t4, C.JSNumber_methods.$add(ry, height));
         C.CanvasRenderingContext2D_methods.lineTo$2(context, C.JSNumber_methods.$add(rx, width) - radius, C.JSNumber_methods.$add(ry, height));
         C.CanvasRenderingContext2D_methods.quadraticCurveTo$4(context, C.JSNumber_methods.$add(rx, width), C.JSNumber_methods.$add(ry, height), C.JSNumber_methods.$add(rx, width), C.JSNumber_methods.$add(ry, height) - radius);
-        C.CanvasRenderingContext2D_methods.lineTo$2(context, C.JSNumber_methods.$add(rx, width), t1);
+        C.CanvasRenderingContext2D_methods.lineTo$2(context, C.JSNumber_methods.$add(rx, width), t2);
         C.CanvasRenderingContext2D_methods.quadraticCurveTo$4(context, C.JSNumber_methods.$add(rx, width), ry, C.JSNumber_methods.$add(rx, width) - radius, ry);
-        C.CanvasRenderingContext2D_methods.lineTo$2(context, t3, ry);
-        C.CanvasRenderingContext2D_methods.quadraticCurveTo$4(context, rx, ry, rx, t1);
+        C.CanvasRenderingContext2D_methods.lineTo$2(context, t4, ry);
+        C.CanvasRenderingContext2D_methods.quadraticCurveTo$4(context, rx, ry, rx, t2);
         context.closePath();
       }
     }
@@ -637,60 +763,61 @@ var $$ = {};
     t1.putImageData$3(context, pixelData, 0, 0);
   }, "call$3", "CanvasTinter_tintWithPerPixel$closure", 6, 0, 1],
   WebGLGraphics_renderGraphics: function(graphics, renderSession) {
-    var gl, projection, offset, shader, webGL, t1, t2, t3, t4, i, t5, t6, webGLData, colorList, tintColor, t7;
+    var gl, projection, offset, shader, webGL, t1, i, t2, t3, webGLData, colorList, tintColor, t4;
     gl = renderSession.gl;
     projection = renderSession.projection;
     offset = renderSession.offset;
     shader = renderSession.shaderManager.primitiveShader;
-    if (graphics.dirty)
+    if (graphics._dirty)
       M.WebGLGraphics_updateGraphics(graphics, gl);
     webGL = graphics._webGL.$index(0, gl);
-    for (t1 = J.getInterceptor$x(gl), t2 = graphics.tint, t3 = (t2 >>> 16 & 255) / 255, t4 = (t2 >>> 8 & 255) / 255, t2 = (t2 & 255) / 255, i = 0; t5 = webGL.data, i < t5.length; ++i) {
-      t5 = J.get$mode$x(t5[i]);
-      t6 = webGL.data;
-      if (t5 === 1) {
-        if (i >= t6.length)
-          return H.ioore(t6, i);
-        webGLData = H.interceptedTypeCheck(t6[i], "$isWebGLGraphicsData");
+    for (t1 = J.getInterceptor$x(gl), i = 0; t2 = webGL.data, i < t2.length; ++i) {
+      t2 = J.get$mode$x(t2[i]);
+      t3 = webGL.data;
+      if (t2 === 1) {
+        if (i >= t3.length)
+          return H.ioore(t3, i);
+        webGLData = H.interceptedTypeCheck(t3[i], "$isWebGLGraphicsData");
         renderSession.stencilManager.pushStencil$3(graphics, webGLData, renderSession);
         t1.drawElements$4(gl, 6, 4, 5123, (webGLData.indices.length - 4) * 2);
         renderSession.stencilManager.popStencil$3(graphics, webGLData, renderSession);
         $.WebGLGraphics_last = webGLData.mode;
       } else {
-        if (i >= t6.length)
-          return H.ioore(t6, i);
-        webGLData = H.interceptedTypeCheck(t6[i], "$isWebGLGraphicsData");
-        colorList = H.assertSubtype(H.assertSubtype([t3, t4, t2], "$isList", [P.num], "$asList"), "$isList", [P.num], "$asList");
+        if (i >= t3.length)
+          return H.ioore(t3, i);
+        webGLData = H.interceptedTypeCheck(t3[i], "$isWebGLGraphicsData");
+        t2 = graphics.tint;
+        colorList = H.assertSubtype(H.assertSubtype([(t2 >>> 16 & 255) / 255, (t2 >>> 8 & 255) / 255, (t2 & 255) / 255], "$isList", [P.num], "$asList"), "$isList", [P.num], "$asList");
         tintColor = new Float32Array(3);
-        t5 = colorList.length;
-        if (0 >= t5)
+        t2 = colorList.length;
+        if (0 >= t2)
           return H.ioore(colorList, 0);
         tintColor[0] = colorList[0];
-        if (1 >= t5)
+        if (1 >= t2)
           return H.ioore(colorList, 1);
         tintColor[1] = colorList[1];
-        if (2 >= t5)
+        if (2 >= t2)
           return H.ioore(colorList, 2);
         tintColor[2] = colorList[2];
         renderSession.shaderManager.setShader$1(shader);
         shader = renderSession.shaderManager.primitiveShader;
-        t1.uniformMatrix3fv$3(gl, shader.PIXI$PrimitiveShader$translationMatrix, false, graphics.worldTransform.toArray$1(true));
-        t5 = shader.PIXI$PrimitiveShader$projectionVector;
-        t6 = projection.x;
-        t7 = projection.y;
-        if (typeof t7 !== "number")
-          return t7.$negate();
-        C.RenderingContext_methods.uniform2f$3(gl, t5, t6, -t7);
-        t7 = shader.PIXI$PrimitiveShader$offsetVector;
-        t6 = offset.x;
-        if (typeof t6 !== "number")
-          return t6.$negate();
-        t5 = offset.y;
-        if (typeof t5 !== "number")
-          return t5.$negate();
-        C.RenderingContext_methods.uniform2f$3(gl, t7, -t6, -t5);
+        t1.uniformMatrix3fv$3(gl, shader.PIXI$PrimitiveShader$translationMatrix, false, graphics._worldTransform.toArray$1(true));
+        t2 = shader.PIXI$PrimitiveShader$projectionVector;
+        t3 = projection.x;
+        t4 = projection.y;
+        if (typeof t4 !== "number")
+          return t4.$negate();
+        C.RenderingContext_methods.uniform2f$3(gl, t2, t3, -t4);
+        t4 = shader.PIXI$PrimitiveShader$offsetVector;
+        t3 = offset.x;
+        if (typeof t3 !== "number")
+          return t3.$negate();
+        t2 = offset.y;
+        if (typeof t2 !== "number")
+          return t2.$negate();
+        C.RenderingContext_methods.uniform2f$3(gl, t4, -t3, -t2);
         C.RenderingContext_methods.uniform3fv$2(gl, shader.PIXI$PrimitiveShader$tintColor, tintColor);
-        C.RenderingContext_methods.uniform1f$2(gl, shader.PIXI$PrimitiveShader$alpha, graphics.worldAlpha);
+        C.RenderingContext_methods.uniform1f$2(gl, shader.PIXI$PrimitiveShader$alpha, graphics._worldAlpha);
         C.RenderingContext_methods.bindBuffer$2(gl, 34962, webGLData.buffer);
         C.RenderingContext_methods.vertexAttribPointer$6(gl, shader.PIXI$PrimitiveShader$aVertexPosition, 2, 5126, false, 24, 0);
         C.RenderingContext_methods.vertexAttribPointer$6(gl, shader.PIXI$PrimitiveShader$colorAttribute, 4, 5126, false, 24, 8);
@@ -700,7 +827,7 @@ var $$ = {};
     }
   },
   WebGLGraphics_updateGraphics: function(graphics, gl) {
-    var t1, webGL, i, graphicsData, webGLData, data, rectData, x, y, width, height, color, alpha, r, g, b, verts, indices, vertPos, t2, tempPoints;
+    var t1, webGL, i, graphicsData, webGLData, data, t2, rectData, x, y, width, height, color, alpha, r, g, b, verts, indices, vertPos, t3, tempPoints;
     t1 = graphics._webGL;
     webGL = t1.$index(0, gl);
     if (webGL == null) {
@@ -710,7 +837,7 @@ var $$ = {};
       webGL.gl = gl;
       t1.$indexSet(0, gl, webGL);
     }
-    graphics.dirty = false;
+    graphics._dirty = false;
     if (graphics.clearDirty) {
       graphics.clearDirty = false;
       for (i = 0; t1 = webGL.data, i < t1.length; ++i) {
@@ -723,13 +850,13 @@ var $$ = {};
       webGL.set$data(0, []);
       webGL.lastIndex = 0;
     }
-    for (i = webGL.lastIndex, webGLData = null; t1 = graphics.graphicsData, i < t1.length; ++i) {
-      data = H.interceptedTypeCheck(t1[i], "$isGraphicsData");
+    for (i = webGL.lastIndex, t1 = graphics._graphicsData, webGLData = null; i < t1.length; ++i) {
+      data = t1[i];
       if (data.type === $.Graphics_POLY) {
         if (H.boolConversionCheck(data.fill)) {
-          t1 = data.points.length;
-          if (t1 > 6)
-            if (t1 > 10) {
+          t2 = data.points.length;
+          if (t2 > 6)
+            if (t2 > 10) {
               webGLData = M.WebGLGraphics_switchMode(webGL, 1);
               M.WebGLGraphics_buildComplexPoly(data, webGLData);
             } else {
@@ -743,25 +870,25 @@ var $$ = {};
         }
       } else {
         webGLData = M.WebGLGraphics_switchMode(webGL, 0);
-        t1 = data.type;
-        if (t1 === $.Graphics_RECT) {
+        t2 = data.type;
+        if (t2 === $.Graphics_RECT) {
           rectData = data.points;
-          t1 = rectData.length;
-          if (0 >= t1)
+          t2 = rectData.length;
+          if (0 >= t2)
             return H.ioore(rectData, 0);
           x = rectData[0];
-          if (1 >= t1)
+          if (1 >= t2)
             return H.ioore(rectData, 1);
           y = rectData[1];
-          if (2 >= t1)
+          if (2 >= t2)
             return H.ioore(rectData, 2);
           width = rectData[2];
-          if (3 >= t1)
+          if (3 >= t2)
             return H.ioore(rectData, 3);
           height = rectData[3];
           if (H.boolConversionCheck(data.fill)) {
-            t1 = data.fillColor;
-            color = H.assertSubtype(H.assertSubtype([(t1 >>> 16 & 255) / 255, (t1 >>> 8 & 255) / 255, (t1 & 255) / 255], "$isList", [P.num], "$asList"), "$isList", [P.num], "$asList");
+            t2 = data.fillColor;
+            color = H.assertSubtype(H.assertSubtype([(t2 >>> 16 & 255) / 255, (t2 >>> 8 & 255) / 255, (t2 & 255) / 255], "$isList", [P.num], "$asList"), "$isList", [P.num], "$asList");
             alpha = data.fillAlpha;
             if (0 >= color.length)
               return H.ioore(color, 0);
@@ -777,28 +904,28 @@ var $$ = {};
             vertPos = verts.length / 6;
             C.JSArray_methods.addAll$1(verts, [x, y]);
             C.JSArray_methods.addAll$1(verts, [r, g, b, alpha]);
-            t1 = J.getInterceptor$ns(x);
-            C.JSArray_methods.addAll$1(verts, [t1.$add(x, width), y]);
+            t2 = J.getInterceptor$ns(x);
+            C.JSArray_methods.addAll$1(verts, [t2.$add(x, width), y]);
             C.JSArray_methods.addAll$1(verts, [r, g, b, alpha]);
-            t2 = J.getInterceptor$ns(y);
-            C.JSArray_methods.addAll$1(verts, [x, t2.$add(y, height)]);
+            t3 = J.getInterceptor$ns(y);
+            C.JSArray_methods.addAll$1(verts, [x, t3.$add(y, height)]);
             C.JSArray_methods.addAll$1(verts, [r, g, b, alpha]);
-            C.JSArray_methods.addAll$1(verts, [t1.$add(x, width), t2.$add(y, height)]);
+            C.JSArray_methods.addAll$1(verts, [t2.$add(x, width), t3.$add(y, height)]);
             C.JSArray_methods.addAll$1(verts, [r, g, b, alpha]);
-            t2 = vertPos + 3;
-            C.JSArray_methods.addAll$1(indices, [vertPos, vertPos, vertPos + 1, vertPos + 2, t2, t2]);
+            t3 = vertPos + 3;
+            C.JSArray_methods.addAll$1(indices, [vertPos, vertPos, vertPos + 1, vertPos + 2, t3, t3]);
           }
           if (data.lineWidth !== 0) {
             tempPoints = data.points;
-            t1 = J.getInterceptor$ns(x);
-            t2 = J.getInterceptor$ns(y);
-            data.set$points(0, [x, y, t1.$add(x, width), y, t1.$add(x, width), t2.$add(y, height), x, t2.$add(y, height), x, y]);
+            t2 = J.getInterceptor$ns(x);
+            t3 = J.getInterceptor$ns(y);
+            data.set$points(0, [x, y, t2.$add(x, width), y, t2.$add(x, width), t3.$add(y, height), x, t3.$add(y, height), x, y]);
             M.WebGLGraphics_buildLine(data, webGLData);
             data.set$points(0, tempPoints);
           }
-        } else if (t1 === $.Graphics_CIRC || t1 === $.Graphics_ELIP)
+        } else if (t2 === $.Graphics_CIRC || t2 === $.Graphics_ELIP)
           M.WebGLGraphics_buildCircle(data, webGLData);
-        else if (t1 === $.Graphics_RREC)
+        else if (t2 === $.Graphics_RREC)
           M.WebGLGraphics_buildRoundedRectangle(data, webGLData);
       }
       ++webGL.lastIndex;
@@ -1613,7 +1740,7 @@ var $$ = {};
     $isPoint: true
   },
   Rectangle: {
-    "^": "Object;x,y,width,height",
+    "^": "Shape;x,y,width,height",
     contains$2: [function(_, x, y) {
       var t1, t2, x1, y1;
       t1 = this.width;
@@ -1635,26 +1762,24 @@ var $$ = {};
           return true;
       }
       return false;
-    }, "call$2", "get$contains", 4, 0, 58],
+    }, "call$2", "get$contains", 4, 0, 54],
     $isRectangle: true
+  },
+  Shape: {
+    "^": "Object;",
+    $isShape: true
   },
   DisplayInterface: {
     "^": "Object;",
     $isDisplayInterface: true
   },
   DisplayObject: {
-    "^": "Object;rotation<,visible<,hitArea<,parent,interactiveChildren,mousemove<,worldTransform<",
+    "^": "Object;rotation<,hitArea<,_worldTransform<",
     set$rotation: function(rotation) {
       this.rotation = H.numTypeCheck(rotation);
     },
-    set$parent: function(_, $parent) {
-      this.parent = H.interceptedTypeCheck($parent, "$isDisplayInterface");
-    },
-    set$interactiveChildren: function(interactiveChildren) {
-      this.interactiveChildren = H.boolTypeCheck(interactiveChildren);
-    },
-    set$worldTransform: function(worldTransform) {
-      this.worldTransform = H.interceptedTypeCheck(worldTransform, "$isMatrix");
+    set$_worldTransform: function(_worldTransform) {
+      this._worldTransform = H.interceptedTypeCheck(_worldTransform, "$isMatrix");
     },
     click$1: function($receiver, arg0) {
       return this.click.call$1(arg0);
@@ -1665,38 +1790,39 @@ var $$ = {};
     set$interactive: function(value) {
       var t1;
       this._interactive = value;
-      t1 = this.stage;
+      t1 = this._stage;
       if (t1 != null)
-        t1.PIXI$Stage$dirty = true;
+        t1.PIXI$Stage$_dirty = true;
     },
     set$mask: function(_, value) {
       var t1 = this._mask;
       if (t1 != null)
-        t1.PIXI$Graphics$isMask = false;
+        t1._isMask = false;
       this._mask = value;
       if (value != null)
-        value.PIXI$Graphics$isMask = true;
+        value._isMask = true;
     },
     get$worldVisible: function() {
       var item = this;
       do {
         if (!item.visible)
           return false;
-        item = item.parent;
+        item = item._parent;
       } while (item != null);
       return true;
     },
-    updateTransform$0: function() {
-      var t1, parentTransform, worldTransform, px, py, a00, a01, a10, a11, t2, t3, a02, a12, b00, b01, b10, b11;
+    _updateTransform$0: function() {
+      var t1, $parent, parentTransform, worldTransform, px, py, a00, a01, a10, a11, t2, t3, a02, a12, b00, b01, b10, b11;
       t1 = this.rotation;
-      if (t1 !== this.rotationCache) {
-        this.rotationCache = t1;
+      if (t1 !== this._rotationCache) {
+        this._rotationCache = t1;
         this._sr = Math.sin(t1);
         t1 = this.rotation;
         this._cr = Math.cos(t1);
       }
-      parentTransform = this.parent.get$worldTransform();
-      worldTransform = this.get$worldTransform();
+      $parent = this._parent;
+      parentTransform = $parent.get$_worldTransform();
+      worldTransform = this.get$_worldTransform();
       t1 = this.pivot;
       px = t1.x;
       py = t1.y;
@@ -1729,19 +1855,19 @@ var $$ = {};
       worldTransform.c = H.doubleTypeCheck(b10 * a00 + b11 * a10);
       worldTransform.d = H.doubleTypeCheck(b10 * a01 + b11 * a11);
       worldTransform.ty = C.JSNumber_methods.$add(b10 * a02 + b11 * a12, parentTransform.ty);
-      this.worldAlpha = this.alpha * this.parent.worldAlpha;
+      this._worldAlpha = this.alpha * $parent._worldAlpha;
     },
     getBounds$1: function(matrix) {
       return $.get$EmptyRectangle();
     },
-    setStageReference$1: function(stage) {
-      this.stage = stage;
+    _setStageReference$1: function(stage) {
+      this._stage = stage;
       if (this._interactive)
-        stage.PIXI$Stage$dirty = true;
+        stage.PIXI$Stage$_dirty = true;
     },
     _renderCachedSprite$1: function(renderSession) {
       var t1 = this._cachedSprite;
-      t1.worldAlpha = this.worldAlpha;
+      t1._worldAlpha = this._worldAlpha;
       if (renderSession.gl != null)
         t1._renderWebGL$1(renderSession);
       else
@@ -1755,25 +1881,25 @@ var $$ = {};
     $isDisplayInterface: true
   },
   DisplayObjectContainer: {
-    "^": "DisplayObject;children,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,renderable,parent,__iParent,interactiveChildren,__hit,__isOver,__mouseIsDown,__isDown,dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,stage,buttonMode,worldAlpha,_interactive,defaultCursor,worldTransform,color,dynamic,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,isMask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,rotationCache",
+    "^": "DisplayObject;children,interactiveChildren,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,buttonMode,renderable,_parent,__hit,__isOver,__mouseIsDown,__isDown,_dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,_stage,_worldAlpha,_interactive,defaultCursor,_worldTransform,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,_rotationCache",
     addChildAt$2: function(child, index) {
       var t1, t2, t3, child0;
       if (index <= this.children.length) {
-        t1 = child.parent;
+        t1 = child._parent;
         if (t1 != null) {
           t2 = t1.children;
           t3 = H.Lists_indexOf(t2, child, 0, t2.length);
-          child0 = t1.getChildAt$1(t3);
-          if (t1.stage != null && !!J.getInterceptor(child0).$isDisplayObjectContainer)
-            child0.removeStageReference$0();
-          child0.set$parent(0, null);
+          child0 = H.interceptedTypeCheck(t1.getChildAt$1(t3), "$isDisplayObject");
+          if (t1._stage != null && !!J.getInterceptor(child0).$isDisplayObjectContainer)
+            child0._removeStageReference$0();
+          child0._parent = null;
           C.JSArray_methods.removeAt$1(t2, t3);
         }
-        child.parent = this;
+        child._parent = this;
         C.JSArray_methods.insert$2(this.children, index, child);
-        t1 = this.stage;
+        t1 = this._stage;
         if (t1 != null)
-          child.setStageReference$1(t1);
+          child._setStageReference$1(t1);
         return child;
       } else
         throw H.wrapException(P.Exception_Exception(child.toString$0(0) + "  The index " + index + " supplied is out of bounds " + this.children.length));
@@ -1788,38 +1914,37 @@ var $$ = {};
       } else
         throw H.wrapException(P.Exception_Exception("Supplied index does not exist in the child list, or the supplied DisplayObject must be a child of the caller"));
     },
-    updateTransform$0: function() {
+    _updateTransform$0: function() {
       var t1, j, i;
       if (!this.visible)
         return;
-      M.DisplayObject.prototype.updateTransform$0.call(this);
+      M.DisplayObject.prototype._updateTransform$0.call(this);
       if (this._cacheAsBitmap)
         return;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        t1[i].updateTransform$0();
+        t1[i]._updateTransform$0();
       }
     },
     getBounds$1: function(matrix) {
-      var t1, matrixCache, j, minX, minY, maxX, maxY, childBounds, childMaxX, childMaxY, childVisible, i, minX0, minY0, t2, bounds;
+      var t1, matrixCache, j, minX, minY, maxX, maxY, childBounds, childMaxX, childMaxY, childVisible, i, child, minX0, minY0, t2, bounds;
       t1 = this.children;
       if (t1.length === 0)
         return $.get$EmptyRectangle();
       if (matrix != null) {
-        matrixCache = this.get$worldTransform();
-        this.set$worldTransform(matrix);
-        this.updateTransform$0();
-        this.set$worldTransform(matrixCache);
+        matrixCache = this.get$_worldTransform();
+        this.set$_worldTransform(matrix);
+        this._updateTransform$0();
+        this.set$_worldTransform(matrixCache);
       }
       for (j = t1.length, minX = 1 / 0, minY = 1 / 0, maxX = -1 / 0, maxY = -1 / 0, childBounds = null, childMaxX = null, childMaxY = null, childVisible = false, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        if (!H.interceptedTypeCheck(t1[i], "$isDisplayInterface").get$visible())
+        child = H.interceptedTypeCheck(t1[i], "$isDisplayObject");
+        if (!child.visible)
           continue;
-        if (i >= t1.length)
-          return H.ioore(t1, i);
-        childBounds = t1[i].getBounds$1(matrix);
+        childBounds = child.getBounds$1(matrix);
         minX0 = childBounds.x;
         minX = minX < minX0 ? minX : minX0;
         minY0 = childBounds.y;
@@ -1848,40 +1973,40 @@ var $$ = {};
     getBounds$0: function() {
       return this.getBounds$1(null);
     },
-    getLocalBounds$0: function() {
+    _getLocalBounds$0: function() {
       var matrixCache, t1, j, i, bounds;
-      matrixCache = this.get$worldTransform();
-      this.set$worldTransform($.get$IdentityMatrix());
+      matrixCache = this.get$_worldTransform();
+      this.set$_worldTransform($.get$IdentityMatrix());
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        t1[i].updateTransform$0();
+        t1[i]._updateTransform$0();
       }
       bounds = this.getBounds$0();
-      this.set$worldTransform(matrixCache);
+      this.set$_worldTransform(matrixCache);
       return bounds;
     },
-    setStageReference$1: function(stage) {
+    _setStageReference$1: function(stage) {
       var t1, j, i;
-      this.stage = stage;
+      this._stage = stage;
       if (this._interactive)
-        stage.PIXI$Stage$dirty = true;
+        stage.PIXI$Stage$_dirty = true;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        H.interceptedTypeCheck(t1[i], "$isDisplayInterface").setStageReference$1(stage);
+        H.interceptedTypeCheck(t1[i], "$isDisplayObject")._setStageReference$1(stage);
       }
     },
-    removeStageReference$0: function() {
+    _removeStageReference$0: function() {
       var t1, j, i;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        H.interceptedTypeCheck(t1[i], "$isDisplayObjectContainer").removeStageReference$0();
+        H.interceptedTypeCheck(t1[i], "$isDisplayObjectContainer")._removeStageReference$0();
       }
       if (this._interactive)
-        this.stage.PIXI$Stage$dirty = true;
-      this.stage = null;
+        this._stage.PIXI$Stage$_dirty = true;
+      this._stage = null;
     },
     _renderWebGL$1: function(renderSession) {
       var t1, j, i;
@@ -1929,7 +2054,7 @@ var $$ = {};
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        H.interceptedTypeCheck(t1[i], "$isDisplayObject")._renderCanvas$1(renderSession);
+        H.interceptedTypeCheck(t1[i], "$isDisplayInterface")._renderCanvas$1(renderSession);
       }
       if (this._mask != null)
         renderSession.maskManager.popMask$1(renderSession.context);
@@ -1937,14 +2062,14 @@ var $$ = {};
     $isDisplayObjectContainer: true
   },
   Sprite: {
-    "^": "DisplayObjectContainer;anchor,texture,updateFrame,textureChange,PIXI$Sprite$_width,PIXI$Sprite$_height,_uvs,tintedTexture,buffer,tint,cachedTint,blendMode,children,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,renderable,parent,__iParent,interactiveChildren,__hit,__isOver,__mouseIsDown,__isDown,dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,stage,buttonMode,worldAlpha,_interactive,defaultCursor,worldTransform,color,dynamic,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,isMask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,rotationCache",
+    "^": "DisplayObjectContainer;anchor,texture,updateFrame,PIXI$Sprite$_width,PIXI$Sprite$_height,_uvs,tintedTexture,buffer,tint,cachedTint,blendMode,children,interactiveChildren,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,buttonMode,renderable,_parent,__hit,__isOver,__mouseIsDown,__isDown,_dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,_stage,_worldAlpha,_interactive,defaultCursor,_worldTransform,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,_rotationCache",
     _setupTexture$0: function() {
       if (this.texture.get$baseTexture()._hasLoaded)
-        this.onTextureUpdate$1(null);
+        this._onTextureUpdate$1(null);
       else
-        this.texture.addEventListener$2(0, "update", this.get$onTextureUpdate());
+        this.texture.addEventListener$2(0, "update", this.get$_onTextureUpdate());
     },
-    onTextureUpdate$1: [function(e) {
+    _onTextureUpdate$1: [function(e) {
       var t1, t2;
       H.interceptedTypeCheck(e, "$isPixiEvent");
       t1 = this.PIXI$Sprite$_width;
@@ -1961,7 +2086,7 @@ var $$ = {};
           return t1.$div();
         this.scale.y = C.JSInt_methods.$div(t1, t2);
       }
-    }, "call$1", "get$onTextureUpdate", 2, 0, 59, 3],
+    }, "call$1", "get$_onTextureUpdate", 2, 0, 55, 3],
     getBounds$1: function(matrix) {
       var width, height, t1, t2, w0, w1, h0, h1, worldTransform, a, b, c, d, tx, ty, x1, t3, t4, y1, t5, x2, y2, x3, y3, x4, y4, minX, minY, maxX, maxY, bounds;
       width = this.texture.get$frame().width;
@@ -1983,7 +2108,7 @@ var $$ = {};
       if (typeof t1 !== "number")
         return t1.$negate();
       h1 = height * -t1;
-      worldTransform = matrix == null ? this.worldTransform : matrix;
+      worldTransform = matrix == null ? this._worldTransform : matrix;
       a = worldTransform.a;
       b = worldTransform.c;
       c = worldTransform.b;
@@ -2090,9 +2215,9 @@ var $$ = {};
         renderSession.maskManager.pushMask$2(t1, renderSession.context);
       if (H.boolConversionCheck(this.texture.get$valid())) {
         t1 = renderSession.context;
-        t1.globalAlpha = this.worldAlpha;
+        t1.globalAlpha = this._worldAlpha;
         renderSession.roundPixels;
-        t2 = this.worldTransform;
+        t2 = this._worldTransform;
         t3 = t2.a;
         t4 = t2.c;
         t5 = t2.b;
@@ -2161,23 +2286,23 @@ var $$ = {};
     $isSprite: true
   },
   Stage: {
-    "^": "DisplayObjectContainer;PIXI$Stage$dirty,_interactiveEventsAdded,hitArea:PIXI$Stage$hitArea<,backgroundColor,backgroundColorSplit,backgroundColorString,worldTransform:PIXI$Stage$worldTransform<,interactionManager,children,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,renderable,parent,__iParent,interactiveChildren,__hit,__isOver,__mouseIsDown,__isDown,dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,stage,buttonMode,worldAlpha,_interactive,defaultCursor,worldTransform,color,dynamic,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,isMask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,rotationCache",
+    "^": "DisplayObjectContainer;PIXI$Stage$_dirty,_interactiveEventsAdded,hitArea:PIXI$Stage$hitArea<,backgroundColor,backgroundColorSplit,backgroundColorString,_worldTransform:PIXI$Stage$_worldTransform<,interactionManager,children,interactiveChildren,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,buttonMode,renderable,_parent,__hit,__isOver,__mouseIsDown,__isDown,_dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,_stage,_worldAlpha,_interactive,defaultCursor,_worldTransform,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,_rotationCache",
     set$backgroundColorSplit: function(backgroundColorSplit) {
       this.backgroundColorSplit = H.assertSubtype(backgroundColorSplit, "$isList", [P.num], "$asList");
     },
-    set$worldTransform: function(worldTransform) {
-      this.PIXI$Stage$worldTransform = H.interceptedTypeCheck(worldTransform, "$isMatrix");
+    set$_worldTransform: function(_worldTransform) {
+      this.PIXI$Stage$_worldTransform = H.interceptedTypeCheck(_worldTransform, "$isMatrix");
     },
-    updateTransform$0: function() {
+    _updateTransform$0: function() {
       var t1, j, i;
-      this.worldAlpha = 1;
+      this._worldAlpha = 1;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        t1[i].updateTransform$0();
+        t1[i]._updateTransform$0();
       }
-      if (this.PIXI$Stage$dirty) {
-        this.PIXI$Stage$dirty = false;
+      if (this.PIXI$Stage$_dirty) {
+        this.PIXI$Stage$_dirty = false;
         this.interactionManager.dirty = true;
       }
       if (this._interactive)
@@ -2185,8 +2310,8 @@ var $$ = {};
     },
     Stage$2: function(backgroundColor, interactive) {
       var t1, t2, t3, t4, hex;
-      this.PIXI$Stage$dirty = true;
-      this.stage = this;
+      this.PIXI$Stage$_dirty = true;
+      this._stage = this;
       this.backgroundColor = backgroundColor;
       this.set$interactive(interactive);
       t1 = new M.Point(null, null);
@@ -2234,11 +2359,8 @@ var $$ = {};
           C.JSArray_methods.add$1(this.interactiveItems, child);
           if (child.children.length > 0)
             this.collectInteractiveSprite$2(child, child);
-        } else {
-          child.__iParent = null;
-          if (child.children.length > 0)
-            this.collectInteractiveSprite$2(child, iParent);
-        }
+        } else if (child.children.length > 0)
+          this.collectInteractiveSprite$2(child, iParent);
       }
     },
     setTarget$1: function(target) {
@@ -2295,7 +2417,7 @@ var $$ = {};
         if (t2 && !over) {
           if (item.buttonMode)
             cursor = item.defaultCursor;
-          if (!item.interactiveChildren)
+          if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
             over = true;
           if (!item.__isOver) {
             item.mouseover;
@@ -2312,20 +2434,21 @@ var $$ = {};
       }
     },
     rebuildInteractiveGraph$0: function() {
-      var len, i, t1;
+      var t1, len, i, item;
       this.dirty = false;
-      len = this.interactiveItems.length;
+      t1 = this.interactiveItems;
+      len = t1.length;
       for (i = 0; i < len; ++i) {
-        t1 = this.interactiveItems;
         if (i >= t1.length)
           return H.ioore(t1, i);
-        t1[i].set$interactiveChildren(false);
+        item = H.interceptedTypeCheck(t1[i], "$isDisplayInterface");
+        if (!!J.getInterceptor(item).$isDisplayObjectContainer)
+          item.interactiveChildren = false;
       }
       this.set$interactiveItems([]);
       t1 = this.stage;
       if (t1._interactive)
         C.JSArray_methods.add$1(this.interactiveItems, t1);
-      t1 = this.stage;
       this.collectInteractiveSprite$2(t1, t1);
     },
     onMouseMove$1: [function(_, $event) {
@@ -2362,14 +2485,11 @@ var $$ = {};
       if (typeof t3 !== "number")
         return t3.$div();
       t1.y = t5 * C.JSInt_methods.$div(t3, t2);
-      $length = this.interactiveItems.length;
-      for (i = 0; i < $length; ++i) {
-        t1 = this.interactiveItems;
-        if (i >= t1.length)
-          return H.ioore(t1, i);
-        t1[i].get$mousemove();
-      }
-    }, "call$1", "get$onMouseMove", 2, 0, 60, 4],
+      t2 = this.interactiveItems;
+      $length = t2.length;
+      for (i = 0; i < $length; ++i)
+        H.interceptedTypeCheck(t2[i], "$isDisplayObject").mousemove;
+    }, "call$1", "get$onMouseMove", 2, 0, 56, 4],
     onMouseDown$1: [function(_, $event) {
       var t1, $length, i, t2, item;
       H.interceptedTypeCheck($event, "$isMouseEvent");
@@ -2391,12 +2511,12 @@ var $$ = {};
           item.__hit = t2;
           if (t2) {
             item.__isDown = true;
-            if (!item.interactiveChildren)
+            if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
               break;
           }
         }
       }
-    }, "call$1", "get$onMouseDown", 2, 0, 61, 4],
+    }, "call$1", "get$onMouseDown", 2, 0, 57, 4],
     onMouseOut$1: [function(_, $event) {
       var $length, t1, i, t2, item;
       H.interceptedTypeCheck($event, "$isMouseEvent");
@@ -2419,7 +2539,7 @@ var $$ = {};
       t1 = t1.global;
       t1.x = -10000;
       t1.y = -10000;
-    }, "call$1", "get$onMouseOut", 2, 0, 61, 4],
+    }, "call$1", "get$onMouseOut", 2, 0, 57, 4],
     onMouseUp$1: [function(_, $event) {
       var t1, $length, up, i, t2, item;
       H.interceptedTypeCheck($event, "$isMouseEvent");
@@ -2440,20 +2560,20 @@ var $$ = {};
           if (item.__isDown)
             if (item.click != null)
               item.click$1(0, t1);
-          if (!item.interactiveChildren)
+          if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
             up = true;
         } else if (item.__isDown)
           item.mouseupoutside;
         item.__isDown = false;
       }
-    }, "call$1", "get$onMouseUp", 2, 0, 60, 4],
+    }, "call$1", "get$onMouseUp", 2, 0, 56, 4],
     hitTest$2: function(item, interactionData) {
       var global, worldTransform, a00, a01, a02, a10, a11, a12, t1, id, t2, t3, x, y, width, height, x1, y1, $length, i;
       H.interceptedTypeCheck(item, "$isDisplayObjectContainer");
       global = interactionData.global;
       if (!item.get$worldVisible())
         return false;
-      worldTransform = item.get$worldTransform();
+      worldTransform = item.get$_worldTransform();
       a00 = worldTransform.a;
       a01 = worldTransform.b;
       a02 = worldTransform.tx;
@@ -2621,7 +2741,7 @@ var $$ = {};
               item.__isDown = true;
               t3 = item.__touchData;
               t3.$indexSet(0, touchEvent.$index(0, "identifier"), touchData);
-              if (!item.interactiveChildren)
+              if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
                 break;
             }
           }
@@ -2685,7 +2805,7 @@ var $$ = {};
                 if (item.__isDown)
                   if (item.tap != null)
                     item.tap$1(touchData);
-                if (!item.interactiveChildren)
+                if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
                   up = true;
               } else if (item.__isDown)
                 item.touchendoutside;
@@ -2711,21 +2831,18 @@ var $$ = {};
     static: {"^": "scaleModes_DEFAULT,scaleModes_LINEAR,scaleModes_NEAREST"}
   },
   GraphicsData: {
-    "^": "Object;points>,fillAlpha<,fillColor<,fill>,lineWidth>,lineAlpha<,lineColor<,type>",
+    "^": "Object;points,fillAlpha,fillColor,fill,lineWidth,lineAlpha,lineColor,type",
     set$points: function(_, points) {
       this.points = H.assertSubtype(points, "$isList", [P.num], "$asList");
     },
     $isGraphicsData: true
   },
   Graphics: {
-    "^": "DisplayObjectContainer;fillAlpha<,fillColor<,filling,lineWidth>,lineAlpha<,lineColor<,graphicsData,tint,blendMode,currentPath,_webGL,PIXI$Graphics$isMask,bounds,boundsPadding,clearDirty,children,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,renderable,parent,__iParent,interactiveChildren,__hit,__isOver,__mouseIsDown,__isDown,dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,stage,buttonMode,worldAlpha,_interactive,defaultCursor,worldTransform,color,dynamic,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,isMask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,rotationCache",
-    set$graphicsData: function(graphicsData) {
-      this.graphicsData = H.assertSubtype(graphicsData, "$isList", [M.GraphicsData], "$asList");
-    },
+    "^": "DisplayObjectContainer;fillAlpha,lineWidth,lineColor,fillColor,filling,lineAlpha,_graphicsData,tint,blendMode,_currentPath,_webGL,_isMask,bounds,boundsPadding,clearDirty,children,interactiveChildren,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,buttonMode,renderable,_parent,__hit,__isOver,__mouseIsDown,__isDown,_dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,_stage,_worldAlpha,_interactive,defaultCursor,_worldTransform,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,_rotationCache",
     moveTo$2: function(_, x, y) {
       var t1;
-      if (this.currentPath.points.length === 0) {
-        t1 = this.graphicsData;
+      if (this._currentPath.points.length === 0) {
+        t1 = this._graphicsData;
         if (t1.length > 0)
           t1.pop();
       }
@@ -2739,23 +2856,23 @@ var $$ = {};
       t1.fill = this.filling;
       t1.set$points(0, []);
       t1.type = $.Graphics_POLY;
-      this.currentPath = t1;
+      this._currentPath = t1;
       C.JSArray_methods.addAll$1(t1.points, [x, y]);
-      C.JSArray_methods.add$1(this.graphicsData, this.currentPath);
+      C.JSArray_methods.add$1(this._graphicsData, this._currentPath);
       return this;
     },
     lineTo$2: function(_, x, y) {
-      C.JSArray_methods.addAll$1(this.currentPath.points, [x, y]);
-      this.dirty = true;
+      C.JSArray_methods.addAll$1(this._currentPath.points, [x, y]);
+      this._dirty = true;
       return this;
     },
     _renderWebGL$1: function(renderSession) {
-      var bounds, t1, canvasBuffer, texture, t2, t3, t4, t5, t6, t7, blendModeWebGL, i;
-      if (!this.visible || this.alpha === 0 || this.PIXI$Graphics$isMask)
+      var bounds, t1, canvasBuffer, texture, t2, t3, t4, t5, t6, t7, t8, blendModeWebGL, i;
+      if (!this.visible || this.alpha === 0 || this._isMask)
         return;
       if (this._cacheAsBitmap) {
-        if (this.dirty) {
-          bounds = this.getLocalBounds$0();
+        if (this._dirty) {
+          bounds = this._getLocalBounds$0();
           t1 = this._cachedSprite;
           if (t1 == null) {
             canvasBuffer = M.CanvasBuffer$(bounds.width, bounds.height);
@@ -2775,12 +2892,13 @@ var $$ = {};
             t5 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
             t6 = new Float32Array(9);
             t7 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-            t7 = new M.Sprite(t1, null, false, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t2, t3, t4, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t6), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t7, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+            t8 = H.buildFunctionType(H.getVoidRuntimeType(), [H.buildInterfaceType(M.InteractionData)]);
+            t7 = new M.Sprite(t1, null, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t2, t3, t4, 0, 1, true, null, false, false, null, false, false, false, false, false, t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t6), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t7, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
             t7.texture = texture;
             t7._setupTexture$0();
             this._cachedSprite = t7;
             t7.buffer = canvasBuffer;
-            t7.worldTransform = this.worldTransform;
+            t7._worldTransform = this._worldTransform;
           } else
             t1.buffer.resize$2(0, bounds.width, bounds.height);
           this._cachedSprite.anchor.x = -C.JSNumber_methods.$div(bounds.x, bounds.width);
@@ -2790,7 +2908,7 @@ var $$ = {};
           t1 = this._cachedSprite;
           t1.alpha = this.alpha;
           M.updateWebGLTexture(t1.texture.get$baseTexture(), renderSession.gl);
-          this.dirty = false;
+          this._dirty = false;
         }
         t1 = this._cachedSprite;
         t1.alpha = this.alpha;
@@ -2831,10 +2949,10 @@ var $$ = {};
     },
     _renderCanvas$1: function(renderSession) {
       var context, transform, t1, j, i;
-      if (!this.visible || this.alpha === 0 || this.PIXI$Graphics$isMask)
+      if (!this.visible || this.alpha === 0 || this._isMask)
         return;
       context = renderSession.context;
-      transform = this.worldTransform;
+      transform = this._worldTransform;
       t1 = this.blendMode;
       if (t1 !== renderSession.currentBlendMode) {
         renderSession.currentBlendMode = t1;
@@ -2856,9 +2974,9 @@ var $$ = {};
     getBounds$1: function(matrix) {
       var t1, w0, t2, w1, h0, h1, a, b, c, d, tx, ty, x1, t3, t4, y1, t5, x2, y2, x3, y3, x4, y4, minX, minY, maxX, maxY, bounds;
       if (matrix == null)
-        matrix = this.worldTransform;
+        matrix = this._worldTransform;
       if (this.bounds == null)
-        this.updateBounds$0();
+        this._updateBounds$0();
       t1 = this.bounds;
       w0 = t1.x;
       t2 = t1.width;
@@ -2922,52 +3040,69 @@ var $$ = {};
     getBounds$0: function() {
       return this.getBounds$1(null);
     },
-    updateBounds$0: function() {
-      var minX, maxX, minY, maxY, x, y, w, h, i, t1, data, type, lineWidth, points, t2, j, padding, t3, t4;
-      for (minX = 1 / 0, maxX = -1 / 0, minY = 1 / 0, maxY = -1 / 0, x = null, y = null, w = null, h = null, i = 0; t1 = this.graphicsData, i < t1.length; ++i) {
+    _updateBounds$0: function() {
+      var t1, minX, maxX, minY, maxY, x, y, w, h, i, data, type, lineWidth, points, t2, j, t3, padding, t4;
+      for (t1 = this._graphicsData, minX = 1 / 0, maxX = -1 / 0, minY = 1 / 0, maxY = -1 / 0, x = null, y = null, w = null, h = null, i = 0; i < t1.length; ++i) {
         data = t1[i];
-        t1 = J.getInterceptor$x(data);
-        type = t1.get$type(data);
-        lineWidth = t1.get$lineWidth(data);
-        points = t1.get$points(data);
+        type = data.type;
+        lineWidth = data.lineWidth;
+        points = data.points;
         if (type === $.Graphics_RECT) {
-          t1 = J.getInterceptor$asx(points);
-          t2 = J.getInterceptor$n(lineWidth);
-          x = J.$sub$n(t1.$index(points, 0), t2.$div(lineWidth, 2));
-          y = J.$sub$n(t1.$index(points, 1), t2.$div(lineWidth, 2));
-          w = J.$add$ns(t1.$index(points, 2), lineWidth);
-          h = J.$add$ns(t1.$index(points, 3), lineWidth);
-          t1 = J.getInterceptor$n(x);
-          if (t1.$lt(x, minX))
+          if (0 >= points.length)
+            return H.ioore(points, 0);
+          t2 = lineWidth / 2;
+          x = J.$sub$n(points[0], t2);
+          if (1 >= points.length)
+            return H.ioore(points, 1);
+          y = J.$sub$n(points[1], t2);
+          if (2 >= points.length)
+            return H.ioore(points, 2);
+          w = J.$add$ns(points[2], lineWidth);
+          if (3 >= points.length)
+            return H.ioore(points, 3);
+          h = J.$add$ns(points[3], lineWidth);
+          t2 = J.getInterceptor$n(x);
+          if (t2.$lt(x, minX))
             minX = x;
-          if (J.$gt$n(t1.$add(x, w), maxX))
-            maxX = t1.$add(x, w);
-          t1 = J.getInterceptor$n(y);
-          if (t1.$lt(y, minY))
+          if (J.$gt$n(t2.$add(x, w), maxX))
+            maxX = t2.$add(x, w);
+          t2 = J.getInterceptor$n(y);
+          if (t2.$lt(y, minY))
             minY = x;
-          if (J.$gt$n(t1.$add(y, h), maxY))
-            maxY = t1.$add(y, h);
+          if (J.$gt$n(t2.$add(y, h), maxY))
+            maxY = t2.$add(y, h);
         } else if (type === $.Graphics_CIRC || type === $.Graphics_ELIP) {
-          t1 = J.getInterceptor$asx(points);
-          x = t1.$index(points, 0);
-          y = t1.$index(points, 1);
-          t2 = J.getInterceptor$n(lineWidth);
-          w = J.$add$ns(t1.$index(points, 2), t2.$div(lineWidth, 2));
-          h = J.$add$ns(t1.$index(points, 3), t2.$div(lineWidth, 2));
-          t1 = J.getInterceptor$n(x);
-          if (J.$lt$n(t1.$sub(x, w), minX))
-            minX = t1.$sub(x, w);
-          if (J.$gt$n(t1.$add(x, w), maxX))
-            maxX = t1.$add(x, w);
-          t1 = J.getInterceptor$n(y);
-          if (J.$lt$n(t1.$sub(y, h), minY))
-            minY = t1.$sub(y, h);
-          if (J.$gt$n(t1.$add(y, h), maxY))
-            maxY = t1.$add(y, h);
+          t2 = points.length;
+          if (0 >= t2)
+            return H.ioore(points, 0);
+          x = points[0];
+          if (1 >= t2)
+            return H.ioore(points, 1);
+          y = points[1];
+          if (2 >= t2)
+            return H.ioore(points, 2);
+          t2 = lineWidth / 2;
+          w = J.$add$ns(points[2], t2);
+          if (3 >= points.length)
+            return H.ioore(points, 3);
+          h = J.$add$ns(points[3], t2);
+          t2 = J.getInterceptor$n(x);
+          if (J.$lt$n(t2.$sub(x, w), minX))
+            minX = t2.$sub(x, w);
+          if (J.$gt$n(t2.$add(x, w), maxX))
+            maxX = t2.$add(x, w);
+          t2 = J.getInterceptor$n(y);
+          if (J.$lt$n(t2.$sub(y, h), minY))
+            minY = t2.$sub(y, h);
+          if (J.$gt$n(t2.$add(y, h), maxY))
+            maxY = t2.$add(y, h);
         } else
-          for (t1 = J.getInterceptor$asx(points), j = 0; j < t1.get$length(points); j += 2) {
-            x = t1.$index(points, j);
-            y = t1.$index(points, j + 1);
+          for (j = 0; t2 = points.length, j < t2; j += 2) {
+            x = points[j];
+            t3 = j + 1;
+            if (t3 >= t2)
+              return H.ioore(points, t3);
+            y = points[t3];
             t2 = J.getInterceptor$n(x);
             if (J.$lt$n(t2.$sub(x, lineWidth), minX))
               minX = t2.$sub(x, lineWidth);
@@ -2991,7 +3126,7 @@ var $$ = {};
     Graphics$0: function() {
       this.renderable = true;
       this.blendMode = C.BlendModes_0;
-      this.dirty = true;
+      this._dirty = true;
     },
     $isGraphics: true,
     static: {"^": "Graphics_POLY,Graphics_RECT,Graphics_CIRC,Graphics_ELIP,Graphics_RREC"}
@@ -3002,7 +3137,7 @@ var $$ = {};
       var t1, t2;
       C.JSArray_methods.set$length($.get$texturesToUpdate(), 0);
       C.JSArray_methods.set$length($.get$texturesToDestroy(), 0);
-      stage.updateTransform$0();
+      stage._updateTransform$0();
       J.setTransform$6$x(this.context, 1, 0, 0, 1, 0, 0);
       t1 = this.context;
       t1.globalAlpha = 1;
@@ -3034,7 +3169,7 @@ var $$ = {};
       var t1;
       H.interceptedTypeCheck(context, "$isCanvasRenderingContext2D");
       t1 = this.renderSession;
-      t1.context = context == null ? this.context : context;
+      t1.context = this.context;
       displayObject._renderCanvas$1(t1);
     },
     renderDisplayObject$1: function(displayObject) {
@@ -3136,11 +3271,11 @@ var $$ = {};
       t1 = J.getInterceptor$x(context);
       t1.save$0(context);
       cacheAlpha = maskData.alpha;
-      transform = maskData.worldTransform;
+      transform = maskData._worldTransform;
       t1.setTransform$6(context, transform.a, transform.c, transform.b, transform.d, transform.tx, transform.ty);
       M.CanvasGraphics_renderGraphicsMask(maskData, context);
       t1.clip$0(context);
-      maskData.worldAlpha = cacheAlpha;
+      maskData._worldAlpha = cacheAlpha;
     },
     popMask$2: function(context, renderSession) {
       J.restore$0$x(context);
@@ -3160,7 +3295,7 @@ var $$ = {};
     $isRenderSession: true
   },
   Renderer: {
-    "^": "Object;type>",
+    "^": "Object;",
     $isRenderer: true
   },
   ComplexPrimitiveShader: {
@@ -3417,7 +3552,7 @@ var $$ = {};
     $isWebGLFilterManager: true
   },
   WebGLGraphicsData: {
-    "^": "Object;gl,color,points>,indices<,lastIndex,buffer,indexBuffer,mode>,alpha,dirty,glPoints,glIndicies,data",
+    "^": "Object;gl,color,points,indices<,lastIndex,buffer,indexBuffer,mode>,alpha,dirty,glPoints,glIndicies,data",
     set$color: function(_, color) {
       this.color = H.assertSubtype(color, "$isList", [P.num], "$asList");
     },
@@ -3484,18 +3619,18 @@ var $$ = {};
     "^": "Closure:32;",
     call$1: [function(s) {
       return J.toDouble$0$n(s);
-    }, "call$1", null, 2, 0, null, 62, "call"],
+    }, "call$1", null, 2, 0, null, 58, "call"],
     $isFunction: true
   },
   WebGLGraphicsData_upload_closure0: {
-    "^": "Closure:63;",
+    "^": "Closure:59;",
     call$1: [function(s) {
       return J.toInt$0$n(H.numTypeCheck(s));
-    }, "call$1", null, 2, 0, null, 62, "call"],
+    }, "call$1", null, 2, 0, null, 58, "call"],
     $isFunction: true
   },
   WebGLGraphics_quadraticBezierCurve_getPt: {
-    "^": "Closure:64;",
+    "^": "Closure:60;",
     call$3: function(n1, n2, perc) {
       var t1;
       if (typeof n2 !== "number")
@@ -3516,7 +3651,7 @@ var $$ = {};
       var gl, t1, t2;
       H.interceptedTypeCheck(renderSession, "$isRenderSession");
       gl = renderSession.gl;
-      if (maskData.dirty)
+      if (maskData._dirty)
         M.WebGLGraphics_updateGraphics(maskData, gl);
       t1 = maskData._webGL;
       if (t1.$index(0, gl).data.length === 0)
@@ -3663,7 +3798,7 @@ var $$ = {};
       uvs = texture._uvs;
       if (uvs == null)
         return;
-      alpha = sprite.worldAlpha;
+      alpha = sprite._worldAlpha;
       tint = sprite.tint;
       verticies = this.vertices;
       t1 = sprite.anchor;
@@ -3693,7 +3828,7 @@ var $$ = {};
         return t1.$mul();
       h1 = t1 * -aY;
       index = this.currentBatchSize * 4 * this.vertSize;
-      worldTransform = sprite.worldTransform;
+      worldTransform = sprite._worldTransform;
       a = worldTransform.a;
       b = worldTransform.c;
       c = worldTransform.b;
@@ -4033,7 +4168,7 @@ var $$ = {};
         t1 = renderSession.shaderManager;
         shader = t1.complexPrimativeShader;
         t1.setShader$1(shader);
-        J.uniformMatrix3fv$3$x(this.gl, shader.translationMatrix, false, graphics.worldTransform.toArray$1(true));
+        J.uniformMatrix3fv$3$x(this.gl, shader.translationMatrix, false, graphics._worldTransform.toArray$1(true));
         t1 = this.gl;
         t2 = shader.projectionVector;
         t3 = projection.x;
@@ -4062,7 +4197,7 @@ var $$ = {};
         H.assertSubtype(t1, "$isList", [P.$double], "$asList");
         H.assertSubtype(t1, "$isList", [P.$double], "$asList");
         J.uniform3fv$2$x(t3, t2, new Float32Array(H._ensureNativeList(t1)));
-        J.uniform1f$2$x(this.gl, shader.alpha, graphics.worldAlpha * webGLData.alpha);
+        J.uniform1f$2$x(this.gl, shader.alpha, graphics._worldAlpha * webGLData.alpha);
         J.bindBuffer$2$x(this.gl, 34962, webGLData.buffer);
         J.vertexAttribPointer$6$x(this.gl, shader.aVertexPosition, 2, 5126, false, 8, 0);
         J.bindBuffer$2$x(this.gl, 34963, webGLData.indexBuffer);
@@ -4070,7 +4205,7 @@ var $$ = {};
         t1 = renderSession.shaderManager;
         shader = t1.primitiveShader;
         t1.setShader$1(shader);
-        J.uniformMatrix3fv$3$x(this.gl, shader.PIXI$PrimitiveShader$translationMatrix, false, graphics.worldTransform.toArray$1(true));
+        J.uniformMatrix3fv$3$x(this.gl, shader.PIXI$PrimitiveShader$translationMatrix, false, graphics._worldTransform.toArray$1(true));
         t1 = this.gl;
         t2 = shader.PIXI$PrimitiveShader$projectionVector;
         t3 = projection.x;
@@ -4093,7 +4228,7 @@ var $$ = {};
         H.assertSubtype(t3, "$isList", [P.$double], "$asList");
         H.assertSubtype(t3, "$isList", [P.$double], "$asList");
         J.uniform3fv$2$x(t1, t2, new Float32Array(H._ensureNativeList(t3)));
-        J.uniform1f$2$x(this.gl, shader.PIXI$PrimitiveShader$alpha, graphics.worldAlpha);
+        J.uniform1f$2$x(this.gl, shader.PIXI$PrimitiveShader$alpha, graphics._worldAlpha);
         J.bindBuffer$2$x(this.gl, 34962, webGLData.buffer);
         J.vertexAttribPointer$6$x(this.gl, shader.PIXI$PrimitiveShader$aVertexPosition, 2, 5126, false, 24, 0);
         J.vertexAttribPointer$6$x(this.gl, shader.PIXI$PrimitiveShader$colorAttribute, 4, 5126, false, 24, 8);
@@ -4174,7 +4309,7 @@ var $$ = {};
         this.__stage = stage;
       }
       M.WebGLRenderer_updateTextures(this.gl);
-      stage.updateTransform$0();
+      stage._updateTransform$0();
       J.viewport$4$x(this.gl, 0, 0, this.width, this.height);
       J.bindFramebuffer$2$x(this.gl, 36160, null);
       t1 = this.transparent;
@@ -4208,7 +4343,6 @@ var $$ = {};
     },
     renderDisplayObject$3: function(displayObject, projection, buffer) {
       var t1, t2, t3;
-      H.interceptedTypeCheck(projection, "$isPoint");
       this.renderSession.blendModeManager.setBlendMode$1(C.BlendModes_0);
       t1 = this.renderSession;
       t1.drawCount = 0;
@@ -4436,15 +4570,23 @@ var $$ = {};
       }}
   },
   TextStyle: {
-    "^": "Object;fill>,font,align,stroke,strokeThickness,wordWrap,wordWrapWidth,dropShadow,dropShadowAngle,dropShadowDistance,dropShadowColor,shadowOffsetX,shadowOffsetY,shadowColor,shadowBlur,tint",
+    "^": "Object;fill,font,align,stroke,strokeThickness,wordWrap,wordWrapWidth,dropShadow,dropShadowAngle,dropShadowDistance,dropShadowColor,tint",
+    TextStyle$6$align$fill$font$stroke$strokeThickness$tint: function(align, fill, font, stroke, strokeThickness, tint) {
+      this.fill = fill;
+      this.font = font;
+      this.align = align;
+      this.stroke = stroke;
+      this.strokeThickness = strokeThickness;
+      this.tint = tint;
+    },
     $isTextStyle: true
   },
   Text: {
-    "^": "Sprite;_text,style,canvas,context,PIXI$Text$dirty,requiresUpdate,anchor,texture,updateFrame,textureChange,PIXI$Sprite$_width,PIXI$Sprite$_height,_uvs,tintedTexture,buffer,tint,cachedTint,blendMode,children,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,renderable,parent,__iParent,interactiveChildren,__hit,__isOver,__mouseIsDown,__isDown,dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,stage,buttonMode,worldAlpha,_interactive,defaultCursor,worldTransform,color,dynamic,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,isMask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,rotationCache",
-    updateText$0: function() {
+    "^": "Sprite;_text,_style,_canvas,_context,PIXI$Text$_dirty,_requiresUpdate,anchor,texture,updateFrame,PIXI$Sprite$_width,PIXI$Sprite$_height,_uvs,tintedTexture,buffer,tint,cachedTint,blendMode,children,interactiveChildren,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,buttonMode,renderable,_parent,__hit,__isOver,__mouseIsDown,__isDown,_dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,_stage,_worldAlpha,_interactive,defaultCursor,_worldTransform,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,_rotationCache",
+    _updateText$0: function() {
       var t1, t2, outputText, lines, lineWidths, maxLineWidth, i, lineWidth, width, result, t3, body, dummy, lineHeight, height, t4, t5, xShadowOffset, yShadowOffset, linePositionX, linePositionX0, linePositionY;
-      t1 = this.context;
-      t2 = this.style;
+      t1 = this._context;
+      t2 = this._style;
       t1.font = t2.font;
       outputText = this._text;
       if (t2.wordWrap)
@@ -4452,18 +4594,18 @@ var $$ = {};
       lines = J.split$1$s(outputText, $.get$Text_splitReg());
       lineWidths = H.assertSubtype(H.setRuntimeTypeInfo(Array(lines.length), [P.num]), "$isList", [P.num], "$asList");
       for (t1 = lineWidths.length, maxLineWidth = 0, i = 0; i < lines.length; ++i) {
-        lineWidth = J.measureText$1$x(this.context, lines[i]).width;
+        lineWidth = J.measureText$1$x(this._context, lines[i]).width;
         if (i >= t1)
           return H.ioore(lineWidths, i);
         lineWidths[i] = lineWidth;
         maxLineWidth = P.max(maxLineWidth, lineWidth);
       }
-      t2 = this.style;
+      t2 = this._style;
       width = maxLineWidth + t2.strokeThickness;
       if (t2.dropShadow)
         width += t2.dropShadowDistance;
-      this.canvas.width = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(C.JSNumber_methods.$add(width, this.context.lineWidth))));
-      t2 = "font: " + this.style.font + ";";
+      this._canvas.width = C.JSDouble_methods.toInt$0(H.doubleTypeCheck(Math.floor(C.JSNumber_methods.$add(width, this._context.lineWidth))));
+      t2 = "font: " + this._style.font + ";";
       result = $.get$Text_heightCache().$index(0, t2);
       if (result == null) {
         t3 = C.HtmlDocument_methods.getElementsByTagName$1(document, "body");
@@ -4479,7 +4621,7 @@ var $$ = {};
         $.get$Text_heightCache().$indexSet(0, t2, result);
         t3.remove$0(dummy);
       }
-      t2 = this.style;
+      t2 = this._style;
       t3 = t2.strokeThickness;
       if (typeof result !== "number")
         return result.$add();
@@ -4488,8 +4630,8 @@ var $$ = {};
       t4 = t2.dropShadow;
       if (t4)
         height += t2.dropShadowDistance;
-      this.canvas.height = height;
-      t5 = this.context;
+      this._canvas.height = height;
+      t5 = this._context;
       t5.font = t2.font;
       t5.strokeStyle = t2.stroke;
       t5.lineWidth = t3;
@@ -4498,12 +4640,12 @@ var $$ = {};
         t5.fillStyle = t2.dropShadowColor;
         t2 = t2.dropShadowAngle;
         t2 = Math.sin(t2);
-        t3 = this.style;
+        t3 = this._style;
         xShadowOffset = t2 * t3.dropShadowDistance;
         t3 = t3.dropShadowAngle;
-        yShadowOffset = Math.cos(t3) * this.style.dropShadowDistance;
+        yShadowOffset = Math.cos(t3) * this._style.dropShadowDistance;
         for (i = 0; i < lines.length; ++i) {
-          t2 = this.style;
+          t2 = this._style;
           linePositionX = t2.strokeThickness / 2;
           t2 = t2.align;
           if (t2 === "right") {
@@ -4516,8 +4658,8 @@ var $$ = {};
             linePositionX0 = linePositionX + C.JSNumber_methods.$sub(maxLineWidth, lineWidths[i]) / 2;
           } else
             linePositionX0 = linePositionX;
-          this.style.fill;
-          t2 = this.context;
+          this._style.fill;
+          t2 = this._context;
           if (i >= lines.length)
             return H.ioore(lines, i);
           t3 = lines[i];
@@ -4526,9 +4668,9 @@ var $$ = {};
           t2.fillText(t3, linePositionX0 + xShadowOffset, linePositionX + i * lineHeight + yShadowOffset);
         }
       }
-      this.context.fillStyle = this.style.fill;
+      this._context.fillStyle = this._style.fill;
       for (i = 0; i < lines.length; ++i) {
-        t2 = this.style;
+        t2 = this._style;
         linePositionX = t2.strokeThickness / 2;
         linePositionY = linePositionX + i * lineHeight;
         t2 = t2.align;
@@ -4541,16 +4683,16 @@ var $$ = {};
             return H.ioore(lineWidths, i);
           linePositionX += C.JSNumber_methods.$sub(maxLineWidth, lineWidths[i]) / 2;
         }
-        t2 = this.style;
+        t2 = this._style;
         t2.stroke;
         if (t2.strokeThickness !== 0) {
-          t2 = this.context;
+          t2 = this._context;
           if (i >= lines.length)
             return H.ioore(lines, i);
           J.strokeText$3$x(t2, lines[i], linePositionX, linePositionY);
         }
-        this.style.fill;
-        t2 = this.context;
+        this._style.fill;
+        t2 = this._context;
         if (i >= lines.length)
           return H.ioore(lines, i);
         t3 = lines[i];
@@ -4558,48 +4700,48 @@ var $$ = {};
         H.stringTypeCheck(t3);
         t2.fillText(t3, linePositionX, linePositionY);
       }
-      this.texture.get$baseTexture().width = this.canvas.width;
-      this.texture.get$baseTexture().height = this.canvas.height;
+      this.texture.get$baseTexture().width = this._canvas.width;
+      this.texture.get$baseTexture().height = this._canvas.height;
       t1 = this.texture;
       t2 = t1.crop;
       t1 = t1.get$frame();
-      t3 = this.canvas.width;
+      t3 = this._canvas.width;
       t1.width = t3;
       t2.width = t3;
       t3 = this.texture;
       t2 = t3.crop;
       t3 = t3.get$frame();
-      t1 = this.canvas;
+      t1 = this._canvas;
       t4 = t1.height;
       t3.height = t4;
       t2.height = t4;
       this.PIXI$Sprite$_width = t1.width;
       this.PIXI$Sprite$_height = t1.height;
-      this.requiresUpdate = true;
+      this._requiresUpdate = true;
     },
     _renderWebGL$1: function(renderSession) {
-      if (H.boolConversionCheck(this.requiresUpdate)) {
-        this.requiresUpdate = false;
+      if (H.boolConversionCheck(this._requiresUpdate)) {
+        this._requiresUpdate = false;
         M.updateWebGLTexture(this.texture.get$baseTexture(), renderSession.gl);
       }
       M.Sprite.prototype._renderWebGL$1.call(this, renderSession);
     },
-    updateTransform$0: function() {
-      if (H.boolConversionCheck(this.PIXI$Text$dirty)) {
-        this.updateText$0();
-        this.PIXI$Text$dirty = false;
+    _updateTransform$0: function() {
+      if (H.boolConversionCheck(this.PIXI$Text$_dirty)) {
+        this._updateText$0();
+        this.PIXI$Text$_dirty = false;
       }
-      M.DisplayObjectContainer.prototype.updateTransform$0.call(this);
+      M.DisplayObjectContainer.prototype._updateTransform$0.call(this);
     },
     wordWrap$1: function(_, text) {
       var lines, result, i, spaceLeft, words, j, wordWidth, t1;
       lines = H.assertSubtype(text.split("\n"), "$isList", [P.String], "$asList");
       for (result = "", i = 0; i < lines.length; ++i) {
-        spaceLeft = this.style.wordWrapWidth;
+        spaceLeft = this._style.wordWrapWidth;
         words = J.split$1$s(lines[i], " ");
         for (j = 0; j < words.length; ++j) {
-          wordWidth = J.measureText$1$x(this.context, words[j]).width;
-          t1 = J.measureText$1$x(this.context, " ").width;
+          wordWidth = J.measureText$1$x(this._context, words[j]).width;
+          t1 = J.measureText$1$x(this._context, " ").width;
           if (typeof wordWidth !== "number")
             return wordWidth.$add();
           t1 = C.JSDouble_methods.$add(wordWidth, t1);
@@ -4609,7 +4751,7 @@ var $$ = {};
             if (j >= words.length)
               return H.ioore(words, j);
             result = C.JSString_methods.$add(result, words[j]);
-            spaceLeft = this.style.wordWrapWidth - wordWidth;
+            spaceLeft = this._style.wordWrapWidth - wordWidth;
           } else {
             spaceLeft -= t1;
             if (j >= words.length)
@@ -4625,16 +4767,16 @@ var $$ = {};
     Text$2: function(text, style) {
       var t1;
       this._text = text;
-      this.style = style;
+      this._style = style;
       t1 = H.interceptedTypeCheck(C.HtmlDocument_methods._createElement$2(document, "canvas", null), "$isCanvasElement");
-      this.canvas = t1;
-      this.context = H.interceptedTypeCheck(J.getContext$1$x(t1, "2d"), "$isCanvasRenderingContext2D");
-      this.texture = M.Texture$(M.BaseTexture_fromCanvas(this.canvas, null), null);
+      this._canvas = t1;
+      this._context = H.interceptedTypeCheck(J.getContext$1$x(t1, "2d"), "$isCanvasRenderingContext2D");
+      this.texture = M.Texture$(M.BaseTexture_fromCanvas(this._canvas, null), null);
       this._setupTexture$0();
       this._text = text;
-      this.PIXI$Text$dirty = true;
-      this.style = style;
-      this.PIXI$Text$dirty = true;
+      this.PIXI$Text$_dirty = true;
+      this._style = style;
+      this.PIXI$Text$_dirty = true;
     },
     static: {"^": "Text_splitReg,Text_heightCache"}
   },
@@ -4859,7 +5001,7 @@ var $$ = {};
     $isTextureUvs: true
   },
   PixiEvent: {
-    "^": "Object;type>,content,loader",
+    "^": "Object;type,content,loader",
     $isPixiEvent: true
   },
   EventTarget0: {
@@ -4955,8 +5097,8 @@ var $$ = {};
     noSuchMethod$1: [function(receiver, invocation) {
       H.interceptedTypeCheck(invocation, "$isInvocation");
       throw H.wrapException(P.NoSuchMethodError$(receiver, invocation.get$memberName(), invocation.get$positionalArguments(), invocation.get$namedArguments(), null));
-    }, "call$1", "get$noSuchMethod", 2, 0, null, 65],
-    "%": "ArrayBuffer|CanvasGradient|CanvasPattern|DOMError|FileError|MediaKeyError|Navigator|NavigatorUserMediaError|PositionError|SQLError|SVGAnimatedLengthList|SVGAnimatedNumber|SVGAnimatedNumberList|SVGRect|TextMetrics|WebGLRenderbuffer"
+    }, "call$1", "get$noSuchMethod", 2, 0, null, 61],
+    "%": "ArrayBuffer|CanvasGradient|CanvasPattern|DOMError|FileError|MediaKeyError|Navigator|NavigatorUserMediaError|PositionError|SQLError|SVGAnimatedLengthList|SVGAnimatedNumber|SVGAnimatedNumberList|SVGPointList|SVGRect|TextMetrics|WebGLRenderbuffer"
   },
   JSBool: {
     "^": "Interceptor;",
@@ -4981,7 +5123,7 @@ var $$ = {};
     },
     noSuchMethod$1: [function(receiver, invocation) {
       return J.Interceptor.prototype.noSuchMethod$1.call(this, receiver, H.interceptedTypeCheck(invocation, "$isInvocation"));
-    }, "call$1", "get$noSuchMethod", 2, 0, null, 65]
+    }, "call$1", "get$noSuchMethod", 2, 0, null, 61]
   },
   JavaScriptObject: {
     "^": "Interceptor;",
@@ -6175,14 +6317,14 @@ var $$ = {};
     "^": "Closure:32;replyPort_6",
     call$1: [function(msg) {
       this.replyPort_6.send$1(msg);
-    }, "call$1", null, 2, 0, null, 66, "call"],
+    }, "call$1", null, 2, 0, null, 62, "call"],
     $isFunction: true
   },
   IsolateNatives__processWorkerMessage_closure1: {
-    "^": "Closure:68;replyPort_7",
+    "^": "Closure:64;replyPort_7",
     call$1: [function(errorMessage) {
       this.replyPort_7.send$1(["spawn failed", H.stringTypeCheck(errorMessage)]);
-    }, "call$1", null, 2, 0, null, 67, "call"],
+    }, "call$1", null, 2, 0, null, 63, "call"],
     $isFunction: true
   },
   IsolateNatives_spawn_closure: {
@@ -6200,14 +6342,14 @@ var $$ = {};
         H.assertHelper(J.$eq(t1.$index(msg, 0), "spawn failed"));
         t2.completeError$1(t1.$index(msg, 1));
       }
-    }, "call$1", null, 2, 0, null, 66, "call"],
+    }, "call$1", null, 2, 0, null, 62, "call"],
     $isFunction: true
   },
   IsolateNatives_spawn_closure0: {
-    "^": "Closure:68;completer_1",
+    "^": "Closure:64;completer_1",
     call$1: [function(message) {
       return this.completer_1.completeError$1(H.stringTypeCheck(message));
-    }, "call$1", null, 2, 0, null, 69, "call"],
+    }, "call$1", null, 2, 0, null, 65, "call"],
     $isFunction: true
   },
   IsolateNatives__startNonWorker_closure: {
@@ -6598,7 +6740,7 @@ var $$ = {};
     }
   },
   _Copier_visitMap_closure: {
-    "^": "Closure:70;box_0,this_1",
+    "^": "Closure:66;box_0,this_1",
     call$2: function(key, val) {
       var t1 = this.this_1;
       this.box_0.copy_0.$indexSet(0, t1._dispatch$1(key), t1._dispatch$1(val));
@@ -8137,7 +8279,7 @@ var $$ = {};
       }}
   },
   ReflectionInfo_sortedIndex_closure: {
-    "^": "Closure:68;box_0,this_1,positions_2",
+    "^": "Closure:64;box_0,this_1,positions_2",
     call$1: function($name) {
       var t1, t2, t3;
       H.stringTypeCheck($name);
@@ -8151,7 +8293,7 @@ var $$ = {};
     $isFunction: true
   },
   Primitives_functionNoSuchMethod_closure: {
-    "^": "Closure:71;box_0,arguments_1,namedArgumentList_2",
+    "^": "Closure:67;box_0,arguments_1,namedArgumentList_2",
     call$2: function($name, argument) {
       var t1;
       H.stringTypeCheck($name);
@@ -8164,7 +8306,7 @@ var $$ = {};
     $isFunction: true
   },
   Primitives_applyFunction_closure: {
-    "^": "Closure:71;box_0,defaultArguments_1",
+    "^": "Closure:67;box_0,defaultArguments_1",
     call$2: function(parameter, value) {
       var t1;
       H.stringTypeCheck(parameter);
@@ -8685,14 +8827,14 @@ var $$ = {};
     $isFunction: true
   },
   initHooks_closure0: {
-    "^": "Closure:72;getUnknownTag_1",
+    "^": "Closure:68;getUnknownTag_1",
     call$2: function(o, tag) {
       return this.getUnknownTag_1(o, tag);
     },
     $isFunction: true
   },
   initHooks_closure1: {
-    "^": "Closure:68;prototypeForTag_2",
+    "^": "Closure:64;prototypeForTag_2",
     call$1: function(tag) {
       return this.prototypeForTag_2(H.stringTypeCheck(tag));
     },
@@ -10012,7 +10154,7 @@ var $$ = {};
     $isFunction: true
   },
   _Future__chainForeignFuture_closure0: {
-    "^": "Closure:73;target_1",
+    "^": "Closure:69;target_1",
     call$2: [function(error, stackTrace) {
       var t1 = this.target_1;
       H.assertHelper(t1._state === 2);
@@ -10044,7 +10186,7 @@ var $$ = {};
     $isFunction: true
   },
   _Future__propagateToListeners_handleValueCallback: {
-    "^": "Closure:74;box_1,listener_3,sourceValue_4,zone_5",
+    "^": "Closure:70;box_1,listener_3,sourceValue_4,zone_5",
     call$0: function() {
       var e, s, t1, t2, t3, exception;
       try {
@@ -10204,11 +10346,11 @@ var $$ = {};
     "^": "Closure:32;box_2,listener_11",
     call$1: [function(ignored) {
       P._Future__propagateToListeners(this.box_2.source_4, this.listener_11);
-    }, "call$1", null, 2, 0, null, 75, "call"],
+    }, "call$1", null, 2, 0, null, 71, "call"],
     $isFunction: true
   },
   _Future__propagateToListeners_handleWhenCompleteCallback_closure0: {
-    "^": "Closure:73;box_0,listener_12",
+    "^": "Closure:69;box_0,listener_12",
     call$2: [function(error, stackTrace) {
       var t1, completeResult;
       t1 = this.box_0;
@@ -10275,7 +10417,7 @@ var $$ = {};
     "^": "Closure;box_0,this_1,action_2,future_3",
     call$1: [function(element) {
       P._runUserCode(new P.Stream_forEach__closure(this.action_2, H.assertSubtypeOfRuntimeType(element, H.getRuntimeTypeArgument(this.this_1, "Stream", 0))), new P.Stream_forEach__closure0(), P._cancelAndErrorClosure(this.box_0.subscription_0, this.future_3));
-    }, "call$1", null, 2, 0, null, 76, "call"],
+    }, "call$1", null, 2, 0, null, 72, "call"],
     $isFunction: true,
     $signature: function() {
       return H.computeSignature(function(T) {
@@ -10307,7 +10449,7 @@ var $$ = {};
     "^": "Closure:32;box_0",
     call$1: [function(_) {
       ++this.box_0.count_0;
-    }, "call$1", null, 2, 0, null, 77, "call"],
+    }, "call$1", null, 2, 0, null, 73, "call"],
     $isFunction: true
   },
   Stream_length_closure0: {
@@ -11053,7 +11195,7 @@ var $$ = {};
     $isFunction: true
   },
   _cancelAndErrorClosure_closure: {
-    "^": "Closure:78;subscription_0,future_1",
+    "^": "Closure:74;subscription_0,future_1",
     call$2: function(error, stackTrace) {
       return P._cancelAndError(this.subscription_0, this.future_1, error, stackTrace);
     },
@@ -11153,12 +11295,12 @@ var $$ = {};
       return H.computeSignature(function(S, T) {
         return {func: "void__S", void: true, args: [S]};
       }, this.$receiver, "_ForwardingStreamSubscription");
-    }, 79],
+    }, 75],
     _handleError$2: [function(error, stackTrace) {
       H.interceptedTypeCheck(stackTrace, "$isStackTrace");
       H.assertSubtype(this, "$is_EventSink", [H.getRuntimeTypeArgument(this._stream, "_ForwardingStream", 1)], "$as_EventSink");
       this._addError$2(error, stackTrace);
-    }, "call$2", "get$_handleError", 4, 0, 80, 20, 21],
+    }, "call$2", "get$_handleError", 4, 0, 76, 20, 21],
     _handleDone$0: [function() {
       H.assertSubtype(this, "$is_EventSink", [H.getRuntimeTypeArgument(this._stream, "_ForwardingStream", 1)], "$as_EventSink");
       this._close$0();
@@ -11310,14 +11452,14 @@ var $$ = {};
     "^": "Closure:32;this_0,registered_1",
     call$1: [function(arg) {
       return this.this_0.runUnaryGuarded$2(this.registered_1, arg);
-    }, "call$1", null, 2, 0, null, 81, "call"],
+    }, "call$1", null, 2, 0, null, 77, "call"],
     $isFunction: true
   },
   _BaseZone_bindUnaryCallback_closure0: {
     "^": "Closure:32;this_2,registered_3",
     call$1: [function(arg) {
       return this.this_2.runUnary$2(this.registered_3, arg);
-    }, "call$1", null, 2, 0, null, 81, "call"],
+    }, "call$1", null, 2, 0, null, 77, "call"],
     $isFunction: true
   },
   _rootHandleUncaughtError_closure: {
@@ -11770,7 +11912,7 @@ var $$ = {};
     "^": "Closure:32;this_0",
     call$1: [function(each) {
       return this.this_0.$index(0, each);
-    }, "call$1", null, 2, 0, null, 82, "call"],
+    }, "call$1", null, 2, 0, null, 78, "call"],
     $isFunction: true
   },
   HashMapKeyIterable: {
@@ -12077,7 +12219,7 @@ var $$ = {};
     "^": "Closure:32;this_0",
     call$1: [function(each) {
       return this.this_0.$index(0, each);
-    }, "call$1", null, 2, 0, null, 82, "call"],
+    }, "call$1", null, 2, 0, null, 78, "call"],
     $isFunction: true
   },
   LinkedHashMapCell: {
@@ -12510,7 +12652,7 @@ var $$ = {};
     $asIterable: null
   },
   Maps_mapToString_closure: {
-    "^": "Closure:70;box_0,result_1",
+    "^": "Closure:66;box_0,result_1",
     call$2: function(k, v) {
       var t1 = this.box_0;
       if (!t1.first_0)
@@ -12774,14 +12916,14 @@ var $$ = {};
     H.printString(line);
   },
   Function__toMangledNames_closure: {
-    "^": "Closure:70;result_0",
+    "^": "Closure:66;result_0",
     call$2: function(symbol, value) {
       this.result_0.$indexSet(0, symbol.get$_name(), value);
     },
     $isFunction: true
   },
   NoSuchMethodError_toString_closure: {
-    "^": "Closure:83;box_0",
+    "^": "Closure:79;box_0",
     call$2: function(key, value) {
       var t1, t2;
       H.interceptedTypeCheck(key, "$isSymbol");
@@ -12937,7 +13079,7 @@ var $$ = {};
       }}
   },
   Duration_toString_sixDigits: {
-    "^": "Closure:84;",
+    "^": "Closure:80;",
     call$1: function(n) {
       if (n >= 100000)
         return "" + n;
@@ -12954,7 +13096,7 @@ var $$ = {};
     $isFunction: true
   },
   Duration_toString_twoDigits: {
-    "^": "Closure:84;",
+    "^": "Closure:80;",
     call$1: function(n) {
       if (n >= 10)
         return "" + n;
@@ -13305,10 +13447,10 @@ var $$ = {};
   },
   HtmlElement: {
     "^": "Element;",
-    "%": "HTMLAppletElement|HTMLBRElement|HTMLBaseElement|HTMLContentElement|HTMLDListElement|HTMLDataListElement|HTMLDetailsElement|HTMLDialogElement|HTMLDirectoryElement|HTMLFontElement|HTMLFrameElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLLabelElement|HTMLLegendElement|HTMLMarqueeElement|HTMLMenuElement|HTMLModElement|HTMLOptGroupElement|HTMLParagraphElement|HTMLPreElement|HTMLQuoteElement|HTMLShadowElement|HTMLSpanElement|HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableDataCellElement|HTMLTableElement|HTMLTableHeaderCellElement|HTMLTableRowElement|HTMLTableSectionElement|HTMLTemplateElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement;HTMLElement"
+    "%": "HTMLAppletElement|HTMLBRElement|HTMLBaseElement|HTMLContentElement|HTMLDListElement|HTMLDataListElement|HTMLDetailsElement|HTMLDialogElement|HTMLDirectoryElement|HTMLFontElement|HTMLFrameElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLLabelElement|HTMLLegendElement|HTMLLinkElement|HTMLMarqueeElement|HTMLMenuElement|HTMLModElement|HTMLOListElement|HTMLOptGroupElement|HTMLParagraphElement|HTMLPreElement|HTMLQuoteElement|HTMLScriptElement|HTMLShadowElement|HTMLSourceElement|HTMLSpanElement|HTMLStyleElement|HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableDataCellElement|HTMLTableElement|HTMLTableHeaderCellElement|HTMLTableRowElement|HTMLTableSectionElement|HTMLTemplateElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement;HTMLElement"
   },
   AnchorElement: {
-    "^": "HtmlElement;type=",
+    "^": "HtmlElement;",
     toString$0: function(receiver) {
       return receiver.toString();
     },
@@ -13322,7 +13464,7 @@ var $$ = {};
     "%": "HTMLAreaElement"
   },
   Blob: {
-    "^": "Interceptor;type=",
+    "^": "Interceptor;",
     $isBlob: true,
     "%": "Blob|File"
   },
@@ -13333,7 +13475,7 @@ var $$ = {};
     "%": "HTMLBodyElement"
   },
   ButtonElement: {
-    "^": "HtmlElement;name=,type=,value=",
+    "^": "HtmlElement;name=,value=",
     "%": "HTMLButtonElement"
   },
   CanvasElement: {
@@ -13365,7 +13507,7 @@ var $$ = {};
     "%": ";CanvasRenderingContext"
   },
   CanvasRenderingContext2D: {
-    "^": "CanvasRenderingContext;lineWidth=",
+    "^": "CanvasRenderingContext;",
     set$globalCompositeOperation: function(receiver, globalCompositeOperation) {
       receiver.globalCompositeOperation = H.stringTypeCheck(globalCompositeOperation);
     },
@@ -13442,11 +13584,6 @@ var $$ = {};
     drawImageScaledFromSource$9: function(receiver, source, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight) {
       return receiver.drawImage(H.interceptedTypeCheck(source, "$isCanvasImageSource"), sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
     },
-    fill$1: [function(receiver, winding) {
-      receiver.fill(winding);
-    }, function($receiver) {
-      return this.fill$1($receiver, "nonzero");
-    }, "fill$0", "call$1", "call$0", "get$fill", 0, 2, 36, 37],
     $isCanvasRenderingContext2D: true,
     "%": "CanvasRenderingContext2D"
   },
@@ -13517,7 +13654,7 @@ var $$ = {};
     "%": ";Element"
   },
   EmbedElement: {
-    "^": "HtmlElement;name=,type=",
+    "^": "HtmlElement;name=",
     "%": "HTMLEmbedElement"
   },
   ErrorEvent: {
@@ -13525,7 +13662,7 @@ var $$ = {};
     "%": "ErrorEvent"
   },
   Event: {
-    "^": "Interceptor;type=",
+    "^": "Interceptor;",
     preventDefault$0: function(receiver) {
       return receiver.preventDefault();
     },
@@ -13544,7 +13681,7 @@ var $$ = {};
     "%": "MediaStream;EventTarget"
   },
   FieldSetElement: {
-    "^": "HtmlElement;name=,type=",
+    "^": "HtmlElement;name=",
     "%": "HTMLFieldSetElement"
   },
   FormElement: {
@@ -13606,23 +13743,19 @@ var $$ = {};
     "%": "HTMLImageElement"
   },
   InputElement: {
-    "^": "HtmlElement;name=,type=,value=",
+    "^": "HtmlElement;name=,value=",
     $isElement: true,
     $isEventTarget: true,
     $isNode: true,
     "%": "HTMLInputElement"
   },
   KeygenElement: {
-    "^": "HtmlElement;name=,type=",
+    "^": "HtmlElement;name=",
     "%": "HTMLKeygenElement"
   },
   LIElement: {
     "^": "HtmlElement;value=",
     "%": "HTMLLIElement"
-  },
-  LinkElement: {
-    "^": "HtmlElement;type=",
-    "%": "HTMLLinkElement"
   },
   MapElement: {
     "^": "HtmlElement;name=",
@@ -13704,12 +13837,8 @@ var $$ = {};
     $isJavaScriptIndexingBehavior: true,
     "%": "NodeList|RadioNodeList"
   },
-  OListElement: {
-    "^": "HtmlElement;type=",
-    "%": "HTMLOListElement"
-  },
   ObjectElement: {
-    "^": "HtmlElement;name=,type=",
+    "^": "HtmlElement;name=",
     "%": "HTMLObjectElement"
   },
   OptionElement: {
@@ -13717,7 +13846,7 @@ var $$ = {};
     "%": "HTMLOptionElement"
   },
   OutputElement: {
-    "^": "HtmlElement;name=,type=,value=",
+    "^": "HtmlElement;name=,value=",
     "%": "HTMLOutputElement"
   },
   ParamElement: {
@@ -13728,28 +13857,16 @@ var $$ = {};
     "^": "HtmlElement;value=",
     "%": "HTMLProgressElement"
   },
-  ScriptElement: {
-    "^": "HtmlElement;type=",
-    "%": "HTMLScriptElement"
-  },
   SelectElement: {
-    "^": "HtmlElement;length=,name=,type=,value=",
+    "^": "HtmlElement;length=,name=,value=",
     "%": "HTMLSelectElement"
-  },
-  SourceElement: {
-    "^": "HtmlElement;type=",
-    "%": "HTMLSourceElement"
   },
   SpeechRecognitionError: {
     "^": "Event;error=",
     "%": "SpeechRecognitionError"
   },
-  StyleElement: {
-    "^": "HtmlElement;type=",
-    "%": "HTMLStyleElement"
-  },
   TextAreaElement: {
-    "^": "HtmlElement;name=,type=,value=",
+    "^": "HtmlElement;name=,value=",
     "%": "HTMLTextAreaElement"
   },
   UIEvent: {
@@ -13768,7 +13885,7 @@ var $$ = {};
       var t1 = H.buildFunctionType(H.getVoidRuntimeType(), [H.buildInterfaceType(P.num)])._assertCheck$1(callback);
       this._ensureRequestAnimationFrame$0(receiver);
       return this._requestAnimationFrame$1(receiver, W._wrapZone(t1));
-    }, "call$1", "get$requestAnimationFrame", 2, 0, 38],
+    }, "call$1", "get$requestAnimationFrame", 2, 0, 36],
     _requestAnimationFrame$1: function(receiver, callback) {
       return receiver.requestAnimationFrame(H.convertDartClosureToJS(H.buildFunctionType(H.getVoidRuntimeType(), [H.buildInterfaceType(P.num)])._assertCheck$1(callback), 1));
     },
@@ -14097,7 +14214,7 @@ var $$ = {};
     }
   },
   _DataAttributeMap_forEach_closure: {
-    "^": "Closure:85;this_0,f_1",
+    "^": "Closure:81;this_0,f_1",
     call$2: function(key, value) {
       H.stringTypeCheck(key);
       if (J.getInterceptor$s(key).startsWith$1(key, "data-"))
@@ -14106,7 +14223,7 @@ var $$ = {};
     $isFunction: true
   },
   _DataAttributeMap_keys_closure: {
-    "^": "Closure:85;this_0,keys_1",
+    "^": "Closure:81;this_0,keys_1",
     call$2: function(key, value) {
       H.stringTypeCheck(key);
       if (J.getInterceptor$s(key).startsWith$1(key, "data-"))
@@ -14115,7 +14232,7 @@ var $$ = {};
     $isFunction: true
   },
   _DataAttributeMap_values_closure: {
-    "^": "Closure:85;this_0,values_1",
+    "^": "Closure:81;this_0,values_1",
     call$2: function(key, value) {
       if (J.startsWith$1$s(H.stringTypeCheck(key), "data-"))
         C.JSArray_methods.add$1(this.values_1, value);
@@ -14262,47 +14379,10 @@ var $$ = {};
     "^": "SvgElement;mode=",
     "%": "SVGFEBlendElement"
   },
-  FEColorMatrixElement: {
-    "^": "SvgElement;type=",
-    "%": "SVGFEColorMatrixElement"
-  },
-  FETurbulenceElement: {
-    "^": "SvgElement;type=",
-    "%": "SVGFETurbulenceElement"
-  },
-  GeometryElement: {
-    "^": "GraphicsElement;",
-    "%": "SVGCircleElement|SVGEllipseElement|SVGLineElement|SVGPathElement|SVGRectElement;SVGGeometryElement"
-  },
-  GraphicsElement: {
-    "^": "SvgElement;",
-    "%": "SVGAElement|SVGAltGlyphElement|SVGClipPathElement|SVGDefsElement|SVGForeignObjectElement|SVGGElement|SVGImageElement|SVGSVGElement|SVGSwitchElement|SVGTSpanElement|SVGTextContentElement|SVGTextElement|SVGTextPathElement|SVGTextPositioningElement|SVGUseElement;SVGGraphicsElement"
-  },
-  PointList: {
-    "^": "Interceptor;",
-    $isPointList: true,
-    "%": "SVGPointList"
-  },
-  PolygonElement: {
-    "^": "GeometryElement;points=",
-    "%": "SVGPolygonElement"
-  },
-  PolylineElement: {
-    "^": "GeometryElement;points=",
-    "%": "SVGPolylineElement"
-  },
-  ScriptElement0: {
-    "^": "SvgElement;type=",
-    "%": "SVGScriptElement"
-  },
-  StyleElement0: {
-    "^": "SvgElement;type=",
-    "%": "SVGStyleElement"
-  },
   SvgElement: {
     "^": "Element;",
     $isEventTarget: true,
-    "%": "SVGAltGlyphDefElement|SVGAltGlyphItemElement|SVGAnimateElement|SVGAnimateMotionElement|SVGAnimateTransformElement|SVGAnimationElement|SVGComponentTransferFunctionElement|SVGCursorElement|SVGDescElement|SVGDiscardElement|SVGFEComponentTransferElement|SVGFECompositeElement|SVGFEConvolveMatrixElement|SVGFEDiffuseLightingElement|SVGFEDisplacementMapElement|SVGFEDistantLightElement|SVGFEDropShadowElement|SVGFEFloodElement|SVGFEFuncAElement|SVGFEFuncBElement|SVGFEFuncGElement|SVGFEFuncRElement|SVGFEGaussianBlurElement|SVGFEImageElement|SVGFEMergeElement|SVGFEMergeNodeElement|SVGFEMorphologyElement|SVGFEOffsetElement|SVGFEPointLightElement|SVGFESpecularLightingElement|SVGFESpotLightElement|SVGFETileElement|SVGFilterElement|SVGFontElement|SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement|SVGGlyphElement|SVGGlyphRefElement|SVGGradientElement|SVGHKernElement|SVGLinearGradientElement|SVGMPathElement|SVGMarkerElement|SVGMaskElement|SVGMetadataElement|SVGMissingGlyphElement|SVGPatternElement|SVGRadialGradientElement|SVGSetElement|SVGStopElement|SVGSymbolElement|SVGTitleElement|SVGVKernElement|SVGViewElement;SVGElement"
+    "%": "SVGAElement|SVGAltGlyphDefElement|SVGAltGlyphElement|SVGAltGlyphItemElement|SVGAnimateElement|SVGAnimateMotionElement|SVGAnimateTransformElement|SVGAnimationElement|SVGCircleElement|SVGClipPathElement|SVGComponentTransferFunctionElement|SVGCursorElement|SVGDefsElement|SVGDescElement|SVGDiscardElement|SVGEllipseElement|SVGFEColorMatrixElement|SVGFEComponentTransferElement|SVGFECompositeElement|SVGFEConvolveMatrixElement|SVGFEDiffuseLightingElement|SVGFEDisplacementMapElement|SVGFEDistantLightElement|SVGFEDropShadowElement|SVGFEFloodElement|SVGFEFuncAElement|SVGFEFuncBElement|SVGFEFuncGElement|SVGFEFuncRElement|SVGFEGaussianBlurElement|SVGFEImageElement|SVGFEMergeElement|SVGFEMergeNodeElement|SVGFEMorphologyElement|SVGFEOffsetElement|SVGFEPointLightElement|SVGFESpecularLightingElement|SVGFESpotLightElement|SVGFETileElement|SVGFETurbulenceElement|SVGFilterElement|SVGFontElement|SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement|SVGForeignObjectElement|SVGGElement|SVGGeometryElement|SVGGlyphElement|SVGGlyphRefElement|SVGGradientElement|SVGGraphicsElement|SVGHKernElement|SVGImageElement|SVGLineElement|SVGLinearGradientElement|SVGMPathElement|SVGMarkerElement|SVGMaskElement|SVGMetadataElement|SVGMissingGlyphElement|SVGPathElement|SVGPatternElement|SVGPolygonElement|SVGPolylineElement|SVGRadialGradientElement|SVGRectElement|SVGSVGElement|SVGScriptElement|SVGSetElement|SVGStopElement|SVGStyleElement|SVGSwitchElement|SVGSymbolElement|SVGTSpanElement|SVGTextContentElement|SVGTextElement|SVGTextPathElement|SVGTextPositioningElement|SVGTitleElement|SVGUseElement|SVGVKernElement|SVGViewElement;SVGElement"
   }
 }],
 ["dart.dom.web_gl", "dart:web_gl", , P, {
@@ -14396,9 +14476,6 @@ var $$ = {};
     getUniformLocation$2: function(receiver, program, $name) {
       return receiver.getUniformLocation(program, H.stringTypeCheck($name));
     },
-    lineWidth$1: [function(receiver, width) {
-      return receiver.lineWidth(H.numTypeCheck(width));
-    }, "call$1", "get$lineWidth", 2, 0, 39, 40],
     linkProgram$1: function(receiver, program) {
       return receiver.linkProgram(program);
     },
@@ -14455,40 +14532,40 @@ var $$ = {};
     },
     uniform1f$2: [function(receiver, $location, x) {
       return receiver.uniform1f(H.interceptedTypeCheck($location, "$isUniformLocation"), H.numTypeCheck(x));
-    }, "call$2", "get$uniform1f", 4, 0, 41, 42, 43],
+    }, "call$2", "get$uniform1f", 4, 0, 37, 38, 39],
     uniform1i$2: [function(receiver, $location, x) {
       return receiver.uniform1i(H.interceptedTypeCheck($location, "$isUniformLocation"), H.intTypeCheck(x));
-    }, "call$2", "get$uniform1i", 4, 0, 44, 42, 43],
+    }, "call$2", "get$uniform1i", 4, 0, 40, 38, 39],
     uniform2f$3: [function(receiver, $location, x, y) {
       return receiver.uniform2f(H.interceptedTypeCheck($location, "$isUniformLocation"), H.numTypeCheck(x), H.numTypeCheck(y));
-    }, "call$3", "get$uniform2f", 6, 0, 45, 42, 43, 46],
+    }, "call$3", "get$uniform2f", 6, 0, 41, 38, 39, 42],
     uniform2fv$2: [function(receiver, $location, v) {
       return receiver.uniform2fv(H.interceptedTypeCheck($location, "$isUniformLocation"), H.interceptedTypeCheck(v, "$isFloat32List"));
-    }, "call$2", "get$uniform2fv", 4, 0, 47, 42, 48],
+    }, "call$2", "get$uniform2fv", 4, 0, 43, 38, 44],
     uniform2i$3: [function(receiver, $location, x, y) {
       return receiver.uniform2i(H.interceptedTypeCheck($location, "$isUniformLocation"), H.intTypeCheck(x), H.intTypeCheck(y));
-    }, "call$3", "get$uniform2i", 6, 0, 49, 42, 43, 46],
+    }, "call$3", "get$uniform2i", 6, 0, 45, 38, 39, 42],
     uniform3f$4: [function(receiver, $location, x, y, z) {
       return receiver.uniform3f(H.interceptedTypeCheck($location, "$isUniformLocation"), H.numTypeCheck(x), H.numTypeCheck(y), H.numTypeCheck(z));
-    }, "call$4", "get$uniform3f", 8, 0, 50, 42, 43, 46, 51],
+    }, "call$4", "get$uniform3f", 8, 0, 46, 38, 39, 42, 47],
     uniform3fv$2: [function(receiver, $location, v) {
       return receiver.uniform3fv(H.interceptedTypeCheck($location, "$isUniformLocation"), H.interceptedTypeCheck(v, "$isFloat32List"));
-    }, "call$2", "get$uniform3fv", 4, 0, 47, 42, 48],
+    }, "call$2", "get$uniform3fv", 4, 0, 43, 38, 44],
     uniform3i$4: [function(receiver, $location, x, y, z) {
       return receiver.uniform3i(H.interceptedTypeCheck($location, "$isUniformLocation"), H.intTypeCheck(x), H.intTypeCheck(y), H.intTypeCheck(z));
-    }, "call$4", "get$uniform3i", 8, 0, 52, 42, 43, 46, 51],
+    }, "call$4", "get$uniform3i", 8, 0, 48, 38, 39, 42, 47],
     uniform4f$5: [function(receiver, $location, x, y, z, w) {
       return receiver.uniform4f(H.interceptedTypeCheck($location, "$isUniformLocation"), H.numTypeCheck(x), H.numTypeCheck(y), H.numTypeCheck(z), H.numTypeCheck(w));
-    }, "call$5", "get$uniform4f", 10, 0, 53, 42, 43, 46, 51, 54],
+    }, "call$5", "get$uniform4f", 10, 0, 49, 38, 39, 42, 47, 50],
     uniform4fv$2: [function(receiver, $location, v) {
       return receiver.uniform4fv(H.interceptedTypeCheck($location, "$isUniformLocation"), H.interceptedTypeCheck(v, "$isFloat32List"));
-    }, "call$2", "get$uniform4fv", 4, 0, 47, 42, 48],
+    }, "call$2", "get$uniform4fv", 4, 0, 43, 38, 44],
     uniform4i$5: [function(receiver, $location, x, y, z, w) {
       return receiver.uniform4i(H.interceptedTypeCheck($location, "$isUniformLocation"), H.intTypeCheck(x), H.intTypeCheck(y), H.intTypeCheck(z), H.intTypeCheck(w));
-    }, "call$5", "get$uniform4i", 10, 0, 55, 42, 43, 46, 51, 54],
+    }, "call$5", "get$uniform4i", 10, 0, 51, 38, 39, 42, 47, 50],
     uniformMatrix3fv$3: [function(receiver, $location, transpose, array) {
       return receiver.uniformMatrix3fv(H.interceptedTypeCheck($location, "$isUniformLocation"), H.boolTypeCheck(transpose), H.interceptedTypeCheck(array, "$isFloat32List"));
-    }, "call$3", "get$uniformMatrix3fv", 6, 0, null, 42, 56, 57],
+    }, "call$3", "get$uniformMatrix3fv", 6, 0, null, 38, 52, 53],
     useProgram$1: function(receiver, program) {
       return receiver.useProgram(program);
     },
@@ -15351,7 +15428,7 @@ var $$ = {};
     return imageData;
   },
   convertDartToNative_Dictionary_closure: {
-    "^": "Closure:71;object_0",
+    "^": "Closure:67;object_0",
     call$2: function(key, value) {
       this.object_0[H.stringTypeCheck(key)] = value;
     },
@@ -15366,7 +15443,7 @@ var $$ = {};
 ["", "main.dart", , F, {
   "^": "",
   main: [function() {
-    var t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, stage, texture, bg, container, bgFront, light2, light1, panda, renderer, t11, thing, help;
+    var t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, stage, texture, bg, container, bgFront, light2, light1, panda, renderer, t13, t14, thing, help;
     t1 = {};
     t2 = new Float32Array(9);
     t3 = new M.Point(null, null);
@@ -15383,7 +15460,9 @@ var $$ = {};
     t8 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
     t9 = H.assertSubtype([], "$isList", [P.num], "$asList");
     t10 = H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList");
-    stage = new M.Stage(null, false, new M.Rectangle(0, 0, 100000, 100000), 0, t9, null, new M.Matrix(1, 0, 0, 1, 0, 0, t2), null, t10, null, null, t3, t4, t5, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t6, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t7), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t8, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+    t11 = H.getVoidRuntimeType();
+    t12 = H.buildFunctionType(t11, [H.buildInterfaceType(M.InteractionData)]);
+    stage = new M.Stage(null, false, new M.Rectangle(0, 0, 100000, 100000), 0, t9, null, new M.Matrix(1, 0, 0, 1, 0, 0, t2), null, t10, false, null, null, t3, t4, t5, 0, 1, true, null, false, false, null, false, false, false, false, false, t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), H.assertSubtype(t6, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t7), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t8, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
     stage.Stage$2(16777215, true);
     stage.set$interactive(true);
     texture = M.Texture_fromImage("BGrotate.jpg", null, null);
@@ -15402,7 +15481,7 @@ var $$ = {};
     t4 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
     t2 = new Float32Array(9);
     t3 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-    bg = new M.Sprite(t8, null, false, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t7, t6, t5, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t4, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t2), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t3, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+    bg = new M.Sprite(t8, null, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t7, t6, t5, 0, 1, true, null, false, false, null, false, false, false, false, false, t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), H.assertSubtype(t4, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t2), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t3, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
     bg.texture = texture;
     bg._setupTexture$0();
     t8.x = 0.5;
@@ -15421,7 +15500,7 @@ var $$ = {};
     t5 = new Float32Array(9);
     t6 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
     t7 = H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList");
-    container = new M.DisplayObjectContainer(t7, null, null, t8, t3, t2, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t4, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t5), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t6, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+    container = new M.DisplayObjectContainer(t7, false, null, null, t8, t3, t2, 0, 1, true, null, false, false, null, false, false, false, false, false, t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), H.assertSubtype(t4, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t5), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t6, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
     texture = M.Texture_fromImage("SceneRotate.jpg", null, null);
     t6 = new M.Point(null, null);
     t6.x = 0;
@@ -15438,7 +15517,7 @@ var $$ = {};
     t3 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
     t8 = new Float32Array(9);
     t9 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-    bgFront = new M.Sprite(t6, null, false, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t5, t4, t2, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t3, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t8), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t9, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+    bgFront = new M.Sprite(t6, null, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t5, t4, t2, 0, 1, true, null, false, false, null, false, false, false, false, false, t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), H.assertSubtype(t3, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t8), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t9, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
     bgFront.texture = texture;
     bgFront._setupTexture$0();
     t6.x = 0.5;
@@ -15460,7 +15539,7 @@ var $$ = {};
     t2 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
     t4 = new Float32Array(9);
     t5 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-    light2 = new M.Sprite(t6, null, false, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t9, t8, t3, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t2, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t4), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t5, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+    light2 = new M.Sprite(t6, null, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t9, t8, t3, 0, 1, true, null, false, false, null, false, false, false, false, false, t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), H.assertSubtype(t2, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t4), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t5, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
     light2.texture = texture;
     light2._setupTexture$0();
     t6.x = 0.5;
@@ -15482,7 +15561,7 @@ var $$ = {};
     t3 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
     t8 = new Float32Array(9);
     t9 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-    light1 = new M.Sprite(t6, null, false, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t5, t4, t2, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t3, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t8), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t9, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+    light1 = new M.Sprite(t6, null, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t5, t4, t2, 0, 1, true, null, false, false, null, false, false, false, false, false, t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), H.assertSubtype(t3, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t8), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t9, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
     light1.texture = texture;
     light1._setupTexture$0();
     t6.x = 0.5;
@@ -15504,7 +15583,7 @@ var $$ = {};
     t2 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
     t4 = new Float32Array(9);
     t5 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-    panda = new M.Sprite(t6, null, false, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t9, t8, t3, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t2, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t4), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t5, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+    panda = new M.Sprite(t6, null, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t9, t8, t3, 0, 1, true, null, false, false, null, false, false, false, false, false, t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), H.assertSubtype(t2, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t4), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t5, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
     panda.texture = texture;
     panda._setupTexture$0();
     t6.x = 0.5;
@@ -15526,17 +15605,16 @@ var $$ = {};
     t3.y = 0;
     t8 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
     t9 = new Float32Array(9);
-    t11 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-    thing = new M.Graphics(1, 0, false, 1, 1, 0, H.assertSubtype([], "$isList", [M.GraphicsData], "$asList"), 16777215, null, new M.GraphicsData(t6, 1, 0, null, 1, 1, 0, t7), H.assertSubtype(t5, "$isMap", [P.RenderingContext, M.WebGLGraphicsData], "$asMap"), false, null, 10, false, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t4, t2, t3, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t8, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t9), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t11, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+    t13 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
+    t14 = H.assertSubtype([], "$isList", [M.GraphicsData], "$asList");
+    thing = new M.Graphics(1, 1, 0, 0, false, 1, t14, 16777215, null, new M.GraphicsData(t6, 1, 0, null, 1, 1, 0, t7), H.assertSubtype(t5, "$isMap", [P.RenderingContext, M.WebGLGraphicsData], "$asMap"), false, null, 10, false, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t4, t2, t3, 0, 1, true, null, false, false, null, false, false, false, false, false, t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), H.assertSubtype(t8, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t9), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t13, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
     thing.Graphics$0();
     stage.addChildAt$2(thing, t10.length);
     t4.x = 310;
     t4.y = 190;
-    if (thing.currentPath.points.length === 0) {
-      t2 = thing.graphicsData;
-      if (t2.length > 0)
-        t2.pop();
-    }
+    if (thing._currentPath.points.length === 0)
+      if (t14.length > 0)
+        t14.pop();
     thing.lineWidth = 0;
     thing.lineColor = 0;
     thing.lineAlpha = 1;
@@ -15550,8 +15628,8 @@ var $$ = {};
     t2.fill = thing.filling;
     t2.set$points(0, []);
     t2.type = $.Graphics_POLY;
-    thing.currentPath = t2;
-    C.JSArray_methods.add$1(thing.graphicsData, t2);
+    thing._currentPath = t2;
+    C.JSArray_methods.add$1(t14, t2);
     container.set$mask(0, thing);
     t1.count_0 = 0;
     t2 = new F.main_closure(container, thing);
@@ -15560,37 +15638,37 @@ var $$ = {};
     J.append$1$x(document.body, renderer.view);
     renderer.view.className = "rendererView";
     t2 = new F.main_resize(bg, container, renderer, thing);
-    t3 = H.assertSubtype(H.assertSubtype(H.setRuntimeTypeInfo(new W._EventStream(window, C.EventStreamProvider_resize._eventType, false), [null]), "$isStream", [H.getTypeArgumentByIndex(C.EventStreamProvider_resize, 0)], "$asStream"), "$isStream", [W.Event], "$asStream");
-    t4 = H.getVoidRuntimeType();
-    H.buildFunctionType(t4, [t3.$tv_T()])._assertCheck$1(t2);
-    H.buildFunctionType(t4)._assertCheck$1(null);
-    t4 = H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(t2), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)]);
-    t4._tryResume$0();
-    H.assertSubtype(t4, "$isStreamSubscription", [H.getTypeArgumentByIndex(t3, 0)], "$asStreamSubscription");
+    t14 = H.assertSubtype(H.assertSubtype(H.setRuntimeTypeInfo(new W._EventStream(window, C.EventStreamProvider_resize._eventType, false), [null]), "$isStream", [H.getTypeArgumentByIndex(C.EventStreamProvider_resize, 0)], "$asStream"), "$isStream", [W.Event], "$asStream");
+    H.buildFunctionType(t11, [t14.$tv_T()])._assertCheck$1(t2);
+    H.buildFunctionType(t11)._assertCheck$1(null);
+    t11 = H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t14._target, t14._eventType, W._wrapZone(t2), t14._useCapture), [H.getTypeArgumentByIndex(t14, 0)]);
+    t11._tryResume$0();
+    H.assertSubtype(t11, "$isStreamSubscription", [H.getTypeArgumentByIndex(t14, 0)], "$asStreamSubscription");
     t2.call$0();
-    t2 = new M.TextStyle("black", "bold 20pt Arial", "left", "black", 0, false, 100, false, 0.5235987755982988, 4, "black", 0, 0, "rgba(0,0,0,0)", 0, 16777215);
+    t2 = new M.TextStyle("black", "bold 20pt Arial", "left", "black", 0, false, 100, false, 0.5235987755982988, 4, "black", 16777215);
+    t2.TextStyle$6$align$fill$font$stroke$strokeThickness$tint("left", "black", "bold 20pt Arial", "black", 0, 16777215);
     t2.font = "bold 12pt Arial";
     t2.fill = "white";
+    t14 = new M.Point(null, null);
+    t14.x = 0;
+    t14.y = 0;
+    t11 = new M.Point(null, null);
+    t11.x = 0;
+    t11.y = 0;
     t3 = new M.Point(null, null);
-    t3.x = 0;
-    t3.y = 0;
+    t3.x = 1;
+    t3.y = 1;
     t4 = new M.Point(null, null);
     t4.x = 0;
     t4.y = 0;
-    t5 = new M.Point(null, null);
-    t5.x = 1;
-    t5.y = 1;
-    t6 = new M.Point(null, null);
-    t6.x = 0;
-    t6.y = 0;
-    t7 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
-    t8 = new Float32Array(9);
-    t9 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-    help = new M.Text(null, null, null, null, null, null, t3, null, false, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t4, t5, t6, 0, 1, true, null, false, null, null, false, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, H.assertSubtype(t7, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, false, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t8), [], true, 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, false, null, false, new M.FilterBlock(true, true, null, null, null, t9, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+    t5 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
+    t6 = new Float32Array(9);
+    t7 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
+    help = new M.Text(null, null, null, null, null, null, t14, null, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t11, t3, t4, 0, 1, true, null, false, false, null, false, false, false, false, false, t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), t12._assertCheck$1(null), H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t6), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t7, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
     help.renderable = true;
     help.Text$2("Click to turn masking on / off.", t2);
-    t4.y = 350;
-    t4.x = 10;
+    t11.y = 350;
+    t11.x = 10;
     stage.addChildAt$2(help, t10.length);
     $.get$requestAnimFrame().call$1(new F.main_animate(t1, stage, bg, bgFront, light2, light1, panda, renderer, thing));
   }, "call$0", "main$closure", 0, 0, 35],
@@ -15610,7 +15688,7 @@ var $$ = {};
     $isFunction: true
   },
   main_resize: {
-    "^": "Closure:86;bg_3,container_4,renderer_5,thing_6",
+    "^": "Closure:82;bg_3,container_4,renderer_5,thing_6",
     call$1: [function(e) {
       var t1, t2;
       this.renderer_5.resize$2(0, window.innerWidth, window.innerHeight);
@@ -15668,9 +15746,9 @@ var $$ = {};
       t1 = this.thing_14;
       t1.lineWidth = 0;
       t1.filling = false;
-      t1.dirty = true;
+      t1._dirty = true;
       t1.clearDirty = true;
-      t1.set$graphicsData([]);
+      C.JSArray_methods.set$length(t1._graphicsData, 0);
       t1.bounds = null;
       t1.filling = true;
       t1.fillColor = 9160191;
@@ -15698,7 +15776,7 @@ var $$ = {};
       t1.rotation = t2.count_0 * 0.1;
       this.renderer_13.render$1(this.stage_7);
       $.get$requestAnimFrame().call$1(this);
-    }, "call$1", null, 2, 0, null, 87, "call"],
+    }, "call$1", null, 2, 0, null, 83, "call"],
     $isFunction: true
   }
 },
@@ -15796,6 +15874,8 @@ P.Pattern.$isObject = true;
 W.MouseEvent.$isMouseEvent = true;
 W.MouseEvent.$isEvent = true;
 W.MouseEvent.$isObject = true;
+M.InteractionData.$isInteractionData = true;
+M.InteractionData.$isObject = true;
 // getInterceptor methods
 J.getInterceptor = function(receiver) {
   if (typeof receiver == "number") {
@@ -16570,11 +16650,7 @@ init.metadata = [{func: "dynamic__Texture_int_CanvasElement", args: [M.Texture, 
 "o",
 {func: "Object__dynamic", ret: P.Object, args: [null]},
 {func: "args0"},
-{func: "void___String", void: true, opt: [P.String]},
-"nonzero",
 {func: "int__RequestAnimationFrameCallback", ret: P.$int, args: [{func: "void__num", void: true, args: [P.num]}]},
-{func: "void__num", void: true, args: [P.num]},
-"width",
 {func: "void__UniformLocation_num", void: true, args: [P.UniformLocation, P.num]},
 "location",
 "x",
