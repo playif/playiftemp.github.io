@@ -6526,7 +6526,7 @@ init.mangledNames = {get$_Phaser$_bounds: "_bounds", get$_Phaser$_currentBounds:
       return t2.$add();
     data.lineHeight = C.JSInt_methods.$add(t2, ySpacing);
     data.chars = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
-    letters = H.assertSubtype(t1.getElementsByTagName$1(xml, "char"), "$isList", [W.Element], "$asList");
+    letters = t1.getElementsByTagName$1(xml, "char");
     for (i = 0; i < letters.length; ++i) {
       t2 = J.getAttribute$1$x(letters[i], "id");
       t3._assertCheck$1(null);
@@ -6578,7 +6578,7 @@ init.mangledNames = {get$_Phaser$_bounds: "_bounds", get$_Phaser$_currentBounds:
       t8.texture = t6;
       t7.$indexSet(0, charCode, t8);
     }
-    kernings = H.assertSubtype(t1.getElementsByTagName$1(xml, "kerning"), "$isList", [W.Element], "$asList");
+    kernings = t1.getElementsByTagName$1(xml, "kerning");
     for (i = 0; i < kernings.length; ++i) {
       t1 = J.getAttribute$1$x(kernings[i], "first");
       t3._assertCheck$1(null);
