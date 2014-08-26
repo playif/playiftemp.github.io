@@ -1604,7 +1604,7 @@ var $$ = {};
       } while (item != null);
       return true;
     },
-    _updateTransform$0: function() {
+    updateTransform$0: function() {
       var t1, $parent, parentTransform, worldTransform, px, py, a00, a01, a10, a11, t2, t3, a02, a12, b00, b01, b10, b11;
       t1 = this.rotation;
       if (t1 !== this._rotationCache) {
@@ -1706,17 +1706,17 @@ var $$ = {};
       } else
         throw H.wrapException(P.Exception_Exception("Supplied index does not exist in the child list, or the supplied DisplayObject must be a child of the caller"));
     },
-    _updateTransform$0: function() {
+    updateTransform$0: function() {
       var t1, j, i;
       if (!this.visible)
         return;
-      M.DisplayObject.prototype._updateTransform$0.call(this);
+      M.DisplayObject.prototype.updateTransform$0.call(this);
       if (this._cacheAsBitmap)
         return;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        t1[i]._updateTransform$0();
+        t1[i].updateTransform$0();
       }
     },
     getBounds$1: function(matrix) {
@@ -1727,7 +1727,7 @@ var $$ = {};
       if (matrix != null) {
         matrixCache = this.get$_worldTransform();
         this.set$_worldTransform(matrix);
-        this._updateTransform$0();
+        this.updateTransform$0();
         this.set$_worldTransform(matrixCache);
       }
       for (j = t1.length, minX = 1 / 0, minY = 1 / 0, maxX = -1 / 0, maxY = -1 / 0, childBounds = null, childMaxX = null, childMaxY = null, childVisible = false, i = 0; i < j; ++i) {
@@ -1765,14 +1765,14 @@ var $$ = {};
     getBounds$0: function() {
       return this.getBounds$1(null);
     },
-    _getLocalBounds$0: function() {
+    getLocalBounds$0: function() {
       var matrixCache, t1, j, i, bounds;
       matrixCache = this.get$_worldTransform();
       this.set$_worldTransform($.get$IdentityMatrix());
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        t1[i]._updateTransform$0();
+        t1[i].updateTransform$0();
       }
       bounds = this.getBounds$0();
       this.set$_worldTransform(matrixCache);
@@ -2037,13 +2037,13 @@ var $$ = {};
     set$_worldTransform: function(_worldTransform) {
       this.PIXI$Stage$_worldTransform = H.interceptedTypeCheck(_worldTransform, "$isMatrix");
     },
-    _updateTransform$0: function() {
+    updateTransform$0: function() {
       var t1, j, i;
       this._worldAlpha = 1;
       for (t1 = this.children, j = t1.length, i = 0; i < j; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
-        t1[i]._updateTransform$0();
+        t1[i].updateTransform$0();
       }
       if (this.PIXI$Stage$_dirty) {
         this.PIXI$Stage$_dirty = false;
@@ -2067,7 +2067,9 @@ var $$ = {};
       t3.y = 0;
       t4 = new P.DateTime(H.intTypeCheck(Date.now()), false);
       t4.DateTime$_now$0();
-      this.interactionManager = new M.InteractionManager(this, new M.InteractionData(t1, null, null), H.assertSubtype(t2, "$isMap", [P.$int, M.InteractionData], "$asMap"), t3, true, H.assertSubtype([], "$isList", [M.InteractionData], "$asList"), H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t4, null, "inherit", false);
+      t4 = new M.InteractionManager(this, new M.InteractionData(t1, null, null), H.assertSubtype(t2, "$isMap", [P.$int, M.InteractionData], "$asMap"), t3, true, H.assertSubtype([], "$isList", [M.InteractionData], "$asList"), H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), null, null, t4, null, "inherit", false, null);
+      t4.isCocoonJS = J.contains$1$asx(window.navigator.appVersion, "CocoonJS");
+      this.interactionManager = t4;
       this.backgroundColor = backgroundColor;
       this.set$backgroundColorSplit(M.hex2rgb(backgroundColor));
       hex = J.toRadixString$1$n(this.backgroundColor, 16);
@@ -2087,7 +2089,7 @@ var $$ = {};
     $isInteractionData: true
   },
   InteractionManager: {
-    "^": "Object;stage,mouse,touchs,tempPoint,mouseoverEnabled,pool,interactiveItems,interactionDOMElement,target,last,dirty,currentCursorStyle,mouseOut",
+    "^": "Object;stage,mouse,touchs,tempPoint,mouseoverEnabled,pool,interactiveItems,interactionDOMElement,target,last,dirty,currentCursorStyle,mouseOut,isCocoonJS",
     set$interactiveItems: function(interactiveItems) {
       this.interactiveItems = H.assertSubtype(interactiveItems, "$isList", [M.DisplayInterface], "$asList");
     },
@@ -2196,7 +2198,7 @@ var $$ = {};
       this.collectInteractiveSprite$2(t1, t1);
     },
     onMouseMove$1: [function(_, $event) {
-      var t1, rect, t2, t3, t4, t5, t6, $length, i, item;
+      var t1, rect, t2, t3, t4, t5, $length, i, item;
       H.interceptedTypeCheck($event, "$isMouseEvent");
       if (H.boolConversionCheck(this.dirty))
         this.rebuildInteractiveGraph$0();
@@ -2211,24 +2213,14 @@ var $$ = {};
       t5 = t3.get$left(rect);
       if (typeof t4 !== "number")
         return t4.$sub();
-      t5 = C.JSNumber_methods.$sub(t4, t5);
-      t4 = this.target.width;
-      t6 = t3.get$width(rect);
-      if (typeof t4 !== "number")
-        return t4.$div();
-      t2.x = t5 * C.JSInt_methods.$div(t4, t6);
-      t6 = $event.clientX;
+      t2.x = C.JSNumber_methods.$sub(t4, t5) * C.JSInt_methods.$div(this.target.width, t3.get$width(rect));
+      t5 = $event.clientX;
       t4 = $event.clientY;
-      t4 = H.setRuntimeTypeInfo(new P.Point0(H.assertSubtypeOfRuntimeType(t6, null), H.assertSubtypeOfRuntimeType(t4, null)), [null]).y;
-      t6 = t3.get$top(rect);
+      t4 = H.setRuntimeTypeInfo(new P.Point0(H.assertSubtypeOfRuntimeType(t5, null), H.assertSubtypeOfRuntimeType(t4, null)), [null]).y;
+      t5 = t3.get$top(rect);
       if (typeof t4 !== "number")
         return t4.$sub();
-      t6 = C.JSNumber_methods.$sub(t4, t6);
-      t4 = this.target.height;
-      t3 = t3.get$height(rect);
-      if (typeof t4 !== "number")
-        return t4.$div();
-      t2.y = t6 * C.JSInt_methods.$div(t4, t3);
+      t2.y = C.JSNumber_methods.$sub(t4, t5) * C.JSInt_methods.$div(this.target.height, t3.get$height(rect));
       $length = this.interactiveItems.length;
       for (i = 0; i < $length; ++i) {
         t2 = this.interactiveItems;
@@ -2388,123 +2380,167 @@ var $$ = {};
       return false;
     },
     onTouchMove$1: [function(_, $event) {
-      var t1, t2, changedTouches, i, touchEvent, touchData, rect, t3, t4, t5, t6, j, item;
+      var t1, t2, changedTouches, i, touchEvent, identifier, touchData, t3, rect, t4, t5, t6, t7, j, item;
       if (H.boolConversionCheck(this.dirty))
         this.rebuildInteractiveGraph$0();
-      t1 = P.JsObject_JsObject$fromBrowserObject($event).$index(0, "changedTouches");
-      H.listSuperNativeTypeCheck(t1, "$isIterable");
-      t2 = [];
-      C.JSArray_methods.addAll$1(t2, J.map$1$ax(t1, P._convertToJS$closure()));
-      changedTouches = H.setRuntimeTypeInfo(new P.JsArray(t2), [null]);
-      H.assertHelper(changedTouches._jsObject != null);
-      for (t1 = this.touchs, i = 0; i < changedTouches.get$length(changedTouches); ++i) {
-        if (i === C.JSInt_methods.toInt$0(i))
-          if (i >= changedTouches.get$length(changedTouches))
-            H.throwExpression(P.RangeError$range(i, 0, changedTouches.get$length(changedTouches)));
-        touchEvent = P.JsObject_JsObject$fromBrowserObject(H.assertSubtypeOfRuntimeType(P.JsObject.prototype.$index.call(changedTouches, changedTouches, i), H.getTypeArgumentByIndex(changedTouches, 0)));
-        touchData = t1.$index(0, touchEvent.$index(0, "identifier"));
-        touchData.originalEvent = H.interceptedTypeCheck($event, "$isEvent");
-        t2 = window.navigator.appVersion;
-        t2.toString;
-        t2.length;
-        if (H.stringContainsUnchecked(t2, "CocoonJS", 0)) {
-          t2 = touchData.global;
-          t2.x = H.numTypeCheck(touchEvent.$index(0, "clientX"));
-          t2.y = H.numTypeCheck(touchEvent.$index(0, "clientY"));
+      if (this.isCocoonJS) {
+        t1 = P.JsObject_JsObject$fromBrowserObject($event).$index(0, "changedTouches");
+        H.listSuperNativeTypeCheck(t1, "$isIterable");
+        t2 = [];
+        C.JSArray_methods.addAll$1(t2, J.map$1$ax(t1, P._convertToJS$closure()));
+        changedTouches = H.setRuntimeTypeInfo(new P.JsArray(t2), [null]);
+        H.assertHelper(changedTouches._jsObject != null);
+      } else
+        changedTouches = J.get$changedTouches$x($event);
+      for (t1 = J.getInterceptor$asx(changedTouches), t2 = this.touchs, i = 0; i < t1.get$length(changedTouches); ++i) {
+        if (this.isCocoonJS) {
+          touchEvent = P.JsObject_JsObject$fromBrowserObject(t1.$index(changedTouches, i));
+          identifier = H.intTypeCheck(touchEvent.$index(0, "identifier"));
+          touchData = t2.$index(0, identifier);
+          touchData.originalEvent = H.interceptedTypeCheck($event, "$isEvent");
+          t3 = touchData.global;
+          t3.x = H.numTypeCheck(touchEvent.$index(0, "clientX"));
+          t3.y = H.numTypeCheck(touchEvent.$index(0, "clientY"));
         } else {
           rect = this.interactionDOMElement.getBoundingClientRect();
-          t2 = touchData.global;
-          t3 = J.getInterceptor$x(rect);
-          t4 = J.$sub$n(touchEvent.$index(0, "clientX"), t3.get$left(rect));
-          t5 = this.target.width;
-          t6 = t3.get$width(rect);
-          if (typeof t5 !== "number")
-            return t5.$div();
-          t2.x = H.numTypeCheck(J.$mul$ns(t4, C.JSInt_methods.$div(t5, t6)));
-          t6 = J.$sub$n(touchEvent.$index(0, "clientY"), t3.get$top(rect));
-          t5 = this.target.height;
-          t3 = t3.get$height(rect);
-          if (typeof t5 !== "number")
-            return t5.$div();
-          t2.y = H.numTypeCheck(J.$mul$ns(t6, C.JSInt_methods.$div(t5, t3)));
+          touchEvent = H.interceptedTypeCheck(t1.$index(changedTouches, i), "$isTouch");
+          identifier = touchEvent.identifier;
+          touchData = t2.$index(0, identifier);
+          touchData.originalEvent = H.interceptedTypeCheck($event, "$isEvent");
+          t3 = touchData.global;
+          t4 = touchEvent.clientX;
+          t5 = touchEvent.clientY;
+          H.assertSubtypeOfRuntimeType(t4, null);
+          H.assertSubtypeOfRuntimeType(t5, null);
+          t6 = [null];
+          if (!(t6 == null))
+            ;
+          H.assertHelper(true);
+          new P.Point0(t4, t5).$builtinTypeInfo = t6;
+          t5 = J.getInterceptor$x(rect);
+          t6 = t5.get$left(rect);
+          if (typeof t4 !== "number")
+            return t4.$sub();
+          t3.x = C.JSInt_methods.$sub(t4, t6) * C.JSInt_methods.$div(this.target.width, t5.get$width(rect));
+          t6 = touchEvent.clientX;
+          t4 = touchEvent.clientY;
+          H.assertSubtypeOfRuntimeType(t6, null);
+          H.assertSubtypeOfRuntimeType(t4, null);
+          t7 = [null];
+          if (!(t7 == null))
+            ;
+          H.assertHelper(true);
+          new P.Point0(t6, t4).$builtinTypeInfo = t7;
+          t6 = t5.get$top(rect);
+          if (typeof t4 !== "number")
+            return t4.$sub();
+          t3.y = C.JSInt_methods.$sub(t4, t6) * C.JSInt_methods.$div(this.target.height, t5.get$height(rect));
         }
-        for (j = 0; t2 = this.interactiveItems, j < t2.length; ++j) {
-          item = H.interceptedTypeCheck(t2[j], "$isDisplayObject");
-          if (item.touchmove != null && item.__touchData.$index(0, touchEvent.$index(0, "identifier")) != null)
+        for (j = 0; t3 = this.interactiveItems, j < t3.length; ++j) {
+          item = H.interceptedTypeCheck(t3[j], "$isDisplayObject");
+          if (item.touchmove != null && item.__touchData.$index(0, identifier) != null)
             item.touchmove$1(touchData);
         }
       }
     }, "call$1", "get$onTouchMove", 2, 0, 16, 4],
     onTouchStart$1: [function(_, $event) {
-      var ev, t1, t2, changedTouches, i, touchEvent, touchData, t3, t4, rect, t5, t6, t7, $length, j, item;
+      var ev, t1, t2, changedTouches, t3, t4, i, touchData, t5, touchEvent, identifier, rect, t6, t7, t8, $length, j, item;
       if (H.boolConversionCheck(this.dirty))
         this.rebuildInteractiveGraph$0();
-      ev = P.JsObject_JsObject$fromBrowserObject($event);
-      J.preventDefault$0$x($event);
-      t1 = ev.$index(0, "changedTouches");
-      H.listSuperNativeTypeCheck(t1, "$isIterable");
-      t2 = [];
-      C.JSArray_methods.addAll$1(t2, J.map$1$ax(t1, P._convertToJS$closure()));
-      changedTouches = H.setRuntimeTypeInfo(new P.JsArray(t2), [null]);
-      H.assertHelper(changedTouches._jsObject != null);
-      for (t1 = this.touchs, t2 = this.pool, i = 0; i < changedTouches.get$length(changedTouches); ++i) {
-        if (i === C.JSInt_methods.toInt$0(i))
-          if (i >= changedTouches.get$length(changedTouches))
-            H.throwExpression(P.RangeError$range(i, 0, changedTouches.get$length(changedTouches)));
-        touchEvent = P.JsObject_JsObject$fromBrowserObject(H.assertSubtypeOfRuntimeType(P.JsObject.prototype.$index.call(changedTouches, changedTouches, i), H.getTypeArgumentByIndex(changedTouches, 0)));
-        touchData = t2.length > 0 ? t2.pop() : null;
+      if (this.isCocoonJS) {
+        ev = P.JsObject_JsObject$fromBrowserObject($event);
+        t1 = ev.$index(0, "changedTouches");
+        H.listSuperNativeTypeCheck(t1, "$isIterable");
+        t2 = [];
+        C.JSArray_methods.addAll$1(t2, J.map$1$ax(t1, P._convertToJS$closure()));
+        changedTouches = H.setRuntimeTypeInfo(new P.JsArray(t2), [null]);
+        H.assertHelper(changedTouches._jsObject != null);
+        t1 = [];
+        t2 = H.interceptedTypeCheck(ev.$index(0, "preventDefault"), "$isJsFunction")._jsObject;
+        t3 = P._convertToJS(ev);
+        t4 = H.getDynamicRuntimeType();
+        H.buildFunctionType(t4, [H.convertRtiToRuntimeType(t1.$builtinTypeInfo && t1.$builtinTypeInfo[0])])._assertCheck$1(P._convertToJS$closure());
+        H.buildFunctionType(t4, [t4])._assertCheck$1(P._convertToJS$closure());
+        H.listSuperNativeTypeCheck(t1, "$isIterable");
+        t4 = H.buildFunctionType(H.convertRtiToRuntimeType(null), [H.convertRtiToRuntimeType(null)]);
+        t4._assertCheck$1(P._convertToJS$closure());
+        t4 = P.List_List$from(H.setRuntimeTypeInfo(new H.MappedListIterable(H.listSuperNativeTypeCheck(t1, "$isIterable"), t4._assertCheck$1(P._convertToJS$closure())), [null, null]), true, null);
+        t1 = t4;
+        P._convertToDart(t2.apply(t3, t1));
+      } else {
+        t1 = J.getInterceptor$x($event);
+        changedTouches = t1.get$changedTouches($event);
+        t1.preventDefault$0($event);
+      }
+      for (t1 = J.getInterceptor$asx(changedTouches), t2 = this.touchs, t3 = this.pool, i = 0; i < t1.get$length(changedTouches); ++i) {
+        touchData = t3.length > 0 ? t3.pop() : null;
         if (touchData == null) {
-          t3 = new M.Point(null, null);
-          t3.x = 0;
-          t3.y = 0;
-          touchData = new M.InteractionData(t3, null, null);
+          t4 = new M.Point(null, null);
+          t4.x = 0;
+          t4.y = 0;
+          touchData = new M.InteractionData(t4, null, null);
         }
         touchData.originalEvent = H.interceptedTypeCheck($event, "$isEvent");
-        t1.$indexSet(0, touchEvent.$index(0, "identifier"), touchData);
-        t3 = window.navigator.appVersion;
-        t3.toString;
-        t3.length;
-        t3 = H.stringContainsUnchecked(t3, "CocoonJS", 0);
-        t4 = touchData.global;
-        if (t3) {
-          t4.x = H.numTypeCheck(touchEvent.$index(0, "clientX"));
-          t4.y = H.numTypeCheck(touchEvent.$index(0, "clientY"));
+        t4 = this.isCocoonJS;
+        t5 = touchData.global;
+        if (t4) {
+          touchEvent = P.JsObject_JsObject$fromBrowserObject(t1.$index(changedTouches, i));
+          identifier = H.intTypeCheck(touchEvent.$index(0, "identifier"));
+          t5.x = H.numTypeCheck(touchEvent.$index(0, "clientX"));
+          t5.y = H.numTypeCheck(touchEvent.$index(0, "clientY"));
         } else {
+          touchEvent = H.interceptedTypeCheck(t1.$index(changedTouches, i), "$isTouch");
+          identifier = touchEvent.identifier;
           rect = this.interactionDOMElement.getBoundingClientRect();
-          t3 = J.getInterceptor$x(rect);
-          t5 = J.$sub$n(touchEvent.$index(0, "clientX"), t3.get$left(rect));
-          t6 = this.target.width;
-          t7 = t3.get$width(rect);
-          if (typeof t6 !== "number")
-            return t6.$div();
-          t4.x = H.numTypeCheck(J.$mul$ns(t5, C.JSInt_methods.$div(t6, t7)));
-          t7 = J.$sub$n(touchEvent.$index(0, "clientY"), t3.get$top(rect));
-          t6 = this.target.height;
-          t3 = t3.get$height(rect);
-          if (typeof t6 !== "number")
-            return t6.$div();
-          t4.y = H.numTypeCheck(J.$mul$ns(t7, C.JSInt_methods.$div(t6, t3)));
+          t4 = touchEvent.clientX;
+          t6 = touchEvent.clientY;
+          H.assertSubtypeOfRuntimeType(t4, null);
+          H.assertSubtypeOfRuntimeType(t6, null);
+          t7 = [null];
+          if (!(t7 == null))
+            ;
+          H.assertHelper(true);
+          new P.Point0(t4, t6).$builtinTypeInfo = t7;
+          t6 = J.getInterceptor$x(rect);
+          t7 = t6.get$left(rect);
+          if (typeof t4 !== "number")
+            return t4.$sub();
+          t5.x = C.JSInt_methods.$sub(t4, t7) * C.JSInt_methods.$div(this.target.width, t6.get$width(rect));
+          t7 = touchEvent.clientX;
+          t4 = touchEvent.clientY;
+          H.assertSubtypeOfRuntimeType(t7, null);
+          H.assertSubtypeOfRuntimeType(t4, null);
+          t8 = [null];
+          if (!(t8 == null))
+            ;
+          H.assertHelper(true);
+          new P.Point0(t7, t4).$builtinTypeInfo = t8;
+          t7 = t6.get$top(rect);
+          if (typeof t4 !== "number")
+            return t4.$sub();
+          t5.y = C.JSInt_methods.$sub(t4, t7) * C.JSInt_methods.$div(this.target.height, t6.get$height(rect));
         }
+        t2.$indexSet(0, identifier, touchData);
         $length = this.interactiveItems.length;
         for (j = 0; j < $length; ++j) {
-          t3 = this.interactiveItems;
-          if (j >= t3.length)
-            return H.ioore(t3, j);
-          item = H.interceptedTypeCheck(t3[j], "$isDisplayObject");
+          t4 = this.interactiveItems;
+          if (j >= t4.length)
+            return H.ioore(t4, j);
+          item = H.interceptedTypeCheck(t4[j], "$isDisplayObject");
           if (item.touchstart == null) {
             item.tap;
-            t3 = false;
+            t4 = false;
           } else
-            t3 = true;
-          if (t3) {
-            t3 = this.hitTest$2(item, touchData);
-            item.__hit = t3;
-            if (t3) {
+            t4 = true;
+          if (t4) {
+            t4 = this.hitTest$2(item, touchData);
+            item.__hit = t4;
+            if (t4) {
               if (item.touchstart != null)
                 item.touchstart$1(touchData);
               item.__isDown = true;
-              t3 = item.__touchData;
-              t3.$indexSet(0, touchEvent.$index(0, "identifier"), touchData);
+              t4 = item.__touchData;
+              t4.$indexSet(0, identifier, touchData);
               if (!!J.getInterceptor(item).$isDisplayObjectContainer && !item.interactiveChildren)
                 break;
             }
@@ -2513,65 +2549,80 @@ var $$ = {};
       }
     }, "call$1", "get$onTouchStart", 2, 0, 16, 4],
     onTouchEnd$1: [function(_, $event) {
-      var t1, t2, changedTouches, i, touchEvent, touchData, t3, rect, t4, t5, t6, t7, $length, up, j, item;
+      var t1, t2, changedTouches, t3, i, touchEvent, identifier, touchData, t4, rect, t5, t6, t7, t8, $length, up, j, item;
       if (H.boolConversionCheck(this.dirty))
         this.rebuildInteractiveGraph$0();
-      t1 = P.JsObject_JsObject$fromBrowserObject($event).$index(0, "changedTouches");
-      H.listSuperNativeTypeCheck(t1, "$isIterable");
-      t2 = [];
-      C.JSArray_methods.addAll$1(t2, J.map$1$ax(t1, P._convertToJS$closure()));
-      changedTouches = H.setRuntimeTypeInfo(new P.JsArray(t2), [null]);
-      H.assertHelper(changedTouches._jsObject != null);
-      for (t1 = this.pool, t2 = this.touchs, i = 0; i < changedTouches.get$length(changedTouches); ++i) {
-        if (i === C.JSInt_methods.toInt$0(i))
-          if (i >= changedTouches.get$length(changedTouches))
-            H.throwExpression(P.RangeError$range(i, 0, changedTouches.get$length(changedTouches)));
-        touchEvent = P.JsObject_JsObject$fromBrowserObject(H.assertSubtypeOfRuntimeType(P.JsObject.prototype.$index.call(changedTouches, changedTouches, i), H.getTypeArgumentByIndex(changedTouches, 0)));
-        touchData = t2.$index(0, touchEvent.$index(0, "identifier"));
-        t3 = window.navigator.appVersion;
-        t3.toString;
-        t3.length;
-        if (H.stringContainsUnchecked(t3, "CocoonJS", 0)) {
-          t3 = touchData.global;
-          t3.x = H.numTypeCheck(touchEvent.$index(0, "clientX"));
-          t3.y = H.numTypeCheck(touchEvent.$index(0, "clientY"));
+      if (this.isCocoonJS) {
+        t1 = P.JsObject_JsObject$fromBrowserObject($event).$index(0, "changedTouches");
+        H.listSuperNativeTypeCheck(t1, "$isIterable");
+        t2 = [];
+        C.JSArray_methods.addAll$1(t2, J.map$1$ax(t1, P._convertToJS$closure()));
+        changedTouches = H.setRuntimeTypeInfo(new P.JsArray(t2), [null]);
+        H.assertHelper(changedTouches._jsObject != null);
+      } else
+        changedTouches = J.get$changedTouches$x($event);
+      for (t1 = J.getInterceptor$asx(changedTouches), t2 = this.pool, t3 = this.touchs, i = 0; i < t1.get$length(changedTouches); ++i) {
+        if (this.isCocoonJS) {
+          touchEvent = P.JsObject_JsObject$fromBrowserObject(t1.$index(changedTouches, i));
+          identifier = H.intTypeCheck(touchEvent.$index(0, "identifier"));
+          touchData = t3.$index(0, identifier);
+          t4 = touchData.global;
+          t4.x = H.numTypeCheck(touchEvent.$index(0, "clientX"));
+          t4.y = H.numTypeCheck(touchEvent.$index(0, "clientY"));
         } else {
+          touchEvent = H.interceptedTypeCheck(t1.$index(changedTouches, i), "$isTouch");
+          identifier = touchEvent.identifier;
+          touchData = t3.$index(0, identifier);
           rect = this.interactionDOMElement.getBoundingClientRect();
-          t3 = touchData.global;
-          t4 = J.getInterceptor$x(rect);
-          t5 = J.$sub$n(touchEvent.$index(0, "clientX"), t4.get$left(rect));
-          t6 = this.target.width;
-          t7 = t4.get$width(rect);
-          if (typeof t6 !== "number")
-            return t6.$div();
-          t3.x = H.numTypeCheck(J.$mul$ns(t5, C.JSInt_methods.$div(t6, t7)));
-          t7 = J.$sub$n(touchEvent.$index(0, "clientY"), t4.get$top(rect));
-          t6 = this.target.height;
-          t4 = t4.get$height(rect);
-          if (typeof t6 !== "number")
-            return t6.$div();
-          t3.y = H.numTypeCheck(J.$mul$ns(t7, C.JSInt_methods.$div(t6, t4)));
+          t4 = touchData.global;
+          t5 = touchEvent.clientX;
+          t6 = touchEvent.clientY;
+          H.assertSubtypeOfRuntimeType(t5, null);
+          H.assertSubtypeOfRuntimeType(t6, null);
+          t7 = [null];
+          if (!(t7 == null))
+            ;
+          H.assertHelper(true);
+          new P.Point0(t5, t6).$builtinTypeInfo = t7;
+          t6 = J.getInterceptor$x(rect);
+          t7 = t6.get$left(rect);
+          if (typeof t5 !== "number")
+            return t5.$sub();
+          t4.x = C.JSInt_methods.$sub(t5, t7) * C.JSInt_methods.$div(this.target.width, t6.get$width(rect));
+          t7 = touchEvent.clientX;
+          t5 = touchEvent.clientY;
+          H.assertSubtypeOfRuntimeType(t7, null);
+          H.assertSubtypeOfRuntimeType(t5, null);
+          t8 = [null];
+          if (!(t8 == null))
+            ;
+          H.assertHelper(true);
+          new P.Point0(t7, t5).$builtinTypeInfo = t8;
+          t7 = t6.get$top(rect);
+          if (typeof t5 !== "number")
+            return t5.$sub();
+          t4.y = C.JSInt_methods.$sub(t5, t7) * C.JSInt_methods.$div(this.target.height, t6.get$height(rect));
         }
         $length = this.interactiveItems.length;
         for (up = false, j = 0; j < $length; ++j) {
-          t3 = this.interactiveItems;
-          if (j >= t3.length)
-            return H.ioore(t3, j);
-          item = H.interceptedTypeCheck(t3[j], "$isDisplayObject");
-          t3 = item.__touchData;
-          if (t3.$index(0, touchEvent.$index(0, "identifier")) != null) {
-            t3 = this.hitTest$2(item, item.__touchData.$index(0, touchEvent.$index(0, "identifier")));
-            item.__hit = t3;
+          t4 = this.interactiveItems;
+          if (j >= t4.length)
+            return H.ioore(t4, j);
+          item = H.interceptedTypeCheck(t4[j], "$isDisplayObject");
+          t4 = item.__touchData;
+          if (t4.$index(0, identifier) != null) {
+            t4 = this.hitTest$2(item, item.__touchData.$index(0, identifier));
+            item.__hit = t4;
             touchData.originalEvent = H.interceptedTypeCheck($event, "$isEvent");
-            t4 = item.touchend == null;
-            if (t4) {
-              item.tap;
-              t5 = false;
-            } else
-              t5 = true;
+            t5 = item.touchend == null;
             if (t5) {
-              if (t3 && !up) {
-                if (!t4)
+              item.tap;
+              t6 = false;
+            } else
+              t6 = true;
+            if (t6) {
+              if (t4 && !up) {
+                if (!t5)
                   item.touchend$1(touchData);
                 if (item.__isDown)
                   item.tap;
@@ -2581,11 +2632,11 @@ var $$ = {};
                 item.touchendoutside;
               item.__isDown = false;
             }
-            item.__touchData.$indexSet(0, touchEvent.$index(0, "identifier"), null);
+            item.__touchData.$indexSet(0, identifier, null);
           }
         }
-        C.JSArray_methods.add$1(t1, touchData);
-        t2.$indexSet(0, touchEvent.$index(0, "identifier"), null);
+        C.JSArray_methods.add$1(t2, touchData);
+        t3.$indexSet(0, identifier, null);
       }
     }, "call$1", "get$onTouchEnd", 2, 0, 16, 4],
     $isInteractionManager: true
@@ -2654,7 +2705,7 @@ var $$ = {};
         return;
       if (this._cacheAsBitmap) {
         if (this._dirty) {
-          bounds = this._getLocalBounds$0();
+          bounds = this.getLocalBounds$0();
           t1 = this._cachedSprite;
           if (t1 == null) {
             canvasBuffer = M.CanvasBuffer$(bounds.width, bounds.height);
@@ -2675,7 +2726,7 @@ var $$ = {};
             t6 = new Float32Array(9);
             t7 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
             t8 = H.buildFunctionType(H.getVoidRuntimeType(), [H.buildInterfaceType(M.InteractionData)]);
-            t7 = new M.Sprite(t1, null, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t2, t3, t4, 0, 1, true, null, false, false, null, false, false, false, false, false, t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t6), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t7, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+            t7 = new M.Sprite(t1, null, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, 0, 0, t2, t3, t4, 0, 1, true, null, false, false, null, false, false, false, false, false, t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), t8._assertCheck$1(null), H.assertSubtype(t5, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t6), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t7, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
             t7.texture = texture;
             t7._setupTexture$0();
             this._cachedSprite = t7;
@@ -2819,7 +2870,7 @@ var $$ = {};
         type = t2.get$type(data);
         lineWidth = t2.get$lineWidth(data);
         points = t2.get$points(data);
-        if (type === $.Graphics_RECT) {
+        if (type === $.Graphics_RECT || type === $.Graphics_RREC) {
           t2 = J.getInterceptor$asx(points);
           t3 = J.getInterceptor$n(lineWidth);
           x = J.$sub$n(t2.$index(points, 0), t3.$div(lineWidth, 2));
@@ -2901,7 +2952,7 @@ var $$ = {};
         t8 = new Float32Array(9);
         t9 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
         t10 = H.buildFunctionType(H.getVoidRuntimeType(), [H.buildInterfaceType(M.InteractionData)]);
-        t9 = new M.Graphics(1, 1, 0, 0, false, 1, H.assertSubtype([], "$isList", [M.GraphicsData], "$asList"), 16777215, null, new M.GraphicsData(t2, 1, 0, null, 1, 1, 0, t1), H.assertSubtype(t3, "$isMap", [P.RenderingContext, M.WebGLGraphicsData], "$asMap"), false, null, 10, false, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t4, t5, t6, 0, 1, true, null, false, false, null, false, false, false, false, false, t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), H.assertSubtype(t7, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t8), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t9, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+        t9 = new M.Graphics(1, 1, 0, 0, false, 1, H.assertSubtype([], "$isList", [M.GraphicsData], "$asList"), 16777215, null, new M.GraphicsData(t2, 1, 0, null, 1, 1, 0, t1), H.assertSubtype(t3, "$isMap", [P.RenderingContext, M.WebGLGraphicsData], "$asMap"), false, null, 0, false, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, 0, 0, t4, t5, t6, 0, 1, true, null, false, false, null, false, false, false, false, false, t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), t10._assertCheck$1(null), H.assertSubtype(t7, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t8), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t9, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
         t9.Graphics$0();
         return t9;
       }}
@@ -2912,7 +2963,7 @@ var $$ = {};
       var t1, t2;
       C.JSArray_methods.set$length($.get$texturesToUpdate(), 0);
       C.JSArray_methods.set$length($.get$texturesToDestroy(), 0);
-      stage._updateTransform$0();
+      stage.updateTransform$0();
       J.setTransform$6$x(this.context, 1, 0, 0, 1, 0, 0);
       t1 = this.context;
       t1.globalAlpha = 1;
@@ -2946,14 +2997,14 @@ var $$ = {};
       var t1, t2, t3;
       $.defaultRenderer = this;
       this.type = 1;
-      this.width = width;
-      this.height = height;
+      this.width = J.toInt$0$n(width);
+      this.height = J.toInt$0$n(height);
       this.transparent = transparent;
       this.antialias = antialias;
       view = W.CanvasElement_CanvasElement(null, null);
       this.view = view;
-      view.width = J.toInt$0$n(this.width);
-      this.view.height = J.toInt$0$n(this.height);
+      view.width = C.JSInt_methods.toInt$0(this.width);
+      this.view.height = C.JSInt_methods.toInt$0(this.height);
       if ($.blendModesCanvas == null) {
         $.blendModesCanvas = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
         t1 = M.canUseNewCanvasBlendModes();
@@ -3020,9 +3071,9 @@ var $$ = {};
     CanvasBuffer$2: function(width, height) {
       var t1 = H.interceptedTypeCheck(C.HtmlDocument_methods._createElement$2(document, "canvas", null), "$isCanvasElement");
       this.canvas = t1;
-      t1.width = H.intTypeCheck(this.width);
-      t1.height = H.intTypeCheck(this.height);
-      this.context = H.interceptedTypeCheck(J.getContext$1$x(t1, "2d"), "$isCanvasRenderingContext2D");
+      t1.width = J.toInt$0$n(this.width);
+      this.canvas.height = J.toInt$0$n(this.height);
+      this.context = H.interceptedTypeCheck(J.getContext$1$x(this.canvas, "2d"), "$isCanvasRenderingContext2D");
     },
     $isCanvasBuffer: true,
     static: {CanvasBuffer$: function(width, height) {
@@ -3082,21 +3133,20 @@ var $$ = {};
   PixiFastShader: {
     "^": "Shader;gl,program,fragmentSrc,vertexSrc,textureCount,PIXI$PixiFastShader$uSampler,PIXI$PixiFastShader$projectionVector,PIXI$PixiFastShader$offsetVector,PIXI$PixiFastShader$dimensions,PIXI$PixiFastShader$uMatrix,PIXI$PixiFastShader$aVertexPosition,PIXI$PixiFastShader$aPositionCoord,PIXI$PixiFastShader$aScale,PIXI$PixiFastShader$aRotation,PIXI$PixiFastShader$aTextureCoord,PIXI$PixiFastShader$colorAttribute,PIXI$PixiFastShader$attributes,uniforms,uSampler,projectionVector,offsetVector,dimensions,uMatrix,tintColor,color,translationMatrix,alpha,aVertexPosition,aPositionCoord,aScale,aRotation,aTextureCoord,colorAttribute,attributes,_UID",
     init$0: function() {
-      var gl, program, t1;
-      gl = this.gl;
-      program = M.compileProgram(gl, this.vertexSrc, this.fragmentSrc);
-      J.getInterceptor$x(gl).useProgram$1(gl, program);
-      this.PIXI$PixiFastShader$uSampler = C.RenderingContext_methods.getUniformLocation$2(gl, program, "uSampler");
-      this.PIXI$PixiFastShader$projectionVector = C.RenderingContext_methods.getUniformLocation$2(gl, program, "projectionVector");
-      this.PIXI$PixiFastShader$offsetVector = C.RenderingContext_methods.getUniformLocation$2(gl, program, "offsetVector");
-      this.PIXI$PixiFastShader$dimensions = C.RenderingContext_methods.getUniformLocation$2(gl, program, "dimensions");
-      this.PIXI$PixiFastShader$uMatrix = C.RenderingContext_methods.getUniformLocation$2(gl, program, "uMatrix");
-      this.PIXI$PixiFastShader$aVertexPosition = C.RenderingContext_methods.getAttribLocation$2(gl, program, "aVertexPosition");
-      this.PIXI$PixiFastShader$aPositionCoord = C.RenderingContext_methods.getAttribLocation$2(gl, program, "aPositionCoord");
-      this.PIXI$PixiFastShader$aScale = C.RenderingContext_methods.getAttribLocation$2(gl, program, "aScale");
-      this.PIXI$PixiFastShader$aRotation = C.RenderingContext_methods.getAttribLocation$2(gl, program, "aRotation");
-      this.PIXI$PixiFastShader$aTextureCoord = C.RenderingContext_methods.getAttribLocation$2(gl, program, "aTextureCoord");
-      t1 = C.RenderingContext_methods.getAttribLocation$2(gl, program, "aColor");
+      var program, t1;
+      program = M.compileProgram(this.gl, this.vertexSrc, this.fragmentSrc);
+      J.useProgram$1$x(this.gl, program);
+      this.PIXI$PixiFastShader$uSampler = J.getUniformLocation$2$x(this.gl, program, "uSampler");
+      this.PIXI$PixiFastShader$projectionVector = J.getUniformLocation$2$x(this.gl, program, "projectionVector");
+      this.PIXI$PixiFastShader$offsetVector = J.getUniformLocation$2$x(this.gl, program, "offsetVector");
+      this.PIXI$PixiFastShader$dimensions = J.getUniformLocation$2$x(this.gl, program, "dimensions");
+      this.PIXI$PixiFastShader$uMatrix = J.getUniformLocation$2$x(this.gl, program, "uMatrix");
+      this.PIXI$PixiFastShader$aVertexPosition = J.getAttribLocation$2$x(this.gl, program, "aVertexPosition");
+      this.PIXI$PixiFastShader$aPositionCoord = J.getAttribLocation$2$x(this.gl, program, "aPositionCoord");
+      this.PIXI$PixiFastShader$aScale = J.getAttribLocation$2$x(this.gl, program, "aScale");
+      this.PIXI$PixiFastShader$aRotation = J.getAttribLocation$2$x(this.gl, program, "aRotation");
+      this.PIXI$PixiFastShader$aTextureCoord = J.getAttribLocation$2$x(this.gl, program, "aTextureCoord");
+      t1 = J.getAttribLocation$2$x(this.gl, program, "aColor");
       this.PIXI$PixiFastShader$colorAttribute = t1;
       if (t1 === -1) {
         this.PIXI$PixiFastShader$colorAttribute = 2;
@@ -3202,19 +3252,18 @@ var $$ = {};
       this.PIXI$PrimitiveShader$attributes = H.assertSubtype(attributes, "$isList", [P.$int], "$asList");
     },
     init$0: function() {
-      var gl, program, t1;
-      gl = this.gl;
-      program = M.compileProgram(gl, this.vertexSrc, this.fragmentSrc);
-      J.getInterceptor$x(gl).useProgram$1(gl, program);
-      this.PIXI$PrimitiveShader$projectionVector = C.RenderingContext_methods.getUniformLocation$2(gl, program, "projectionVector");
-      this.PIXI$PrimitiveShader$offsetVector = C.RenderingContext_methods.getUniformLocation$2(gl, program, "offsetVector");
-      this.PIXI$PrimitiveShader$tintColor = C.RenderingContext_methods.getUniformLocation$2(gl, program, "tint");
-      this.PIXI$PrimitiveShader$aVertexPosition = C.RenderingContext_methods.getAttribLocation$2(gl, program, "aVertexPosition");
-      t1 = C.RenderingContext_methods.getAttribLocation$2(gl, program, "aColor");
+      var program, t1;
+      program = M.compileProgram(this.gl, this.vertexSrc, this.fragmentSrc);
+      J.useProgram$1$x(this.gl, program);
+      this.PIXI$PrimitiveShader$projectionVector = J.getUniformLocation$2$x(this.gl, program, "projectionVector");
+      this.PIXI$PrimitiveShader$offsetVector = J.getUniformLocation$2$x(this.gl, program, "offsetVector");
+      this.PIXI$PrimitiveShader$tintColor = J.getUniformLocation$2$x(this.gl, program, "tint");
+      this.PIXI$PrimitiveShader$aVertexPosition = J.getAttribLocation$2$x(this.gl, program, "aVertexPosition");
+      t1 = J.getAttribLocation$2$x(this.gl, program, "aColor");
       this.PIXI$PrimitiveShader$colorAttribute = t1;
       this.set$attributes(0, [this.PIXI$PrimitiveShader$aVertexPosition, t1]);
-      this.PIXI$PrimitiveShader$translationMatrix = C.RenderingContext_methods.getUniformLocation$2(gl, program, "translationMatrix");
-      this.PIXI$PrimitiveShader$alpha = C.RenderingContext_methods.getUniformLocation$2(gl, program, "alpha");
+      this.PIXI$PrimitiveShader$translationMatrix = J.getUniformLocation$2$x(this.gl, program, "translationMatrix");
+      this.PIXI$PrimitiveShader$alpha = J.getUniformLocation$2$x(this.gl, program, "alpha");
       this.program = program;
     },
     $isPrimitiveShader: true
@@ -3996,7 +4045,7 @@ var $$ = {};
             C.RenderingContext_methods.stencilFunc$3(gl, 514, level + 1, 255);
             C.RenderingContext_methods.stencilOp$3(gl, 7680, 7680, 7683);
           }
-          C.RenderingContext_methods.drawElements$4(gl, 5, webGLData.indices.length, C.RenderingContext_methods.get$UNSIGNED_SHORT(gl), 0);
+          C.RenderingContext_methods.drawElements$4(gl, 5, webGLData.indices.length, 5123, 0);
           if (!H.boolConversionCheck(this.reverse))
             C.RenderingContext_methods.stencilFunc$3(gl, 514, 255 - level, 255);
           else
@@ -4026,7 +4075,7 @@ var $$ = {};
         this.__stage = stage;
       }
       M.WebGLRenderer_updateTextures(this.gl);
-      stage._updateTransform$0();
+      stage.updateTransform$0();
       J.viewport$4$x(this.gl, 0, 0, this.width, this.height);
       J.bindFramebuffer$2$x(this.gl, 36160, null);
       t1 = this.transparent;
@@ -4094,7 +4143,7 @@ var $$ = {};
       this.contextLost = true;
     }, "call$1", "get$handleContextLost", 2, 0, 32, 4],
     handleContextRestored$1: [function($event) {
-      var exception, gl, t1, key;
+      var exception, gl, t1, t2, t3, key;
       try {
         this.gl = H.interceptedTypeCheck(J.getContext$2$x(this.view, "experimental-webgl", this.options), "$isRenderingContext");
       } catch (exception) {
@@ -4114,25 +4163,24 @@ var $$ = {};
       this.maskManager.setContext$1(gl);
       this.filterManager.setContext$1(gl);
       this.renderSession.gl = this.gl;
-      t1 = J.getInterceptor$x(gl);
-      t1.disable$1(gl, t1.get$DEPTH_TEST(gl));
-      C.RenderingContext_methods.disable$1(gl, C.RenderingContext_methods.get$CULL_FACE(gl));
-      C.RenderingContext_methods.enable$1(gl, C.RenderingContext_methods.get$BLEND(gl));
+      J.getInterceptor$x(gl).disable$1(gl, 2929);
+      C.RenderingContext_methods.disable$1(gl, 2884);
+      C.RenderingContext_methods.enable$1(gl, 3042);
       C.RenderingContext_methods.colorMask$4(gl, true, true, true, this.transparent);
       J.viewport$4$x(this.gl, 0, 0, this.width, this.height);
-      for (t1 = $.get$TextureCache(), t1 = t1.get$iterator(t1); t1.moveNext$0();) {
-        key = t1.get$current();
-        $.get$TextureCache().$index(0, key).get$baseTexture().set$_glTextures([]);
+      for (t1 = $.get$TextureCache().get$keys(), t2 = t1._map, t3 = H.getTypeArgumentByIndex(t1, 0), t3 = H.setRuntimeTypeInfo(new P.LinkedHashMapKeyIterator(t2, t2._modifications, null, H.assertSubtypeOfRuntimeType(null, t3)), [t3]), t3._cell = t3._map._first, H.assertSubtype(t3, "$isIterator", [H.getTypeArgumentByIndex(t1, 0)], "$asIterator"); t3.moveNext$0();) {
+        key = H.assertSubtypeOfRuntimeType(t3._collection$_current, H.getTypeArgumentByIndex(t3, 0));
+        $.get$TextureCache().$index(0, key).get$baseTexture().set$_glTextures(P.LinkedHashMap_LinkedHashMap$_empty(null, null));
       }
       this.contextLost = false;
     }, "call$1", "get$handleContextRestored", 2, 0, 32, 4],
     WebGLRenderer$6: function(width, height, view, transparent, antialias, preserveDrawingBuffer) {
-      var t1, exception, t2, t3, t4, t5;
+      var t1, t2, t3, t4, exception, t5;
       if ($.defaultRenderer == null)
         $.defaultRenderer = this;
       this.type = 0;
-      this.width = width;
-      this.height = height;
+      this.width = J.toInt$0$n(width);
+      this.height = J.toInt$0$n(height);
       this.transparent = transparent;
       this.antialias = antialias;
       this.preserveDrawingBuffer = preserveDrawingBuffer;
@@ -4140,8 +4188,25 @@ var $$ = {};
       this.view = view;
       view.width = this.width;
       view.height = this.height;
-      J.addEventListener$3$x(view, "webglcontextlost", this.get$handleContextLost(), false);
-      J.addEventListener$3$x(this.view, "webglcontextrestored", this.get$handleContextRestored(), false);
+      view.toString;
+      t1 = H.assertSubtype(H.assertSubtype(H.setRuntimeTypeInfo(new W._ElementEventStreamImpl(view, C.EventStreamProvider_webglcontextlost._eventType, false), [null]), "$isElementStream", [H.getTypeArgumentByIndex(C.EventStreamProvider_webglcontextlost, 0)], "$asElementStream"), "$isElementStream", [P.ContextEvent], "$asElementStream");
+      t2 = this.get$handleContextLost();
+      t3 = H.getVoidRuntimeType();
+      H.buildFunctionType(t3, [t1.$tv_T()])._assertCheck$1(t2);
+      t4 = H.buildFunctionType(t3);
+      t4._assertCheck$1(null);
+      t2 = H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t1._html$_target, t1._eventType, W._wrapZone(t2), t1._useCapture), [H.getTypeArgumentByIndex(t1, 0)]);
+      t2._tryResume$0();
+      H.assertSubtype(t2, "$isStreamSubscription", [H.getTypeArgumentByIndex(t1, 0)], "$asStreamSubscription");
+      t1 = this.view;
+      t1.toString;
+      t1 = H.assertSubtype(H.assertSubtype(H.setRuntimeTypeInfo(new W._ElementEventStreamImpl(t1, C.EventStreamProvider_webglcontextrestored._eventType, false), [null]), "$isElementStream", [H.getTypeArgumentByIndex(C.EventStreamProvider_webglcontextrestored, 0)], "$asElementStream"), "$isElementStream", [P.ContextEvent], "$asElementStream");
+      t2 = this.get$handleContextRestored();
+      H.buildFunctionType(t3, [t1.$tv_T()])._assertCheck$1(t2);
+      t4._assertCheck$1(null);
+      t2 = H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t1._html$_target, t1._eventType, W._wrapZone(t2), t1._useCapture), [H.getTypeArgumentByIndex(t1, 0)]);
+      t2._tryResume$0();
+      H.assertSubtype(t2, "$isStreamSubscription", [H.getTypeArgumentByIndex(t1, 0)], "$asStreamSubscription");
       t1 = P.LinkedHashMap_LinkedHashMap$_literal(["alpha", this.transparent, "antialias", this.antialias, "premultipliedAlpha", transparent, "stencil", true, "preserveDrawingBuffer", preserveDrawingBuffer], null, null);
       this.options = t1;
       try {
@@ -4184,12 +4249,8 @@ var $$ = {};
       t1.y = 0;
       this.projection = t1;
       t2 = this.width;
-      if (typeof t2 !== "number")
-        return t2.$div();
       t1.x = t2 / 2;
       t3 = this.height;
-      if (typeof t3 !== "number")
-        return t3.$negate();
       t1.y = -t3 / 2;
       t1 = new M.Point(null, null);
       t1.x = 0;
@@ -4202,47 +4263,43 @@ var $$ = {};
       t1 = this.view;
       t1.width = t2;
       t1.height = t3;
-      J.viewport$4$x(this.gl, 0, 0, t2, t3);
-      t3 = this.projection;
-      t2 = this.width;
-      if (typeof t2 !== "number")
-        return t2.$div();
-      t3.x = t2 / 2;
-      t2 = this.height;
-      if (typeof t2 !== "number")
-        return t2.$negate();
-      t3.y = -t2 / 2;
+      t1 = this.gl;
+      if (t1 != null)
+        J.viewport$4$x(t1, 0, 0, t2, t3);
+      t1 = this.projection;
+      t1.x = this.width / 2;
+      t1.y = -this.height / 2;
       this.contextLost = false;
       this.shaderManager = M.WebGLShaderManager$(this.gl);
       this.spriteBatch = M.WebGLSpriteBatch$(this.gl);
-      t2 = new M.WebGLMaskManager([], 0, null, null, null);
-      t2.WebGLMaskManager$1(this.gl);
-      this.maskManager = t2;
+      t1 = new M.WebGLMaskManager([], 0, null, null, null);
+      t1.WebGLMaskManager$1(this.gl);
+      this.maskManager = t1;
+      t1 = this.gl;
+      t2 = new M.WebGLFilterManager(null, this.transparent, H.assertSubtype([], "$isList", [M.FilterBlock], "$asList"), 0, 0, H.assertSubtype(null, "$isList", [M.FilterTexture], "$asList"), null, null, null, null, null, null, null, null, null, null, null, null);
+      t2.setContext$1(t1);
+      this.filterManager = t2;
       t2 = this.gl;
-      t3 = new M.WebGLFilterManager(null, this.transparent, H.assertSubtype([], "$isList", [M.FilterBlock], "$asList"), 0, 0, H.assertSubtype(null, "$isList", [M.FilterTexture], "$asList"), null, null, null, null, null, null, null, null, null, null, null, null);
-      t3.setContext$1(t2);
-      this.filterManager = t3;
-      t3 = this.gl;
-      t2 = new M.WebGLStencilManager(t3, null, null, null, null, null);
-      t2.WebGLStencilManager$1(t3);
-      this.stencilManager = t2;
-      t3 = this.gl;
-      t1 = new M.WebGLBlendModeManager(t3, null);
-      t1.currentBlendMode = C.BlendModes_99999;
-      this.blendModeManager = t1;
+      t1 = new M.WebGLStencilManager(t2, null, null, null, null, null);
+      t1.WebGLStencilManager$1(t2);
+      this.stencilManager = t1;
+      t2 = this.gl;
+      t3 = new M.WebGLBlendModeManager(t2, null);
+      t3.currentBlendMode = C.BlendModes_99999;
+      this.blendModeManager = t3;
       t4 = new M.RenderSession(null, null, null, 0, null, null, null, null, null, null, null, null, null, null, null, null);
       this.renderSession = t4;
-      t4.gl = t3;
+      t4.gl = t2;
       t4.drawCount = 0;
       t5 = this.shaderManager;
       t4.shaderManager = t5;
       t4.maskManager = this.maskManager;
       t4.filterManager = this.filterManager;
-      t4.blendModeManager = t1;
+      t4.blendModeManager = t3;
       t4.spriteBatch = this.spriteBatch;
-      t4.stencilManager = t2;
+      t4.stencilManager = t1;
       t4.renderer = this;
-      J.useProgram$1$x(t3, t5.defaultShader.program);
+      J.useProgram$1$x(t2, t5.defaultShader.program);
       J.disable$1$x(this.gl, 2929);
       J.disable$1$x(this.gl, 2884);
       J.enable$1$x(this.gl, 3042);
@@ -4296,7 +4353,7 @@ var $$ = {};
   },
   Text: {
     "^": "Sprite;_text,_style,_canvas,_context,PIXI$Text$_dirty,_requiresUpdate,anchor,texture,updateFrame,PIXI$Sprite$_width,PIXI$Sprite$_height,_uvs,tintedTexture,buffer,tint,cachedTint,blendMode,children,interactiveChildren,_width,_height,position,scale,pivot,rotation,alpha,visible,hitArea,buttonMode,renderable,_parent,__hit,__isOver,__mouseIsDown,__isDown,_dirty,click,mousemove,mousedown,mouseout,mouseover,mouseup,mouseupoutside,touchmove,touchstart,touchend,tap,touchendoutside,__touchData,_stage,_worldAlpha,_interactive,defaultCursor,_worldTransform,_sr,_cr,filterArea,_bounds,_currentBounds,_mask,_cacheAsBitmap,_cachedSprite,_cacheIsDirty,_filterBlock,_filters,_rotationCache",
-    _updateText$0: function() {
+    updateText$0: function() {
       var t1, t2, outputText, lines, lineWidths, maxLineWidth, i, lineWidth, width, result, t3, body, dummy, lineHeight, height, t4, t5, xShadowOffset, yShadowOffset, linePositionX, linePositionX0, linePositionY;
       t1 = this._context;
       t2 = this._style;
@@ -4439,12 +4496,12 @@ var $$ = {};
       }
       M.Sprite.prototype._renderWebGL$1.call(this, renderSession);
     },
-    _updateTransform$0: function() {
+    updateTransform$0: function() {
       if (H.boolConversionCheck(this.PIXI$Text$_dirty)) {
-        this._updateText$0();
+        this.updateText$0();
         this.PIXI$Text$_dirty = false;
       }
-      M.DisplayObjectContainer.prototype._updateTransform$0.call(this);
+      M.DisplayObjectContainer.prototype.updateTransform$0.call(this);
     },
     wordWrap$1: function(_, text) {
       var lines, result, i, spaceLeft, words, j, wordWidth, t1;
@@ -4481,7 +4538,7 @@ var $$ = {};
       var t1;
       this._text = text;
       this._style = style;
-      t1 = H.interceptedTypeCheck(C.HtmlDocument_methods._createElement$2(document, "canvas", null), "$isCanvasElement");
+      t1 = W.CanvasElement_CanvasElement(null, null);
       this._canvas = t1;
       this._context = H.interceptedTypeCheck(J.getContext$1$x(t1, "2d"), "$isCanvasRenderingContext2D");
       this.texture = M.Texture$(M.BaseTexture_fromCanvas(this._canvas, null), null);
@@ -4500,9 +4557,6 @@ var $$ = {};
     },
     set$height: function(_, height) {
       this.height = H.numTypeCheck(height);
-    },
-    set$_glTextures: function(_glTextures) {
-      this._glTextures = H.assertSubtype(_glTextures, "$isMap", [P.RenderingContext, null], "$asMap");
     },
     BaseTexture$2: function(source, scaleMode) {
       var t1, t2, t3, t4;
@@ -5236,6 +5290,14 @@ var $$ = {};
       if (start < 0 || start > receiver.length)
         throw H.wrapException(P.RangeError$range(start, 0, receiver.length));
       return receiver.indexOf(pattern, start);
+    },
+    contains$2: function(receiver, other, startIndex) {
+      if (startIndex > receiver.length)
+        throw H.wrapException(P.RangeError$range(startIndex, 0, receiver.length));
+      return H.stringContainsUnchecked(receiver, other, startIndex);
+    },
+    contains$1: function($receiver, other) {
+      return this.contains$2($receiver, other, 0);
     },
     get$isEmpty: function(receiver) {
       return receiver.length === 0;
@@ -13346,7 +13408,7 @@ var $$ = {};
       return receiver.preventDefault();
     },
     $isEvent: true,
-    "%": "AudioProcessingEvent|AutocompleteErrorEvent|BeforeLoadEvent|BeforeUnloadEvent|CSSFontFaceLoadEvent|CloseEvent|CustomEvent|DeviceMotionEvent|DeviceOrientationEvent|HashChangeEvent|IDBVersionChangeEvent|InstallEvent|InstallPhaseEvent|MIDIConnectionEvent|MIDIMessageEvent|MediaKeyEvent|MediaKeyMessageEvent|MediaKeyNeededEvent|MediaStreamEvent|MediaStreamTrackEvent|MessageEvent|MutationEvent|OfflineAudioCompletionEvent|OverflowEvent|PageTransitionEvent|PopStateEvent|ProgressEvent|RTCDTMFToneChangeEvent|RTCDataChannelEvent|RTCIceCandidateEvent|ResourceProgressEvent|SecurityPolicyViolationEvent|SpeechInputEvent|SpeechRecognitionEvent|SpeechSynthesisEvent|StorageEvent|TrackEvent|TransitionEvent|WebGLContextEvent|WebKitAnimationEvent|WebKitTransitionEvent|XMLHttpRequestProgressEvent;Event|InputEvent"
+    "%": "AudioProcessingEvent|AutocompleteErrorEvent|BeforeLoadEvent|BeforeUnloadEvent|CSSFontFaceLoadEvent|CloseEvent|CustomEvent|DeviceMotionEvent|DeviceOrientationEvent|HashChangeEvent|IDBVersionChangeEvent|InstallEvent|InstallPhaseEvent|MIDIConnectionEvent|MIDIMessageEvent|MediaKeyEvent|MediaKeyMessageEvent|MediaKeyNeededEvent|MediaStreamEvent|MediaStreamTrackEvent|MessageEvent|MutationEvent|OfflineAudioCompletionEvent|OverflowEvent|PageTransitionEvent|PopStateEvent|ProgressEvent|RTCDTMFToneChangeEvent|RTCDataChannelEvent|RTCIceCandidateEvent|ResourceProgressEvent|SecurityPolicyViolationEvent|SpeechInputEvent|SpeechRecognitionEvent|SpeechSynthesisEvent|StorageEvent|TrackEvent|TransitionEvent|WebKitAnimationEvent|WebKitTransitionEvent|XMLHttpRequestProgressEvent;Event|InputEvent"
   },
   EventTarget: {
     "^": "Interceptor;",
@@ -13568,9 +13630,53 @@ var $$ = {};
     "^": "HtmlElement;name=,type=,value=",
     "%": "HTMLTextAreaElement"
   },
+  Touch: {
+    "^": "Interceptor;",
+    $isTouch: true,
+    "%": "Touch"
+  },
+  TouchEvent: {
+    "^": "UIEvent;changedTouches=",
+    "%": "TouchEvent"
+  },
+  TouchList: {
+    "^": "Interceptor_ListMixin_ImmutableListMixin1;",
+    get$length: function(receiver) {
+      return receiver.length;
+    },
+    $index: function(receiver, index) {
+      var t1;
+      H.intTypeCheck(index);
+      t1 = receiver.length;
+      if (index >>> 0 !== index || index >= t1)
+        throw H.wrapException(P.RangeError$range(index, 0, t1));
+      return receiver[index];
+    },
+    $indexSet: function(receiver, index, value) {
+      H.interceptedTypeCheck(value, "$isTouch");
+      throw H.wrapException(P.UnsupportedError$("Cannot assign element of immutable List."));
+    },
+    elementAt$1: function(receiver, index) {
+      if (index < 0 || index >= receiver.length)
+        return H.ioore(receiver, index);
+      return receiver[index];
+    },
+    $isTouchList: true,
+    $isList: true,
+    $asList: function() {
+      return [W.Touch];
+    },
+    $isEfficientLength: true,
+    $isIterable: true,
+    $asIterable: function() {
+      return [W.Touch];
+    },
+    $isJavaScriptIndexingBehavior: true,
+    "%": "TouchList"
+  },
   UIEvent: {
     "^": "Event;",
-    "%": "CompositionEvent|FocusEvent|KeyboardEvent|SVGZoomEvent|TextEvent|TouchEvent;UIEvent"
+    "%": "CompositionEvent|FocusEvent|KeyboardEvent|SVGZoomEvent|TextEvent;UIEvent"
   },
   VideoElement: {
     "^": "MediaElement;",
@@ -13675,7 +13781,7 @@ var $$ = {};
     "%": "HTMLFrameSetElement"
   },
   _NamedNodeMap: {
-    "^": "Interceptor_ListMixin_ImmutableListMixin1;",
+    "^": "Interceptor_ListMixin_ImmutableListMixin2;",
     get$length: function(receiver) {
       return receiver.length;
     },
@@ -13769,6 +13875,30 @@ var $$ = {};
     "^": "Interceptor+ListMixin;",
     $isList: true,
     $asList: function() {
+      return [W.Touch];
+    },
+    $isEfficientLength: true,
+    $isIterable: true,
+    $asIterable: function() {
+      return [W.Touch];
+    }
+  },
+  Interceptor_ListMixin_ImmutableListMixin1: {
+    "^": "Interceptor_ListMixin1+ImmutableListMixin;",
+    $isList: true,
+    $asList: function() {
+      return [W.Touch];
+    },
+    $isEfficientLength: true,
+    $isIterable: true,
+    $asIterable: function() {
+      return [W.Touch];
+    }
+  },
+  Interceptor_ListMixin2: {
+    "^": "Interceptor+ListMixin;",
+    $isList: true,
+    $asList: function() {
       return [W.Node];
     },
     $isEfficientLength: true,
@@ -13777,8 +13907,8 @@ var $$ = {};
       return [W.Node];
     }
   },
-  Interceptor_ListMixin_ImmutableListMixin1: {
-    "^": "Interceptor_ListMixin1+ImmutableListMixin;",
+  Interceptor_ListMixin_ImmutableListMixin2: {
+    "^": "Interceptor_ListMixin2+ImmutableListMixin;",
     $isList: true,
     $asList: function() {
       return [W.Node];
@@ -14128,6 +14258,11 @@ var $$ = {};
     $isBuffer: true,
     "%": "WebGLBuffer"
   },
+  ContextEvent: {
+    "^": "Event;",
+    $isContextEvent: true,
+    "%": "WebGLContextEvent"
+  },
   Framebuffer: {
     "^": "Interceptor;",
     $isFramebuffer: true,
@@ -14310,11 +14445,10 @@ var $$ = {};
       return receiver.vertexAttribPointer(indx, size, type, normalized, stride, offset);
     },
     viewport$4: function(receiver, x, y, width, height) {
-      return receiver.viewport(x, y, H.intTypeCheck(width), H.intTypeCheck(height));
+      return receiver.viewport(x, y, width, height);
     },
     $isRenderingContext: true,
-    "%": "WebGLRenderingContext",
-    static: {"^": "RenderingContext_BLEND<,RenderingContext_CULL_FACE<,RenderingContext_DEPTH_TEST<,RenderingContext_UNSIGNED_SHORT<"}
+    "%": "WebGLRenderingContext"
   },
   Shader0: {
     "^": "Interceptor;",
@@ -14501,7 +14635,8 @@ var $$ = {};
       }}
   },
   JsFunction: {
-    "^": "JsObject;_jsObject"
+    "^": "JsObject;_jsObject",
+    $isJsFunction: true
   },
   JsArray: {
     "^": "JsObject_ListMixin;_jsObject",
@@ -14533,8 +14668,7 @@ var $$ = {};
       if (typeof len === "number" && len >>> 0 === len)
         return len;
       throw H.wrapException(P.StateError$("Bad JsArray length"));
-    },
-    $isJsArray: true
+    }
   },
   JsObject_ListMixin: {
     "^": "JsObject+ListMixin;",
@@ -15199,7 +15333,7 @@ var $$ = {};
     t9 = H.assertSubtype([], "$isList", [P.num], "$asList");
     t10 = H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList");
     t11 = H.buildFunctionType(H.getVoidRuntimeType(), [H.buildInterfaceType(M.InteractionData)]);
-    stage = new M.Stage(null, false, new M.Rectangle(0, 0, 100000, 100000), 0, t9, null, new M.Matrix(1, 0, 0, 1, 0, 0, t2), null, t10, false, null, null, t3, t4, t5, 0, 1, true, null, false, false, null, false, false, false, false, false, t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), H.assertSubtype(t6, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t7), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t8, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+    stage = new M.Stage(null, false, new M.Rectangle(0, 0, 100000, 100000), 0, t9, null, new M.Matrix(1, 0, 0, 1, 0, 0, t2), null, t10, false, 0, 0, t3, t4, t5, 0, 1, true, null, false, false, null, false, false, false, false, false, t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), H.assertSubtype(t6, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t7), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t8, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
     stage.Stage$2(4040891, true);
     renderer = M.autoDetectRenderer(window.innerWidth, window.innerHeight, null, false, false);
     J.append$1$x(document.body, renderer.view);
@@ -15232,7 +15366,7 @@ var $$ = {};
     H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList");
     t8.x = 400;
     t8.y = 300;
-    stage.addChildAt$2(new M.DisplayObjectContainer(t4, false, null, null, t8, t7, t6, 0, 1, true, null, false, false, null, false, false, false, false, false, t9, t12, t13, t14, t15, t16, t17, t18, t19, t20, t21, t22, t5, null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t2), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t3, null), null, 0), t10.length);
+    stage.addChildAt$2(new M.DisplayObjectContainer(t4, false, 0, 0, t8, t7, t6, 0, 1, true, null, false, false, null, false, false, false, false, false, t9, t12, t13, t14, t15, t16, t17, t18, t19, t20, t21, t22, t5, null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t2), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t3, null), null, 0), t10.length);
     t1.count_0 = 0;
     graphics = M.Graphics$().beginFill$1(16711680);
     liveGraphics = M.Graphics$().beginFill$1(16711680);
@@ -15260,7 +15394,7 @@ var $$ = {};
     t7 = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
     t8 = new Float32Array(9);
     t9 = H.assertSubtype([], "$isList", [M.AbstractFilter], "$asList");
-    label = new M.Text(null, null, null, null, null, null, t3, null, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, null, null, t4, t5, t6, 0, 1, true, null, false, false, null, false, false, false, false, false, t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), H.assertSubtype(t7, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t8), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t9, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
+    label = new M.Text(null, null, null, null, null, null, t3, null, false, 0, 0, null, null, null, 16777215, null, C.BlendModes_0, H.assertSubtype([], "$isList", [M.DisplayInterface], "$asList"), false, 0, 0, t4, t5, t6, 0, 1, true, null, false, false, null, false, false, false, false, false, t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), t11._assertCheck$1(null), H.assertSubtype(t7, "$isMap", [P.$int, M.InteractionData], "$asMap"), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, t8), 0, 1, null, new M.Rectangle(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, t9, null), H.assertSubtype(null, "$isList", [M.AbstractFilter], "$asList"), 0);
     label.renderable = true;
     label.Text$2("Click and drag anywhere do draw complex geometry in pixi / do an art attack", t2);
     t4.x = 10;
@@ -15382,6 +15516,7 @@ P.$double.$isnum = true;
 P.$double.$isComparable = true;
 P.$double.$asComparable = [P.num];
 P.$double.$isObject = true;
+W.Touch.$isObject = true;
 P.num.$isnum = true;
 P.num.$isComparable = true;
 P.num.$asComparable = [P.num];
@@ -15399,6 +15534,9 @@ P.RenderingContext.$isRenderingContext = true;
 P.RenderingContext.$isObject = true;
 W.Event.$isEvent = true;
 W.Event.$isObject = true;
+P.ContextEvent.$isContextEvent = true;
+P.ContextEvent.$isEvent = true;
+P.ContextEvent.$isObject = true;
 P.Symbol.$isSymbol = true;
 P.Symbol.$isObject = true;
 H.RawReceivePortImpl.$isRawReceivePortImpl = true;
@@ -15672,6 +15810,9 @@ J.floor$0$n = function(receiver) {
 J.forEach$1$ax = function(receiver, a0) {
   return J.getInterceptor$ax(receiver).forEach$1(receiver, a0);
 };
+J.get$changedTouches$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$changedTouches(receiver);
+};
 J.get$data$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$data(receiver);
 };
@@ -15853,6 +15994,8 @@ C.C__RootZone = new P._RootZone();
 C.Duration_0 = new P.Duration(0);
 C.EventStreamProvider_error = H.setRuntimeTypeInfo(new W.EventStreamProvider("error"), [W.Event]);
 C.EventStreamProvider_load = H.setRuntimeTypeInfo(new W.EventStreamProvider("load"), [W.Event]);
+C.EventStreamProvider_webglcontextlost = H.setRuntimeTypeInfo(new W.EventStreamProvider("webglcontextlost"), [P.ContextEvent]);
+C.EventStreamProvider_webglcontextrestored = H.setRuntimeTypeInfo(new W.EventStreamProvider("webglcontextrestored"), [P.ContextEvent]);
 C.JS_CONST_0 = function(hooks) {
   if (typeof dartExperimentalFixupGetTag != "function") return hooks;
   hooks.getTag = dartExperimentalFixupGetTag(hooks.getTag);
