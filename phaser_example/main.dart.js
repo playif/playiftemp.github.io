@@ -59033,7 +59033,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
   main: [function() {
     var game, select, t1, key, option;
     P.print("start");
-    game = R.Game$(800, 600, 1, "", null, null, null, null);
+    game = R.Game$(800, 600, 2, "", null, null, null, null);
     select = H.interceptedTypeCast(document.getElementById("examples"), "$isSelectElement");
     for (t1 = $.get$examples(), t1 = t1.get$keys(t1), t1 = t1.get$iterator(t1); t1.moveNext$0();) {
       key = t1.get$current();
