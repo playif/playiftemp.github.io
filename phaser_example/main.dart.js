@@ -18610,8 +18610,10 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
             this.loopCount = J.$add$ns(this.loopCount, 1);
             this._Phaser$_parent.get$events().get$onAnimationLoop().dispatch$1([this._Phaser$_parent, this]);
             this.onLoop.dispatch$1([this._Phaser$_parent, this]);
-          } else
+          } else {
             this.complete$0(0);
+            return false;
+          }
         t1 = this._frameData.getFrame$1(J.$index$asx(this._frames, this._frameIndex));
         this.currentFrame = t1;
         if (t1 != null) {
@@ -39748,7 +39750,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
   },
   "+Easing": [674],
   Tween: {
-    "^": "Object;_object<-34,game<-612,_manager@-1040,_valuesStart@-782,_valuesEnd@-782,_valuesStartRepeat@-782,_Phaser$_duration@-671,_repeat@-613,_yoyo@-616,_reversed@-616,_delayTime@-615,_startTime@-671,_easingFunction@-1601,_interpolationFunction@-0,_chainedTweens@-1613,_onStartCallbackFired@-616,_onUpdateCallback@-0,_onUpdateCallbackContext@-34,_paused@-616,_pausedTime@-671,_codePaused@-616,pendingDelete@-616,onStart@-1163,onLoop@-1163,onComplete*-1163,isRunning@-616,_Phaser$_parent@-1614,_lastChild@-1614",
+    "^": "Object;_object<-34,game<-612,_manager@-1040,_valuesStart@-782,_valuesEnd@-782,_valuesStartRepeat@-782,_Phaser$_duration@-615,_repeat@-613,_yoyo@-616,_reversed@-616,_delayTime@-615,_startTime@-615,_easingFunction@-1601,_interpolationFunction@-0,_chainedTweens@-1613,_onStartCallbackFired@-616,_onUpdateCallback@-0,_onUpdateCallbackContext@-34,_paused@-616,_pausedTime@-615,_codePaused@-616,pendingDelete@-616,onStart@-1163,onLoop@-1163,onComplete*-1163,isRunning@-616,_Phaser$_parent@-1614,_lastChild@-1614",
     _easingFunction$1: function(arg0) {
       return this._easingFunction.call$1(arg0);
     },
