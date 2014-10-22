@@ -1090,11 +1090,11 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
     sprite$5: function(arg0, arg1, arg2, arg3, arg4) {
       return this.sprite.call$5(arg0, arg1, arg2, arg3, arg4);
     },
-    enable$1: function($receiver, arg0) {
-      return this.enable.call$1(arg0);
-    },
     enable$2: function($receiver, arg0, arg1) {
       return this.enable.call$2(arg0, arg1);
+    },
+    enable$1: function($receiver, arg0) {
+      return this.enable.call$1(arg0);
     },
     enable$3: function($receiver, arg0, arg1, arg2) {
       return this.enable.call$3(arg0, arg1, arg2);
@@ -4330,15 +4330,15 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         if (children && !!t1.$isDisplayObjectContainer && J.$gt$n(J.get$length$asx(t1.get$children(object)), 0))
           this.enable$5(0, t1.get$children(object), type, id, radius, true);
       }
-    }, function($receiver, object) {
-      return this.enable$5($receiver, object, 1, 1, 0, true);
-    }, "enable$1", function($receiver, object, type) {
+    }, function($receiver, object, type) {
       return this.enable$5($receiver, object, type, 1, 0, true);
-    }, "enable$2", function($receiver, object, type, id) {
+    }, "enable$2", function($receiver, object) {
+      return this.enable$5($receiver, object, 1, 1, 0, true);
+    }, "enable$1", function($receiver, object, type, id) {
       return this.enable$5($receiver, object, type, id, 0, true);
     }, "enable$3", function($receiver, object, type, id, radius) {
       return this.enable$5($receiver, object, type, id, radius, true);
-    }, "enable$4", "call$5", "call$1", "call$2", "call$3", "call$4", "get$enable", 2, 8, 639, 400, 400, 7, 41],
+    }, "enable$4", "call$5", "call$2", "call$1", "call$3", "call$4", "get$enable", 2, 8, 639, 400, 400, 7, 41],
     enableBody$4: [function(object, type, id, radius) {
       var t1 = J.getInterceptor$x(object);
       if (t1.get$body(object) == null) {
@@ -5920,11 +5920,11 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         if (children && J.$gt$n(J.get$length$asx(t1.get$children(object)), 0))
           this.enable$3(0, t1.get$children(object), debug, true);
       }
-    }, function($receiver, object) {
-      return this.enable$3($receiver, object, false, true);
-    }, "enable$1", function($receiver, object, debug) {
+    }, function($receiver, object, debug) {
       return this.enable$3($receiver, object, debug, true);
-    }, "enable$2", "call$3", "call$1", "call$2", "get$enable", 2, 4, 667, 97, 41],
+    }, "enable$2", function($receiver, object) {
+      return this.enable$3($receiver, object, false, true);
+    }, "enable$1", "call$3", "call$2", "call$1", "get$enable", 2, 4, 667, 97, 41],
     enableBody$2: [function(object, debug) {
       var t1, body;
       t1 = J.getInterceptor$x(object);
@@ -13598,11 +13598,11 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
       var t1 = this.renderSession;
       J.set$context$x(t1, context == null ? this.context : context);
       displayObject._renderCanvas$1(this.renderSession);
-    }, function(displayObject) {
-      return this.renderDisplayObject$3(displayObject, null, null);
-    }, "renderDisplayObject$1", function(displayObject, context) {
+    }, function(displayObject, context) {
       return this.renderDisplayObject$3(displayObject, context, null);
-    }, "renderDisplayObject$2", "call$3", "call$1", "call$2", "get$renderDisplayObject", 2, 4, 888, 34, 34, 836, [], 106, [], 889, [], "renderDisplayObject"],
+    }, "renderDisplayObject$2", function(displayObject) {
+      return this.renderDisplayObject$3(displayObject, null, null);
+    }, "renderDisplayObject$1", "call$3", "call$2", "call$1", "get$renderDisplayObject", 2, 4, 888, 34, 34, 836, [], 106, [], 889, [], "renderDisplayObject"],
     renderStripFlat$1: [function(strip) {
       var context, verticies, t1, $length, t2, t3, i, t4, index, x0, x1, x2, y0, y1, y2;
       context = this.context;
@@ -18149,14 +18149,14 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
     }, "stop$0", function($receiver, resetFrame) {
       return this.stop$2($receiver, resetFrame, false);
     }, "stop$1", "call$2", "call$0", "call$1", "get$stop", 0, 4, 972, 97, 97, 973, [], 974, [], "stop"],
-    _onPause$0: [function() {
+    _Phaser$_onPause$0: [function() {
       if (this.isPlaying === true)
         this._frameDiff = J.$sub$n(this._timeNextFrame, J.get$now$x(this.game.get$time()));
-    }, "call$0", "get$_onPause", 0, 0, 15, "_onPause"],
-    _onResume$0: [function() {
+    }, "call$0", "get$_Phaser$_onPause", 0, 0, 15, "_Phaser$_onPause"],
+    _Phaser$_onResume$0: [function() {
       if (this.isPlaying === true)
         this._timeNextFrame = J.$add$ns(J.get$now$x(this.game.get$time()), this._frameDiff);
-    }, "call$0", "get$_onResume", 0, 0, 15, "_onResume"],
+    }, "call$0", "get$_Phaser$_onResume", 0, 0, 15, "_Phaser$_onResume"],
     update$0: [function() {
       var t1, t2, t3;
       if (this._isPaused === true)
@@ -18268,8 +18268,8 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
       this.currentFrame = t1;
     }, "call$1", "get$updateFrameData", 2, 0, 977, 978, [], "updateFrameData"],
     destroy$0: [function() {
-      J.remove$1$ax(J.get$onPause$x(this.game), this.get$_onPause());
-      J.remove$1$ax(this.game.get$onResume(), this.get$_onResume());
+      J.remove$1$ax(J.get$onPause$x(this.game), this.get$_Phaser$_onPause());
+      J.remove$1$ax(this.game.get$onResume(), this.get$_Phaser$_onResume());
       this.game = null;
       this._Phaser$_parent = null;
       this._frames = null;
@@ -18301,8 +18301,8 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         this._frames = [];
       if (typeof frameRate === "number")
         this.delay = 1000 / frameRate;
-      J.add$1$ax(J.get$onPause$x(this.game), this.get$_onPause());
-      J.add$1$ax(this.game.get$onResume(), this.get$_onResume());
+      J.add$1$ax(J.get$onPause$x(this.game), this.get$_Phaser$_onPause());
+      J.add$1$ax(this.game.get$onResume(), this.get$_Phaser$_onResume());
     },
     static: {Animation$0: [function(game, _parent, $name, _frameData, _frames, frameRate, loop) {
         var t1 = new R.Animation(game, _parent, $name, _frameData, _frames, null, loop, 0, false, false, false, false, 0, 0, 0, 1, null, null, null, null, null, null, null);
@@ -18532,13 +18532,13 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
           J.set$paused$x(t1, false);
           return J.play$3$x(this.currentAnim, frameRate, loop, killOnComplete);
         }
-    }, function($receiver, name, frameRate, loop) {
-      return this.play$4($receiver, name, frameRate, loop, false);
-    }, "play$3", function($receiver, name) {
+    }, function($receiver, name) {
       return this.play$4($receiver, name, null, null, false);
-    }, "play$1", function($receiver, name, frameRate) {
+    }, "play$1", function($receiver, name, frameRate, loop) {
+      return this.play$4($receiver, name, frameRate, loop, false);
+    }, "play$3", function($receiver, name, frameRate) {
       return this.play$4($receiver, name, frameRate, null, false);
-    }, "play$2", "call$4", "call$3", "call$1", "call$2", "get$play", 2, 6, 988, 34, 34, 97, 46, [], 220, [], 221, [], 970, [], "play"],
+    }, "play$2", "call$4", "call$1", "call$3", "call$2", "get$play", 2, 6, 988, 34, 34, 97, 46, [], 220, [], 221, [], 970, [], "play"],
     stop$2: [function(_, $name, resetFrame) {
       var t1;
       if (typeof $name === "string") {
@@ -19825,7 +19825,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
       this.state = R.StateManager$(this, t1.$index(config, "state") != null ? t1.$index(config, "state") : null);
     }, "call$1", "get$parseConfig", 2, 0, 65, 433, [], "parseConfig"],
     boot$0: [function() {
-      var t1, t2, t3, t4, t5, target;
+      var t1, t2, t3, t4, t5;
       P.print("boot start");
       if (this.isBooted === true)
         return;
@@ -19857,116 +19857,65 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
       t5.Stage$2(0, true);
       t5.Stage$1(this);
       this.stage = t5;
-      if (this.device.get$trident() === true)
-        this.renderType = 1;
-      t1 = J.$index$asx(this.config, "canvasID");
-      t2 = this.width;
-      t3 = this.height;
-      if (t1 != null)
-        this.canvas = R.Canvas_create(t2, t3, J.$index$asx(this.config, "canvasID"));
-      else
-        this.canvas = R.Canvas_create(t2, t3, null);
-      if (this.device.get$cocoonJS() === true) {
-        t1 = J.get$dataset$x(this.canvas);
-        t1._attributes._element.setAttribute("data-" + H.S(t1._toHyphenedName$1("screencanvas")), "true");
-      }
-      if (!J.$eq(this.renderType, 3))
-        if (!J.$eq(this.renderType, 1))
-          t1 = J.$eq(this.renderType, 0) && J.$eq(this.device.get$webGL(), false);
-        else
-          t1 = true;
-      else
-        t1 = true;
-      if (t1)
-        if (J.get$canvas$x(this.device) === true) {
-          if (J.$eq(this.renderType, 0))
-            this.renderType = 1;
-          t1 = M.CanvasRenderer$(this.width, this.height, this.canvas, this.transparent, false);
-          this.renderer = t1;
-          this.context = t1.context;
-        } else
-          H.throwExpression(P.Exception_Exception("Phaser.Game - cannot create Canvas or WebGL context, aborting."));
-      else {
-        this.renderType = 2;
-        this.renderer = M.WebGLRenderer$(this.width, this.height, this.canvas, this.transparent, this.antialias, this.preserveDrawingBuffer);
-        this.context = null;
-      }
-      if (this.device.get$cocoonJS() === true)
-        if (J.$eq(this.renderType, 1))
-          ;
-      if (!J.$eq(this.renderType, 3)) {
-        this.stage.set$smoothed(this.antialias);
-        t1 = this.canvas;
-        target = this.parent;
-        if (target != null)
-          if (typeof target === "string")
-            target = document.getElementById(target);
-          else
-            target = !!J.getInterceptor(target).$isHtmlElement ? target : null;
-        else
-          target = null;
-        if (target == null)
-          target = document.body;
-        J.append$1$x(target, t1);
-      }
+      this.setUpRenderer$0();
       this.device.checkFullScreenSupport$0();
-      t1 = new R.Point(null, null);
-      t1.x = 0;
-      t1.y = 0;
-      t2 = new R.Point(null, null);
-      t2.x = 0;
-      t2.y = 0;
+      t5 = new R.Point(null, null);
+      t5.x = 0;
+      t5.y = 0;
+      t4 = new R.Point(null, null);
+      t4.x = 0;
+      t4.y = 0;
       t3 = new M.Point0(null, null);
       t3.x = 0;
       t3.y = 0;
-      t4 = new M.Point0(null, null);
-      t4.x = 1;
-      t4.y = 1;
-      t5 = new M.Point0(null, null);
-      t5.x = 0;
-      t5.y = 0;
-      t5 = new R.World(null, null, null, null, null, null, null, "__world", false, false, 0, null, null, null, null, null, null, null, null, null, null, null, null, null, [], null, null, t1, null, t2, null, [], false, 0, 0, t3, t4, t5, 0, 1, true, null, false, false, null, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, P.LinkedHashMap_LinkedHashMap$_empty(null, null), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, new Float32Array(H._checkLength(9))), 0, 1, null, new M.Rectangle0(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, [], null), null, 0);
-      t5.Group$6(this, null, "__world", false, false, 0, null);
-      t5.World$1(this);
-      this.world = t5;
-      t5 = new R.GameObjectFactory(this, null);
-      t5.world = this.world;
-      this.add = t5;
-      t5 = new R.GameObjectCreator(this, null);
-      t5.world = this.world;
-      this.make = t5;
-      t5 = new R.Cache(this, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, H.setRuntimeTypeInfo(new R.Signal(H.setRuntimeTypeInfo([], [R.SignalBinding]), null, false, true, true), [null]), null);
-      t5.Cache$1(this);
-      this.cache = t5;
-      t5 = new R.Loader(this, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-      t5.Loader$1(this);
-      this.load = t5;
-      t5 = new R.Time(this, 0, 0, 0, 0, false, 0, 1000, 0, 1000, 0, 0, 0, 16.666666666666668, 0, 0, 0, 0, null, 0, 0, 0, false, [], 0, 0);
-      t4 = H.setRuntimeTypeInfo(new R.Signal(H.setRuntimeTypeInfo([], [R.SignalBinding]), null, false, true, true), [null]);
+      t2 = new M.Point0(null, null);
+      t2.x = 1;
+      t2.y = 1;
+      t1 = new M.Point0(null, null);
+      t1.x = 0;
+      t1.y = 0;
+      t1 = new R.World(null, null, null, null, null, null, null, "__world", false, false, 0, null, null, null, null, null, null, null, null, null, null, null, null, null, [], null, null, t5, null, t4, null, [], false, 0, 0, t3, t2, t1, 0, 1, true, null, false, false, null, false, false, false, false, false, null, null, null, null, null, null, null, null, null, null, null, null, P.LinkedHashMap_LinkedHashMap$_empty(null, null), null, 1, false, "pointer", new M.Matrix(1, 0, 0, 1, 0, 0, new Float32Array(H._checkLength(9))), 0, 1, null, new M.Rectangle0(0, 0, 1, 1), null, null, false, null, false, new M.FilterBlock(true, true, null, null, null, [], null), null, 0);
+      t1.Group$6(this, null, "__world", false, false, 0, null);
+      t1.World$1(this);
+      this.world = t1;
+      t1 = new R.GameObjectFactory(this, null);
+      t1.world = this.world;
+      this.add = t1;
+      t1 = new R.GameObjectCreator(this, null);
+      t1.world = this.world;
+      this.make = t1;
+      t1 = new R.Cache(this, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, H.setRuntimeTypeInfo(new R.Signal(H.setRuntimeTypeInfo([], [R.SignalBinding]), null, false, true, true), [null]), null);
+      t1.Cache$1(this);
+      this.cache = t1;
+      t1 = new R.Loader(this, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+      t1.Loader$1(this);
+      this.load = t1;
+      t1 = new R.Time(this, 0, 0, 0, 0, false, 0, 1000, 0, 1000, 0, 0, 0, 16.666666666666668, 0, 0, 0, 0, null, 0, 0, 0, false, [], 0, 0);
+      t2 = H.setRuntimeTypeInfo(new R.Signal(H.setRuntimeTypeInfo([], [R.SignalBinding]), null, false, true, true), [null]);
       t3 = Date.now();
       new P.DateTime(t3, false).DateTime$_now$0();
-      t5.events = new R.Timer(this, true, false, false, 0, [], t4, 0, 1000, false, false, 0, 0, 0, t3, 0, 0, 0, 0, 0);
-      this.time = t5;
-      t5 = new R.TweenManager(this, [], []);
-      t5.TweenManager$1(this);
-      this.tweens = t5;
-      t5 = Array(11);
-      t5.fixed$length = init;
-      t5 = new R.Input(this, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, H.setRuntimeTypeInfo(t5, [R.Pointer]), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0, 0);
-      t5.Input$1(this);
-      this.input = t5;
-      t5 = new R.SoundManager(this, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-      t5.SoundManager$1(this);
-      this.sound = t5;
-      t5 = new R.Physics(null, null, null, null, null, null, null);
-      t5.Physics$2(this, this.physicsConfig);
-      this.physics = t5;
-      t5 = new R.Particles(P.LinkedHashMap_LinkedHashMap$_empty(null, null), this, null);
-      t5.emitters = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
-      this.particles = t5;
-      t5 = new R.PluginManager(this, null, null, null);
-      t5.PluginManager$1(this);
-      this.plugins = t5;
+      t1.events = new R.Timer(this, true, false, false, 0, [], t2, 0, 1000, false, false, 0, 0, 0, t3, 0, 0, 0, 0, 0);
+      this.time = t1;
+      t1 = new R.TweenManager(this, [], []);
+      t1.TweenManager$1(this);
+      this.tweens = t1;
+      t1 = Array(11);
+      t1.fixed$length = init;
+      t1 = new R.Input(this, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, H.setRuntimeTypeInfo(t1, [R.Pointer]), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 0, 0);
+      t1.Input$1(this);
+      this.input = t1;
+      t1 = new R.SoundManager(this, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+      t1.SoundManager$1(this);
+      this.sound = t1;
+      t1 = new R.Physics(null, null, null, null, null, null, null);
+      t1.Physics$2(this, this.physicsConfig);
+      this.physics = t1;
+      t1 = new R.Particles(P.LinkedHashMap_LinkedHashMap$_empty(null, null), this, null);
+      t1.emitters = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
+      this.particles = t1;
+      t1 = new R.PluginManager(this, null, null, null);
+      t1.PluginManager$1(this);
+      this.plugins = t1;
       this.net = new R.Net(this);
       this.time.boot$0();
       this.stage.boot$0();
@@ -20017,7 +19966,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
       }
     }, "call$0", "get$showDebugHeader", 0, 0, 15, "showDebugHeader"],
     setUpRenderer$0: [function() {
-      var t1, t2, t3, target;
+      var t1, t2, t3, exception, target;
       if (this.device.get$trident() === true)
         this.renderType = 1;
       t1 = J.$index$asx(this.config, "canvasID");
@@ -20047,11 +19996,19 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
           this.context = t1.context;
         } else
           throw H.wrapException(P.Exception_Exception("Phaser.Game - cannot create Canvas or WebGL context, aborting."));
-      else {
-        this.renderType = 2;
-        this.renderer = M.WebGLRenderer$(this.width, this.height, this.canvas, this.transparent, this.antialias, this.preserveDrawingBuffer);
-        this.context = null;
-      }
+      else
+        try {
+          this.renderType = 2;
+          this.renderer = M.WebGLRenderer$(this.width, this.height, this.canvas, this.transparent, this.antialias, this.preserveDrawingBuffer);
+          this.context = null;
+        } catch (exception) {
+          H.unwrapException(exception);
+          this.renderType = 1;
+          t1 = M.CanvasRenderer$(this.width, this.height, this.canvas, this.transparent, false);
+          this.renderer = t1;
+          this.context = t1.context;
+        }
+
       if (this.device.get$cocoonJS() === true)
         if (J.$eq(this.renderType, 1))
           ;
@@ -23744,7 +23701,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
   },
   "+BitmapText": [1145, 2],
   Button: {
-    "^": "Image;_onOverFrameName@-647,_onOutFrameName@-647,_onDownFrameName@-647,_onUpFrameName@-647,_onOverFrameID@-616,_onOutFrameID@-616,_onDownFrameID@-616,_onUpFrameID@-616,onOverMouseOnly@-619,onOverSound@-1146,onOutSound@-1146,onDownSound@-1146,onUpSound@-1146,onOverSoundMarker@-647,onOutSoundMarker@-647,onDownSoundMarker@-647,onUpSoundMarker@-647,onInputOver@-1147,onInputOut@-1147,onInputDown@-1147,onInputUp@-1148,freezeFrames@-619,forceOut@-619,game-615,exists-619,name-647,type-616,z-616,events-651,key-34,world-617,autoCull-619,input-1143,body-4,cameraOffset-617,Phaser$Image$anchor-617,cropRect-652,_frame-34,_cache-648,_crop-652,_Phaser$_bounds-652,_Phaser$_dirty-619,_frameName-647,alive-619,debug-619,Phaser$Image$children-1093,animations-1149,__tilePattern-825,_Phaser$_currentBounds-652,anchor-655,texture-702,updateFrame-619,PIXI$Sprite0$_width-618,PIXI$Sprite0$_height-618,_uvs-703,tintedTexture-704,buffer-705,tint-616,cachedTint-616,blendMode-706,children-654,interactiveChildren-619,_width-618,_height-618,position-655,scale-655,pivot-655,rotation-618,alpha-618,visible-619,hitArea-656,buttonMode-619,renderable-619,_parent-657,__hit-619,__isOver-619,__mouseIsDown-619,__isDown-619,_dirty-619,click-658,mousemove-658,mousedown-658,mouseout-658,mouseover-658,mouseup-658,mouseupoutside-658,touchmove-658,touchstart-658,touchend-658,tap-658,touchendoutside-658,__touchData-659,_stage-660,_worldAlpha-618,_interactive-619,defaultCursor-647,_worldTransform-661,_sr-618,_cr-618,filterArea-662,_bounds-662,_currentBounds-662,_mask-663,_cacheAsBitmap-619,_cachedSprite-664,_cacheIsDirty-619,_filterBlock-665,_filters-666,_rotationCache-618",
+    "^": "Image;_onOverFrameName@-647,_onOutFrameName@-647,_onDownFrameName@-647,_onUpFrameName@-647,_onOverFrameID@-616,_onOutFrameID@-616,_onDownFrameID@-616,_onUpFrameID@-616,onOverMouseOnly@-619,onOverSound@-1146,onOutSound@-1146,onDownSound@-1146,onUpSound@-1146,onOverSoundMarker@-647,onOutSoundMarker@-647,onDownSoundMarker@-647,onUpSoundMarker@-647,onInputOver@-1147,onInputOut@-1147,onInputDown@-1147,onInputUp@-1148,freezeFrames@-619,forceOut@-619,game-615,exists-619,name-647,type-616,z-616,events-651,key-34,world-617,autoCull-619,input-1143,body-4,cameraOffset-617,Phaser$Image$anchor-617,cropRect-652,_frame-652,_cache-648,_crop-652,_Phaser$_bounds-652,_Phaser$_dirty-619,_frameName-647,alive-619,debug-619,Phaser$Image$children-1093,animations-1149,__tilePattern-825,_Phaser$_currentBounds-652,anchor-655,texture-702,updateFrame-619,PIXI$Sprite0$_width-618,PIXI$Sprite0$_height-618,_uvs-703,tintedTexture-704,buffer-705,tint-616,cachedTint-616,blendMode-706,children-654,interactiveChildren-619,_width-618,_height-618,position-655,scale-655,pivot-655,rotation-618,alpha-618,visible-619,hitArea-656,buttonMode-619,renderable-619,_parent-657,__hit-619,__isOver-619,__mouseIsDown-619,__isDown-619,_dirty-619,click-658,mousemove-658,mousedown-658,mouseout-658,mouseover-658,mouseup-658,mouseupoutside-658,touchmove-658,touchstart-658,touchend-658,tap-658,touchendoutside-658,__touchData-659,_stage-660,_worldAlpha-618,_interactive-619,defaultCursor-647,_worldTransform-661,_sr-618,_cr-618,filterArea-662,_bounds-662,_currentBounds-662,_mask-663,_cacheAsBitmap-619,_cachedSprite-664,_cacheIsDirty-619,_filterBlock-665,_filters-666,_rotationCache-618",
     clearFrames$0: [function() {
       this._onOverFrameName = null;
       this._onOverFrameID = null;
@@ -23772,7 +23729,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         } else {
           this._onOverFrameID = overFrame;
           if (this.input.pointerOver$0() === true)
-            this.set$frame(overFrame);
+            this.animations.set$frame(overFrame);
         }
       if (outFrame != null)
         if (typeof outFrame === "string") {
@@ -23782,7 +23739,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         } else {
           this._onOutFrameID = outFrame;
           if (J.$eq(this.input.pointerOver$0(), false))
-            this.set$frame(outFrame);
+            this.animations.set$frame(outFrame);
         }
       if (downFrame != null)
         if (typeof downFrame === "string") {
@@ -23792,7 +23749,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         } else {
           this._onDownFrameID = downFrame;
           if (this.input.pointerDown$0() === true)
-            this.set$frame(downFrame);
+            this.animations.set$frame(downFrame);
         }
       if (upFrame != null)
         if (typeof upFrame === "string") {
@@ -23802,7 +23759,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         } else {
           this._onUpFrameID = upFrame;
           if (this.input.pointerUp$0() === true)
-            this.set$frame(upFrame);
+            this.animations.set$frame(upFrame);
         }
     }, "call$4", "get$setFrames", 8, 0, 1150, 281, [], 282, [], 283, [], 284, [], "setFrames"],
     setSounds$8: [function(overSound, overMarker, downSound, downMarker, outSound, outMarker, upSound, upMarker) {
@@ -23925,7 +23882,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         else {
           t1 = this._onOverFrameID;
           if (t1 != null)
-            this.set$frame(t1);
+            this.animations.set$frame(t1);
         }
       } else if (t1.$eq(newState, 2)) {
         t1 = this._onOutFrameName;
@@ -23934,7 +23891,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         else {
           t1 = this._onOutFrameID;
           if (t1 != null)
-            this.set$frame(t1);
+            this.animations.set$frame(t1);
         }
       } else if (t1.$eq(newState, 3)) {
         t1 = this._onDownFrameName;
@@ -23943,7 +23900,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         else {
           t1 = this._onDownFrameID;
           if (t1 != null)
-            this.set$frame(t1);
+            this.animations.set$frame(t1);
         }
       } else if (t1.$eq(newState, 4)) {
         t1 = this._onUpFrameName;
@@ -23952,7 +23909,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         else {
           t1 = this._onUpFrameID;
           if (t1 != null)
-            this.set$frame(t1);
+            this.animations.set$frame(t1);
         }
       }
     }, "call$1", "get$setState", 2, 0, 62, 1166, [], "setState"],
@@ -23999,7 +23956,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         } else {
           this._onOverFrameID = overFrame;
           if (this.input.pointerOver$0() === true)
-            this.set$frame(overFrame);
+            this.animations.set$frame(overFrame);
         }
       if (outFrame != null)
         if (typeof outFrame === "string") {
@@ -24009,7 +23966,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         } else {
           this._onOutFrameID = outFrame;
           if (J.$eq(this.input.pointerOver$0(), false))
-            this.set$frame(outFrame);
+            this.animations.set$frame(outFrame);
         }
       if (downFrame != null)
         if (typeof downFrame === "string") {
@@ -24019,7 +23976,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         } else {
           this._onDownFrameID = downFrame;
           if (this.input.pointerDown$0() === true)
-            this.set$frame(downFrame);
+            this.animations.set$frame(downFrame);
         }
       if (upFrame != null)
         if (typeof upFrame === "string") {
@@ -24029,7 +23986,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         } else {
           this._onUpFrameID = upFrame;
           if (this.input.pointerUp$0() === true)
-            this.set$frame(upFrame);
+            this.animations.set$frame(upFrame);
         }
       if (callback != null)
         J.add$1$ax(this.onInputUp, callback);
@@ -24891,7 +24848,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
   },
   "+Graphics": [663, 2],
   Image: {
-    "^": "Sprite0;game@-615,exists@-619,name*-647,type*-616,z*-616,events@-651,key*-34,world@-617,autoCull@-619,input@-1143,body*-4,cameraOffset@-617,anchor:Phaser$Image$anchor@-617,cropRect@-652,_frame@-34,_cache@-648,_crop@-652,_Phaser$_bounds@-652,_Phaser$_dirty@-619,_frameName@-647,alive@-619,debug@-619,children:Phaser$Image$children*-1093,animations@-1149,__tilePattern@-825,_Phaser$_currentBounds@-652,anchor-655,texture-702,updateFrame-619,PIXI$Sprite0$_width-618,PIXI$Sprite0$_height-618,_uvs-703,tintedTexture-704,buffer-705,tint-616,cachedTint-616,blendMode-706,children-654,interactiveChildren-619,_width-618,_height-618,position-655,scale-655,pivot-655,rotation-618,alpha-618,visible-619,hitArea-656,buttonMode-619,renderable-619,_parent-657,__hit-619,__isOver-619,__mouseIsDown-619,__isDown-619,_dirty-619,click-658,mousemove-658,mousedown-658,mouseout-658,mouseover-658,mouseup-658,mouseupoutside-658,touchmove-658,touchstart-658,touchend-658,tap-658,touchendoutside-658,__touchData-659,_stage-660,_worldAlpha-618,_interactive-619,defaultCursor-647,_worldTransform-661,_sr-618,_cr-618,filterArea-662,_bounds-662,_currentBounds-662,_mask-663,_cacheAsBitmap-619,_cachedSprite-664,_cacheIsDirty-619,_filterBlock-665,_filters-666,_rotationCache-618",
+    "^": "Sprite0;game@-615,exists@-619,name*-647,type*-616,z*-616,events@-651,key*-34,world@-617,autoCull@-619,input@-1143,body*-4,cameraOffset@-617,anchor:Phaser$Image$anchor@-617,cropRect@-652,_frame@-652,_cache@-648,_crop@-652,_Phaser$_bounds@-652,_Phaser$_dirty@-619,_frameName@-647,alive@-619,debug@-619,children:Phaser$Image$children*-1093,animations@-1149,__tilePattern@-825,_Phaser$_currentBounds@-652,anchor-655,texture-702,updateFrame-619,PIXI$Sprite0$_width-618,PIXI$Sprite0$_height-618,_uvs-703,tintedTexture-704,buffer-705,tint-616,cachedTint-616,blendMode-706,children-654,interactiveChildren-619,_width-618,_height-618,position-655,scale-655,pivot-655,rotation-618,alpha-618,visible-619,hitArea-656,buttonMode-619,renderable-619,_parent-657,__hit-619,__isOver-619,__mouseIsDown-619,__isDown-619,_dirty-619,click-658,mousemove-658,mousedown-658,mouseout-658,mouseover-658,mouseup-658,mouseupoutside-658,touchmove-658,touchstart-658,touchend-658,tap-658,touchendoutside-658,__touchData-659,_stage-660,_worldAlpha-618,_interactive-619,defaultCursor-647,_worldTransform-661,_sr-618,_cr-618,filterArea-662,_bounds-662,_currentBounds-662,_mask-663,_cacheAsBitmap-619,_cachedSprite-664,_cacheIsDirty-619,_filterBlock-665,_filters-666,_rotationCache-618",
     key$4: function($receiver, arg0, arg1, arg2, arg3) {
       return this.key.call$4(arg0, arg1, arg2, arg3);
     },
@@ -25205,20 +25162,11 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
       return J.intersects$1$x(this.get$game().get$world().get$camera().get$screenView(), this.getBounds$0());
     }, null, null, 1, 0, 15, "inCamera"],
     get$frame: [function() {
-      return this._frame;
-    }, null, null, 1, 0, 15, "frame"],
+      return this.animations.get$frame();
+    }, null, null, 1, 0, 377, "frame"],
     set$frame: [function(value) {
-      var t1, frameData;
-      t1 = J.getInterceptor(value);
-      if (!t1.$eq(value, this._frame)) {
-        frameData = this.get$game().get$cache().getFrameData$1(this.key);
-        if (frameData != null && t1.$lt(value, J.get$total$x(frameData)) && frameData.getFrame$1(value) != null) {
-          this.set$texture(J.$index$asx($.get$TextureCache(), frameData.getFrame$1(value).get$uuid()));
-          this.cachedTint = 16777215;
-          this._frame = value;
-        }
-      }
-    }, null, null, 3, 0, 65, 102, [], "frame"],
+      this.animations.set$frame(value);
+    }, null, null, 3, 0, 62, 102, [], "frame"],
     get$frameName: [function() {
       return this._frameName;
     }, null, null, 1, 0, 813, "frameName"],
@@ -26745,13 +26693,13 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
       var t1 = this.animations;
       if (t1 != null)
         return J.play$4$x(t1, $name, frameRate, loop, killOnComplete);
-    }, function($receiver, name, frameRate, loop) {
-      return this.play$4($receiver, name, frameRate, loop, false);
-    }, "play$3", function($receiver, name) {
+    }, function($receiver, name) {
       return this.play$4($receiver, name, 60, true, false);
-    }, "play$1", function($receiver, name, frameRate) {
+    }, "play$1", function($receiver, name, frameRate, loop) {
+      return this.play$4($receiver, name, frameRate, loop, false);
+    }, "play$3", function($receiver, name, frameRate) {
       return this.play$4($receiver, name, frameRate, true, false);
-    }, "play$2", "call$4", "call$3", "call$1", "call$2", "get$play", 2, 6, 1247, 215, 41, 97, 46, [], 220, [], 221, [], 970, [], "play"],
+    }, "play$2", "call$4", "call$1", "call$3", "call$2", "get$play", 2, 6, 1247, 215, 41, 97, 46, [], 220, [], 221, [], 970, [], "play"],
     overlap$1: [function(displayObject) {
       return new R.Rectangle1(0, 0, 0, 0, 0, 0, 0, 0).copyFrom$1(M.Sprite0.prototype.getBounds$1.call(this, null)).intersects$1(0, displayObject.getBounds$0());
     }, "call$1", "get$overlap", 2, 0, 1248, 836, [], "overlap"],
@@ -35136,11 +35084,11 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         J.enable$2$x(this.p2, object, debug);
       else if (t1.$eq(system, 2) && this.ninja != null)
         this.ninja.enableAABB$1(object);
-    }, function($receiver, object) {
-      return this.enable$3($receiver, object, null, null);
-    }, "enable$1", function($receiver, object, system) {
+    }, function($receiver, object, system) {
       return this.enable$3($receiver, object, system, null);
-    }, "enable$2", "call$3", "call$1", "call$2", "get$enable", 2, 4, 1514, 34, 34, 552, [], 1507, [], 1515, [], "enable"],
+    }, "enable$2", function($receiver, object) {
+      return this.enable$3($receiver, object, null, null);
+    }, "enable$1", "call$3", "call$2", "call$1", "get$enable", 2, 4, 1514, 34, 34, 552, [], 1507, [], 1515, [], "enable"],
     preUpdate$0: [function() {
       var t1 = this.p2;
       if (t1 != null)
@@ -35568,15 +35516,15 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
       return this;
     }, function($receiver, marker, position, volume, loop) {
       return this.play$5($receiver, marker, position, volume, loop, true);
-    }, "play$4", function($receiver, marker, position, volume) {
-      return this.play$5($receiver, marker, position, volume, false, true);
-    }, "play$3", function($receiver) {
-      return this.play$5($receiver, null, 0, 1, false, true);
-    }, "play$0", function($receiver, marker) {
+    }, "play$4", function($receiver, marker) {
       return this.play$5($receiver, marker, 0, 1, false, true);
-    }, "play$1", function($receiver, marker, position) {
+    }, "play$1", function($receiver) {
+      return this.play$5($receiver, null, 0, 1, false, true);
+    }, "play$0", function($receiver, marker, position, volume) {
+      return this.play$5($receiver, marker, position, volume, false, true);
+    }, "play$3", function($receiver, marker, position) {
       return this.play$5($receiver, marker, position, 1, false, true);
-    }, "play$2", "call$5", "call$4", "call$3", "call$0", "call$1", "call$2", "get$play", 0, 10, 1523, 34, 7, 400, 97, 41, 1162, [], 254, [], 437, [], 221, [], 1524, [], "play"],
+    }, "play$2", "call$5", "call$4", "call$1", "call$0", "call$3", "call$2", "get$play", 0, 10, 1523, 34, 7, 400, 97, 41, 1162, [], 254, [], 437, [], 221, [], 1524, [], "play"],
     restart$4: [function(marker, position, volume, loop) {
       this.play$5(0, marker, position, volume, loop == null ? false : loop, true);
     }, function(marker, position, volume) {
@@ -37698,7 +37646,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
   },
   "+TilemapLayerData": [678],
   TilemapLayer: {
-    "^": "Image;game:Phaser$TilemapLayer$game@-615,map*-1596,index*-616,layer*-1538,canvas*-839,context*-879,baseTexture@-856,texture:Phaser$TilemapLayer$texture@-702,textureFrame@-966,name:Phaser$TilemapLayer$name*-647,type:Phaser$TilemapLayer$type*-616,cameraOffset:Phaser$TilemapLayer$cameraOffset@-617,tileColor@-647,debug:Phaser$TilemapLayer$debug@-619,debugAlpha@-618,debugColor@-647,debugFill@-619,debugFillColor@-647,debugCallbackColor@-647,scrollFactorX@-618,scrollFactorY@-618,dirty@-619,rayStepRate@-618,wrap*-619,_mc@-1597,_results@-648,_column@-1598,game-615,exists-619,name-647,type-616,z-616,events-651,key-34,world-617,autoCull-619,input-1143,body-4,cameraOffset-617,Phaser$Image$anchor-617,cropRect-652,_frame-34,_cache-648,_crop-652,_Phaser$_bounds-652,_Phaser$_dirty-619,_frameName-647,alive-619,debug-619,Phaser$Image$children-1093,animations-1149,__tilePattern-825,_Phaser$_currentBounds-652,anchor-655,texture-702,updateFrame-619,PIXI$Sprite0$_width-618,PIXI$Sprite0$_height-618,_uvs-703,tintedTexture-704,buffer-705,tint-616,cachedTint-616,blendMode-706,children-654,interactiveChildren-619,_width-618,_height-618,position-655,scale-655,pivot-655,rotation-618,alpha-618,visible-619,hitArea-656,buttonMode-619,renderable-619,_parent-657,__hit-619,__isOver-619,__mouseIsDown-619,__isDown-619,_dirty-619,click-658,mousemove-658,mousedown-658,mouseout-658,mouseover-658,mouseup-658,mouseupoutside-658,touchmove-658,touchstart-658,touchend-658,tap-658,touchendoutside-658,__touchData-659,_stage-660,_worldAlpha-618,_interactive-619,defaultCursor-647,_worldTransform-661,_sr-618,_cr-618,filterArea-662,_bounds-662,_currentBounds-662,_mask-663,_cacheAsBitmap-619,_cachedSprite-664,_cacheIsDirty-619,_filterBlock-665,_filters-666,_rotationCache-618",
+    "^": "Image;game:Phaser$TilemapLayer$game@-615,map*-1596,index*-616,layer*-1538,canvas*-839,context*-879,baseTexture@-856,texture:Phaser$TilemapLayer$texture@-702,textureFrame@-966,name:Phaser$TilemapLayer$name*-647,type:Phaser$TilemapLayer$type*-616,cameraOffset:Phaser$TilemapLayer$cameraOffset@-617,tileColor@-647,debug:Phaser$TilemapLayer$debug@-619,debugAlpha@-618,debugColor@-647,debugFill@-619,debugFillColor@-647,debugCallbackColor@-647,scrollFactorX@-618,scrollFactorY@-618,dirty@-619,rayStepRate@-618,wrap*-619,_mc@-1597,_results@-648,_column@-1598,game-615,exists-619,name-647,type-616,z-616,events-651,key-34,world-617,autoCull-619,input-1143,body-4,cameraOffset-617,Phaser$Image$anchor-617,cropRect-652,_frame-652,_cache-648,_crop-652,_Phaser$_bounds-652,_Phaser$_dirty-619,_frameName-647,alive-619,debug-619,Phaser$Image$children-1093,animations-1149,__tilePattern-825,_Phaser$_currentBounds-652,anchor-655,texture-702,updateFrame-619,PIXI$Sprite0$_width-618,PIXI$Sprite0$_height-618,_uvs-703,tintedTexture-704,buffer-705,tint-616,cachedTint-616,blendMode-706,children-654,interactiveChildren-619,_width-618,_height-618,position-655,scale-655,pivot-655,rotation-618,alpha-618,visible-619,hitArea-656,buttonMode-619,renderable-619,_parent-657,__hit-619,__isOver-619,__mouseIsDown-619,__isDown-619,_dirty-619,click-658,mousemove-658,mousedown-658,mouseout-658,mouseover-658,mouseup-658,mouseupoutside-658,touchmove-658,touchstart-658,touchend-658,tap-658,touchendoutside-658,__touchData-659,_stage-660,_worldAlpha-618,_interactive-619,defaultCursor-647,_worldTransform-661,_sr-618,_cr-618,filterArea-662,_bounds-662,_currentBounds-662,_mask-663,_cacheAsBitmap-619,_cachedSprite-664,_cacheIsDirty-619,_filterBlock-665,_filters-666,_rotationCache-618",
     map$1: function($receiver, arg0) {
       return this.map.call$1(arg0);
     },
@@ -48133,10 +48081,10 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         return t1.$and();
       return (t1 & 4) !== 0;
     },
-    _async$_onPause$0: [function() {
-    }, "call$0", "get$_async$_onPause", 0, 0, 564],
-    _async$_onResume$0: [function() {
-    }, "call$0", "get$_async$_onResume", 0, 0, 564],
+    _onPause$0: [function() {
+    }, "call$0", "get$_onPause", 0, 0, 564],
+    _onResume$0: [function() {
+    }, "call$0", "get$_onResume", 0, 0, 564],
     static: {"^": "_BroadcastSubscription__STATE_EVENT_ID,_BroadcastSubscription__STATE_FIRING,_BroadcastSubscription__STATE_REMOVE_AFTER_FIRING"}
   },
   _BroadcastStreamController: {
@@ -49282,12 +49230,12 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
     _onCancel$0: function() {
       return this.get$_async$_controller()._recordCancel$1(this);
     },
-    _async$_onPause$0: [function() {
+    _onPause$0: [function() {
       this.get$_async$_controller()._recordPause$1(this);
-    }, "call$0", "get$_async$_onPause", 0, 0, 564],
-    _async$_onResume$0: [function() {
+    }, "call$0", "get$_onPause", 0, 0, 564],
+    _onResume$0: [function() {
       this.get$_async$_controller()._recordResume$1(this);
-    }, "call$0", "get$_async$_onResume", 0, 0, 564]
+    }, "call$0", "get$_onResume", 0, 0, 564]
   },
   _EventSink: {
     "^": "Object;"
@@ -49307,7 +49255,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
       if (t1 < 128 && this._pending != null)
         this._pending.cancelSchedule$0();
       if ((t1 & 4) === 0 && (this._state & 32) === 0)
-        this._guardCallback$1(this.get$_async$_onPause());
+        this._guardCallback$1(this.get$_onPause());
     },
     pause$0: function($receiver) {
       return this.pause$1($receiver, null);
@@ -49331,7 +49279,7 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
             t1 = (this._state & 4294967291) >>> 0;
             this._state = t1;
             if ((t1 & 32) === 0)
-              this._guardCallback$1(this.get$_async$_onResume());
+              this._guardCallback$1(this.get$_onResume());
           }
         }
       }
@@ -49385,10 +49333,10 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
       else
         this._addPending$1(C.C__DelayedDone);
     },
-    _async$_onPause$0: [function() {
-    }, "call$0", "get$_async$_onPause", 0, 0, 564],
-    _async$_onResume$0: [function() {
-    }, "call$0", "get$_async$_onResume", 0, 0, 564],
+    _onPause$0: [function() {
+    }, "call$0", "get$_onPause", 0, 0, 564],
+    _onResume$0: [function() {
+    }, "call$0", "get$_onResume", 0, 0, 564],
     _onCancel$0: function() {
       return;
     },
@@ -49482,9 +49430,9 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
           break;
         this._state = (t1 ^ 32) >>> 0;
         if (isInputPaused)
-          this._async$_onPause$0();
+          this._onPause$0();
         else
-          this._async$_onResume$0();
+          this._onResume$0();
         this._state = (this._state & 4294967263) >>> 0;
       }
       t1 = this._state;
@@ -49766,18 +49714,18 @@ init.mangledGlobalNames = {AUTO: "AUTO", AUTO_PREVENT_DEFAULT: "AUTO_PREVENT_DEF
         return;
       P._BufferingStreamSubscription.prototype._addError$2.call(this, error, stackTrace);
     },
-    _async$_onPause$0: [function() {
+    _onPause$0: [function() {
       var t1 = this._subscription;
       if (t1 == null)
         return;
       t1.pause$0(0);
-    }, "call$0", "get$_async$_onPause", 0, 0, 564],
-    _async$_onResume$0: [function() {
+    }, "call$0", "get$_onPause", 0, 0, 564],
+    _onResume$0: [function() {
       var t1 = this._subscription;
       if (t1 == null)
         return;
       t1.resume$0();
-    }, "call$0", "get$_async$_onResume", 0, 0, 564],
+    }, "call$0", "get$_onResume", 0, 0, 564],
     _onCancel$0: function() {
       var t1 = this._subscription;
       if (t1 != null) {
@@ -68361,14 +68309,14 @@ $$ = null;
   _ = P.AudioBuffer;
   _.$isAudioBuffer = TRUE;
   _.$isObject = TRUE;
-  _ = W.AnimationEvent;
-  _.$isEvent = TRUE;
-  _.$isObject = TRUE;
   _ = A.vec20;
   _.$isvec20 = TRUE;
   _.$isObject = TRUE;
   _ = A.Shape;
   _.$isShape = TRUE;
+  _.$isObject = TRUE;
+  _ = W.AnimationEvent;
+  _.$isEvent = TRUE;
   _.$isObject = TRUE;
   _ = R.Body;
   _.$isRectangle1 = TRUE;
@@ -68497,6 +68445,9 @@ $$ = null;
   _ = P.Comparable;
   _.$isComparable = TRUE;
   _.$isObject = TRUE;
+  _ = P.InstanceMirror;
+  _.$isInstanceMirror = TRUE;
+  _.$isObject = TRUE;
   _ = M.Texture;
   _.$isTexture = TRUE;
   _.$isObject = TRUE;
@@ -68507,9 +68458,6 @@ $$ = null;
   _.$isNode = TRUE;
   _.$isEventTarget = TRUE;
   _.$isEventTarget = TRUE;
-  _.$isObject = TRUE;
-  _ = P.InstanceMirror;
-  _.$isInstanceMirror = TRUE;
   _.$isObject = TRUE;
   _ = W.EventTarget;
   _.$isEventTarget = TRUE;
